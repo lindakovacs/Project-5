@@ -21,6 +21,7 @@
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/bootstrap-social.css">
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -35,7 +36,9 @@
         <header class="jumbotron">
             <h1>Rent-A-Student</h1>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
-            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            <div id="fb_button">
+                <a class="btn btn-block btn-social btn-facebook"><img src="img/Social_button_fb.png" />Login met facebook</a>
+            </div>
         </header>
 
         <!--NAV-->

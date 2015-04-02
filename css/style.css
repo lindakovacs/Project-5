@@ -1,4 +1,13 @@
+header{
+	text-align:center;
+}
+
 footer{
     background-color:lightgray;
     text-align: center;
+}
+
+#fb_button{
+	width:18%;
+	margin:auto;
 }
