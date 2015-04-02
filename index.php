@@ -1,3 +1,47 @@
+<?php
+
+if(!empty($_POST))
+    
+{
+    $salt = "Dik.888!!!dfsdf";
+  $Gebruikersnaam = $_POST['gebruikersnaam'];
+    $Wachtwoord = $_POST['wachtwoord'];
+     //$password = md5($_POST['password'].$salt); -> originele code?... maar werkt niet
+    
+    $conn = new mysqli("localhost", "root", "root", "phpproject");
+    if(! $conn->connect_errno)
+        
+    {
+        
+        $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
+        $result = $conn->query($query);
+        
+        //check of password_verify(wachtwoord) == hash
+        $row_hash = $result->fetch_array();
+        if(password_verify($Wachtwoord, $row_hash['wachtwoord']))
+        {
+            echo "welcome";
+            
+        }
+        else{
+            echo "go away";
+        }
+        
+        
+    }
+    
+}
+
+
+
+?>
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -60,49 +104,43 @@
            
             <br>
             
+            
+            
+            	<?php if(isset($error)): ?>
+	<div class="error">
+		<?php echo $error; ?>
+	</div>
+	<?php endif; ?>
+
+	<?php if(isset($succes)): ?>
+	<div class="feedback">
+		<?php echo $succes; ?>
+	</div>
+	<?php endif; ?>
+            
+            
             <!--FORMULIER LOGIN-->
             <h1>Login</h1>
             <form class="form-inline" role="form">
                 <div class="form-group">
-                  <label class="sr-only" for="email">Email:</label>
-                  <input type="email" class="form-control" id="email" placeholder="E-mailadres">
+                  <label class="sr-only" for="gebruikersnaam">Gebruikersnaam:</label>
+                  <input type="email" class="form-control" name= "gebruikersnaam" id="email" placeholder="Gebruikersnaam">
                 </div>
                 <div class="form-group">
-                  <label class="sr-only" for="pwd">Password:</label>
-                  <input type="password" class="form-control" id="pwd" placeholder="Password">
+                  <label class="sr-only" for="pwd">Wachtwoord:</label>
+                  <input type="password" class="form-control" name="wachtwoord" id="pwd" placeholder="Wachtwoord">
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-default">Verstuur</button>
                 <br>
                 <div class="checkbox">
-                  <label><input type="checkbox"> Remember me</label>
+                  <label><input type="checkbox"> Aangemeld blijven</label>
                 </div>
+                <br>
+                <p>Indien je nog niet bent ingeschreven dan je dit hier doen</a></p>
                 <a href="#registration"></a>
             </form>
             
-            <!--FORMULIER REGISTREREN-->
-            <h2 id="registration">Registration</h2>
-            <form role="form">
-                <div class="form-group">
-                    <label for="firstname">Firstname:</label>
-                    <input type="text" class="form-control" id="firstname" placeholder="Firstname">
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Lastname:</label>
-                    <input type="text" class="form-control" id="lastname" placeholder="Lastname">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Enter password">
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox"> Remember me</label>
-                </div>
-                <button type="submit" class="btn btn-default">Submit</button>
-             </form>
+        
 
             <br>
 
