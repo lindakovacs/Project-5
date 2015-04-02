@@ -21,6 +21,8 @@
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/bootstrap-social.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -31,12 +33,11 @@
     <!--CONTAINER-->
     <div class="container">
            
-           <!--HEADER-->
+        <!--HEADER-->
         <header class="jumbotron">
             <h1>Rent-A-Student</h1>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
-            <a class="btn-facebook" href="#" role="button">Learn more</a>
-            <div id="test"></div>
+            <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Registreer met facebook</button>
         </header>
 
         <!--NAV-->
@@ -48,54 +49,59 @@
             </ul>
         </nav>
             
-            <!--FORMULIER REGISTREREN-->
-            <h2 id="registration">Registratie</h2>
-            <form role="form">
-                <div class="form-group">
-                    <label for="firstname">Voornaam:</label>
-                    <input type="text" class="form-control" id="firstname" placeholder="Voornaam">
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Achternaam:</label>
-                    <input type="text" class="form-control" id="lastname" placeholder="Achternaam">
-                </div>
-                <div class="form-group">
-                    <label for="email">E-mailadres:</label>
-                    <input type="email" class="form-control" id="email" placeholder="E-emailadres">
-                </div>
-                <div class="form-group">
-                    <label for="pwd">Wachtwoord:</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Wachtwoord">
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Stad:</label>
-                    <input type="text" class="form-control" id="lastname" placeholder="Stad">
-                </div>
-                <div class="form-group">
-                    <label for="sel1">Jaar:</label>
-                    <select class="form-control" id="sel1">
+        <!--FORMULIER REGISTREREN-->
+        <h2 id="registration">Registratie</h2>
+        <form role="form">
+            <!--NAAM-->
+            <div class="form-group">
+                <label for="name">Naam:<span class="required">*</span></label>
+                <input type="text" class="form-control" id="name" placeholder="Naam">
+            </div>
+            <!--EMAILADRES-->
+            <div class="form-group">
+                <label for="email">E-mailadres:<span class="required">*</span></label>
+                <input type="email" class="form-control" id="email" placeholder="E-emailadres">
+            </div>
+            <!--WACHTWOORD-->
+            <div class="form-group">
+                <label for="pwd">Wachtwoord:<span class="required">*</span></label>
+                <input type="password" class="form-control" id="pwd" placeholder="Wachtwoord">
+            </div>
+            <!--WOONPLAATS-->
+            <div class="form-group">
+                <label for="lastname">Woonplaats:<span class="required">*</span></label>
+                <input type="text" class="form-control" id="lastname" placeholder="Woonplaats">
+            </div>
+            <!--JAAR-->
+            <div class="form-group">
+                <label for="sel1">Jaar:<span class="required">*</span></label>
+                <select class="form-control" id="sel1">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
                 </select>
-                </div>
-                <div class="form-group">
-                    <label for="sel1">Richting:</label>
-                    <select class="form-control" id="sel1">
-                    <option>Webdevelopment</option>
+            </div>
+            <!--RICHTING-->
+            <div class="form-group">
+                <label for="sel1">Richting:<span class="required">*</span></label>
+                <select class="form-control" id="sel1">
+                    <option>Niet van toepassing</option>
                     <option>Webdesign</option>
-                    </select>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox">Aangemeld blijven</label>
-                </div>
-                <button type="submit" class="btn btn-default">Registreren</button>
-                
-
-             
-
-
-             </form>
+                    <option>Webdevelopment</option>
+                </select>
+            </div>
+            <!--TEXTAREA-->
+            <div class="form-group">
+                <label for="">Biografie</label>
+                <textarea class="form-control" id="bio" name="bio" cols="30" rows="10">Lorem Ipsum is slechts een proeftekst.</textarea>
+            </div>
+            <!--PROFIELFOTO-->
+            <div class="form-group">
+                <label for="profilePicInputFile">Profielfoto uploaden</label>
+                <input type="file" id="exampleInputFile">
+            </div>
+            <button type="submit" class="btn btn-default">Registreren</button>
+            </form>
 
             <br>
 
