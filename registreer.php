@@ -64,18 +64,18 @@
             </div>
             <!--WACHTWOORD-->
             <div class="form-group">
-                <label for="pwd">Wachtwoord:<span class="required">*</span></label>
-                <input type="password" class="form-control" id="pwd" placeholder="Wachtwoord">
+                <label for="password">Wachtwoord:<span class="required">*</span></label>
+                <input type="password" class="form-control" id="password" placeholder="Wachtwoord">
             </div>
             <!--WOONPLAATS-->
             <div class="form-group">
-                <label for="lastname">Woonplaats:<span class="required">*</span></label>
-                <input type="text" class="form-control" id="lastname" placeholder="Woonplaats">
+                <label for="city">Woonplaats:<span class="required">*</span></label>
+                <input type="text" class="form-control" id="city" placeholder="Woonplaats">
             </div>
             <!--JAAR-->
             <div class="form-group">
-                <label for="sel1">Jaar:<span class="required">*</span></label>
-                <select class="form-control" id="sel1">
+                <label for="year">Jaar:<span class="required">*</span></label>
+                <select class="form-control" id="year">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -83,8 +83,8 @@
             </div>
             <!--RICHTING-->
             <div class="form-group">
-                <label for="sel1">Richting:<span class="required">*</span></label>
-                <select class="form-control" id="sel1">
+                <label for="education">Richting:<span class="required">*</span></label>
+                <select class="form-control" id="education">
                     <option>Niet van toepassing</option>
                     <option>Webdesign</option>
                     <option>Webdevelopment</option>
@@ -92,13 +92,13 @@
             </div>
             <!--TEXTAREA-->
             <div class="form-group">
-                <label for="">Biografie</label>
-                <textarea class="form-control" id="bio" name="bio" cols="30" rows="10">Lorem Ipsum is slechts een proeftekst.</textarea>
+                <label for="bio">Biografie</label>
+                <textarea class="form-control" id="bio" cols="30" rows="10">Lorem Ipsum is slechts een proeftekst.</textarea>
             </div>
             <!--PROFIELFOTO-->
             <div class="form-group">
                 <label for="profilePicInputFile">Profielfoto uploaden</label>
-                <input type="file" id="exampleInputFile">
+                <input type="file" id="profileInputFile">
             </div>
             <button type="submit" class="btn btn-default">Registreren</button>
             </form>
