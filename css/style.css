@@ -1,7 +1,13 @@
 header{
+<<<<<<< HEAD
 	text-align:center;
 }
 
+=======
+    text-align:center;   
+}
+    
+>>>>>>> origin/master
 footer{
     background-color:lightgray;
     text-align: center;

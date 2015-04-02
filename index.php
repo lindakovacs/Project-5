@@ -9,11 +9,11 @@
     <meta name="keywords" content="Rent,Student,Multimedia,Thomas More, Mechelen">
     <meta name="author" content="Ande Timmerman,Manuel van den Notelaer,Nick van Puyvelde,Stijn Van Doorslaer">
     
-    <link rel="icon" href="images/Rent-A-Student.png">
+    <link rel="icon" href="img/Rent-A-Student.png">
     <title>Rent-A-Student</title>
     
     <!-- OPENGRAPH TAGS -->
-    <meta property="og:image" content="images/Rent-A-Student.png"/>
+    <meta property="og:image" content="img/Rent-A-Student.png"/>
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
@@ -36,9 +36,14 @@
         <header class="jumbotron">
             <h1>Rent-A-Student</h1>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
+<<<<<<< HEAD
             <div id="fb_button">
                 <a class="btn btn-block btn-social btn-facebook"><img src="img/Social_button_fb.png" />Login met facebook</a>
             </div>
+=======
+            <a class="btn-facebook" href="#" role="button">Learn more</a>
+            <div id="test"></div>
+>>>>>>> origin/master
         </header>
 
         <!--NAV-->
