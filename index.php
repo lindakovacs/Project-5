@@ -1,46 +1,34 @@
 <?php
+    session_start();
 
-if(!empty($_POST))
-    
-{
-    $salt = "Dik.888!!!dfsdf";
-  $Gebruikersnaam = $_POST['gebruikersnaam'];
-    $Wachtwoord = $_POST['wachtwoord'];
-     //$password = md5($_POST['password'].$salt); -> originele code?... maar werkt niet
-    
-    $conn = new mysqli("localhost", "root", "root", "phpproject");
-    if(! $conn->connect_errno)
-        
+    if(!empty($_POST)) 
     {
-        
-        $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
-        $result = $conn->query($query);
-        
-        //check of password_verify(wachtwoord) == hash
-        $row_hash = $result->fetch_array();
-        if(password_verify($Wachtwoord, $row_hash['wachtwoord']))
+        //B-CRYPT GEBRUIKEN !!!!!
+        $salt = "Dik.888!!!dfsdf";
+        $Gebruikersnaam = $_POST['gebruikersnaam'];
+        $Wachtwoord = $_POST['wachtwoord'];
+        //$password = md5($_POST['password'].$salt); -> originele code?... maar werkt niet
+
+        $conn = new mysqli("localhost", "root", "root", "phpproject");
+        if(! $conn->connect_errno)
         {
-            echo "welcome";
-            
+            $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
+            $result = $conn->query($query);
+
+            //check of password_verify(wachtwoord) == hash
+            $row_hash = $result->fetch_array();
+            if(password_verify($Wachtwoord, $row_hash['wachtwoord']))
+            {
+                echo "welcome";
+            }
+            else
+            {
+                echo "go away";
+            }
         }
-        else{
-            echo "go away";
-        }
-        
-        
     }
-    
-}
-
-
 
 ?>
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="nl">
@@ -66,6 +54,7 @@ if(!empty($_POST))
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/bootstrap-social.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -78,16 +67,26 @@ if(!empty($_POST))
        
         <!--HEADER-->
         <header class="jumbotron">
+
+            <!--LOGOUT-->
+            <?php if (isset($_SESSION['FBID'])){ ?>
+            <a id="logout" href="facebook/logout.php">Logout</a>
+            <?php } ?>
+
             <h1>Rent-A-Student</h1>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
-<<<<<<< HEAD
-            <div id="fb_button">
-                <a class="btn btn-block btn-social btn-facebook"><img src="img/Social_button_fb.png" />Login met facebook</a>
-            </div>
-=======
-            <a class="btn-facebook" href="#" role="button">Learn more</a>
-            <div id="test"></div>
->>>>>>> origin/master
+            
+            <!--FACEBOOK-->
+            <?php if(isset($_SESSION['FBID'])){ ?>
+            <!--  After user login  -->
+            <img class="img-rounded" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
+            <?php echo $_SESSION['FULLNAME']; ?>
+            <?php }else{ ?>
+            <!--  Before user login  -->  
+            <a href="facebook/fbconfig.php">
+            <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
+            </a>
+            <?php } ?> 
         </header>
 
         <!--NAV-->
@@ -101,24 +100,21 @@ if(!empty($_POST))
 
         <!--SECTION-->
         <section >
-           
-            <br>
             
+            <!--ALERT SUCCESS-->
+            <?php if(isset($succes)){ ?>
+                <div class="alert alert-success" role="alert">
+                    <b>Well done!</b> You successfully read this important alert message.
+                </div>
+            <?php } ?>
             
-            
-            	<?php if(isset($error)): ?>
-	<div class="error">
-		<?php echo $error; ?>
-	</div>
-	<?php endif; ?>
-
-	<?php if(isset($succes)): ?>
-	<div class="feedback">
-		<?php echo $succes; ?>
-	</div>
-	<?php endif; ?>
-            
-            
+            <!--ALERT DANGER-->
+            <?php if(isset($error)){ ?>
+                <div class="alert alert-danger" role="alert">
+                    <b>Oh snap!</b> Change a few things up and try submitting again.
+                </div>
+            <?php } ?>
+               
             <!--FORMULIER LOGIN-->
             <h1>Login</h1>
             <form class="form-inline" role="form">
@@ -136,29 +132,11 @@ if(!empty($_POST))
                   <label><input type="checkbox"> Aangemeld blijven</label>
                 </div>
                 <br>
-                <p>Indien je nog niet bent ingeschreven dan je dit hier doen</a></p>
-                <a href="#registration"></a>
+                <a href="registreer.php">Indien je nog niet bent ingeschreven moet je dit hier doen.</a>
             </form>
-            
-        
 
-            <br>
-
-            <!--ALERT SUCCESS-->
-            <div class="alert alert-success" role="alert">
-                <b>Well done!</b> You successfully read this important alert message.
-            </div>
-
-            <!--ALERT WARNING-->
-            <div class="alert alert-warning" role="alert">
-                <b>Warning!</b> Better check yourself, you're not looking too good.
-            </div>
-
-            <!--ALERT DANGER-->
-            <div class="alert alert-danger" role="alert">
-                <b>Oh snap!</b> Change a few things up and try submitting again.
-            </div>
-            
+           <br>
+           
             <!--3xROW-->
             <div class="row">
                 <div class="col-sm-4">
@@ -184,7 +162,7 @@ if(!empty($_POST))
         </section>
 
         <!-- FOOTER -->
-        <footer class="footer">
+        <footer>
             <p>&copy;2015</p>    
         </footer>
         

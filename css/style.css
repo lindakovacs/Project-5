@@ -6,6 +6,11 @@ header{
     padding-right: 10px;
 }
 
+#logout{
+    position:absolute;
+    margin-left: 35%;
+}
+
 .required{
     color:red;
 }
