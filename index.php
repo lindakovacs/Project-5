@@ -3,6 +3,8 @@
   $error;
   $succes;
 
+github sucked
+
 	if (!empty($_POST)) 
     {
         try
