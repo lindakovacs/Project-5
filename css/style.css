@@ -1,8 +1,9 @@
-header{
+
+.jumbotron {
 	text-align:center;
 }
 
-.fa-facebook{
+header{
     padding-right: 10px;
 }
 
