@@ -1,44 +1,39 @@
 <?php
 
-  $error;
-  $succes;
+    session_start();
 
+    $error;
+    $succes;
 
-Feest het is weekend!
-
-github sucked
-
-	if (!empty($_POST)) 
+    if (!empty($_POST)) 
     {
         try
         {
-            
-		$salt = "DMIqsegmiF§MEIfjé2";
-		$Gebruikersnaam = $_POST['gebruikersnaam'];
-		$options = [ 'cost' => 12,];
-		$Wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT, $options); // php 5.5
+            $salt = "DMIqsegmiF§MEIfjé2";
+            $Gebruikersnaam = $_POST['gebruikersnaam'];
+            $options = [ 'cost' => 12,];
+            $Wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT, $options); // php 5.5
 
-		$conn = new mysqli("localhost", "root", "root", "phpproject");
-		if (!$conn->connect_errno) {
-           
-			$query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
-			$result = $conn->query($query);
-			// echo $query;
-			// check of password_verify(wachtwoord) == hash
-			$row_hash = $result->fetch_array();
-			if (password_verify($Wachtwoord, $row_hash['wachtwoord'])) 
-			{
-				$succes = "u bent ingelogd";
-			}
+            $conn = new mysqli("localhost", "root", "", "phpproject");
+            if (!$conn->connect_errno)
+            {
+                $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
+                $result = $conn->query($query);
+                // echo $query;
+                // check of password_verify(wachtwoord) == hash
+                $row_hash = $result->fetch_array();
+                if (password_verify($Wachtwoord, $row_hash['wachtwoord'])) 
+                {
+                    $succes = "u bent ingelogd";
+                }
+            }
         }
+
+        catch (Exception $e)
+        {
+            $error = $e->getMessage();
         }
-        
-			catch (Exception $e)
-		{
-			$error = $e->getMessage();
-		}
     }
-
 
 ?>
 
@@ -83,7 +78,7 @@ github sucked
 
             <!--LOGOUT-->
             <?php if (isset($_SESSION['FBID'])){ ?>
-            <a id="logout" href="facebook/logout.php">Logout</a>
+                <a id="logout" href="facebook/logout.php">Logout</a>
             <?php } ?>
 
             <a href="index.php"><img src="img/vector-logo.png" alt="logo"></a>
@@ -91,14 +86,14 @@ github sucked
             
             <!--FACEBOOK-->
             <?php if(isset($_SESSION['FBID'])){ ?>
-            <!--  After user login  -->
-            <img class="img-rounded" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
-            <?php echo $_SESSION['FULLNAME']; ?>
+                <!--  After user login  -->
+                <img class="img-rounded" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
+                <?php echo $_SESSION['FULLNAME']; ?>
             <?php }else{ ?>
-            <!--  Before user login  -->  
-            <a href="facebook/fbconfig.php">
-            <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
-            </a>
+                <!--  Before user login  -->  
+                <a href="facebook/fbconfig.php">
+                <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
+                </a>
             <?php } ?> 
         </header>
 
