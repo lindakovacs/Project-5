@@ -54,9 +54,9 @@ CREATE TABLE `bericht` (
 
 CREATE TABLE `bezoeker` (
   `bezoeker_id` int(10) NOT NULL,
-  `bezoeker_facebookid` int(10) NOT NULL,
-  `bezoeker_naam` varchar(200) NOT NULL,
-  `bezoeker_email` varchar(200) NOT NULL
+  `bezoeker_facebookid` varchar(100) NOT NULL,
+  `bezoeker_naam` varchar(60) NOT NULL,
+  `bezoeker_email` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

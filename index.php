@@ -1,4 +1,5 @@
 <?php
+    session_start();
 
     if(!empty($_POST)) 
     {
@@ -66,9 +67,26 @@
        
         <!--HEADER-->
         <header class="jumbotron">
+
+            <!--LOGOUT-->
+            <?php if (isset($_SESSION['FBID'])){ ?>
+            <a id="logout" href="facebook/logout.php">Logout</a>
+            <?php } ?>
+
             <h1>Rent-A-Student</h1>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
+            
+            <!--FACEBOOK-->
+            <?php if(isset($_SESSION['FBID'])){ ?>
+            <!--  After user login  -->
+            <img class="img-rounded" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
+            <?php echo $_SESSION['FULLNAME']; ?>
+            <?php }else{ ?>
+            <!--  Before user login  -->  
+            <a href="facebook/fbconfig.php">
             <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
+            </a>
+            <?php } ?> 
         </header>
 
         <!--NAV-->
@@ -117,6 +135,8 @@
                 <a href="registreer.php">Indien je nog niet bent ingeschreven moet je dit hier doen.</a>
             </form>
 
+           <br>
+           
             <!--3xROW-->
             <div class="row">
                 <div class="col-sm-4">
