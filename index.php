@@ -1,34 +1,42 @@
 <?php
-    session_start();
 
-    if(!empty($_POST)) 
+  $error;
+  $succes;
+
+	if (!empty($_POST)) 
     {
-        //B-CRYPT GEBRUIKEN !!!!!
-        $salt = "Dik.888!!!dfsdf";
-        $Gebruikersnaam = $_POST['gebruikersnaam'];
-        $Wachtwoord = $_POST['wachtwoord'];
-        //$password = md5($_POST['password'].$salt); -> originele code?... maar werkt niet
-
-        $conn = new mysqli("localhost", "root", "root", "phpproject");
-        if(! $conn->connect_errno)
+        try
         {
-            $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
-            $result = $conn->query($query);
+            
+		$salt = "DMIqsegmiF§MEIfjé2";
+		$Gebruikersnaam = $_POST['gebruikersnaam'];
+		$options = [ 'cost' => 12,];
+		$Wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT, $options); // php 5.5
 
-            //check of password_verify(wachtwoord) == hash
-            $row_hash = $result->fetch_array();
-            if(password_verify($Wachtwoord, $row_hash['wachtwoord']))
-            {
-                echo "welcome";
-            }
-            else
-            {
-                echo "go away";
-            }
+		$conn = new mysqli("localhost", "root", "root", "phpproject");
+		if (!$conn->connect_errno) {
+           
+			$query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
+			$result = $conn->query($query);
+			// echo $query;
+			// check of password_verify(wachtwoord) == hash
+			$row_hash = $result->fetch_array();
+			if (password_verify($Wachtwoord, $row_hash['wachtwoord'])) 
+			{
+				$succes = "u bent ingelogd";
+			}
         }
+        }
+        
+			catch (Exception $e)
+		{
+			$error = $e->getMessage();
+		}
     }
 
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="nl">
