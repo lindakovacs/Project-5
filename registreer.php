@@ -38,7 +38,7 @@
            
         <!--HEADER-->
         <header class="jumbotron">
-            <h1>Rent-A-Student</h1>
+            <a href="index.php"><img src="img/vector-logo.png" alt="logo"></a>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
         </header>
 
