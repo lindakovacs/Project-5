@@ -2,7 +2,7 @@
 
   $error;
   $succes;
-joepie!!!!!!
+en nu wel ok!!!!!!
 
 	if (!empty($_POST)) 
     {
