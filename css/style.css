@@ -1,7 +1,15 @@
 header{
-    text-align:center;   
+	text-align:center;
 }
-    
+
+.fa-facebook{
+    padding-right: 10px;
+}
+
+.required{
+    color:red;
+}
+
 footer{
     background-color:lightgray;
     text-align: center;

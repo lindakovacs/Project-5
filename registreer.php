@@ -1,3 +1,8 @@
+<?php 
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -31,12 +36,10 @@
     <!--CONTAINER-->
     <div class="container">
            
-           <!--HEADER-->
+        <!--HEADER-->
         <header class="jumbotron">
             <h1>Rent-A-Student</h1>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
-            <a class="btn-facebook" href="#" role="button">Learn more</a>
-            <div id="test"></div>
         </header>
 
         <!--NAV-->
@@ -47,74 +50,83 @@
               <li><a href="">Contact</a></li>
             </ul>
         </nav>
+           
+        <!--ALERT SUCCESS-->
+        <?php if(isset($succes)){ ?>
+            <div class="alert alert-success" role="alert">
+                <b>Well done!</b> You successfully read this important alert message.
+            </div>
+        <?php } ?>
+
+        <!--ALERT DANGER-->
+        <?php if(isset($error)){ ?>
+            <div class="alert alert-danger" role="alert">
+                <b>Oh snap!</b> Change a few things up and try submitting again.
+            </div>
+        <?php } ?>
             
-            <!--FORMULIER REGISTREREN-->
-            <h2 id="registration">Registratie</h2>
-            <form role="form">
-                <div class="form-group">
-                    <label for="firstname">Voornaam:</label>
-                    <input type="text" class="form-control" id="firstname" placeholder="Voornaam">
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Achternaam:</label>
-                    <input type="text" class="form-control" id="lastname" placeholder="Achternaam">
-                </div>
-                <div class="form-group">
-                    <label for="email">E-mailadres:</label>
-                    <input type="email" class="form-control" id="email" placeholder="E-emailadres">
-                </div>
-                <div class="form-group">
-                    <label for="pwd">Wachtwoord:</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Wachtwoord">
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Stad:</label>
-                    <input type="text" class="form-control" id="lastname" placeholder="Stad">
-                </div>
-                <div class="form-group">
-                    <label for="sel1">Jaar:</label>
-                    <select class="form-control" id="sel1">
+        <!--FORMULIER REGISTREREN-->
+        <h2 id="registration">Registratie</h2>
+        <form role="form">
+            <!--VOORNAAM-->
+            <div class="form-group">
+                <label for="firstname">Voornaam:<span class="required">*</span></label>
+                <input type="text" class="form-control" id="firstname" placeholder="Voornaam">
+            </div>
+            <!--ACHTERNAAM-->
+            <div class="form-group">
+                <label for="lastname">Achternaam:<span class="required">*</span></label>
+                <input type="text" class="form-control" id="lastname" placeholder="Achternaam">
+            </div>
+            <!--EMAILADRES-->
+            <div class="form-group">
+                <label for="email">E-mailadres:<span class="required">*</span></label>
+                <input type="email" class="form-control" id="email" placeholder="E-emailadres">
+            </div>
+            <!--WACHTWOORD-->
+            <div class="form-group">
+                <label for="password">Wachtwoord:<span class="required">*</span></label>
+                <input type="password" class="form-control" id="password" placeholder="Wachtwoord">
+            </div>
+            <!--JAAR-->
+            <div class="form-group">
+                <label for="year">Jaar:<span class="required">*</span></label>
+                <select class="form-control" id="year">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
                 </select>
-                </div>
-                <div class="form-group">
-                    <label for="sel1">Richting:</label>
-                    <select class="form-control" id="sel1">
-                    <option>Webdevelopment</option>
+            </div>
+            <!--RICHTING-->
+            <div class="form-group">
+                <label for="education">Richting:<span class="required">*</span></label>
+                <select class="form-control" id="education">
+                    <option>Niet van toepassing</option>
                     <option>Webdesign</option>
-                    </select>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox">Aangemeld blijven</label>
-                </div>
-                <button type="submit" class="btn btn-default">Registreren</button>
-                
-
-             
-
-
-             </form>
-
-            <br>
-
-            <!--ALERT SUCCESS-->
-            <div class="alert alert-success" role="alert">
-                <b>Well done!</b> You successfully read this important alert message.
+                    <option>Webdevelopment</option>
+                </select>
             </div>
-
-            <!--ALERT WARNING-->
-            <div class="alert alert-warning" role="alert">
-                <b>Warning!</b> Better check yourself, you're not looking too good.
+            <!--WOONPLAATS-->
+            <div class="form-group">
+                <label for="city">Woonplaats:</label>
+                <input type="text" class="form-control" id="city" placeholder="Woonplaats">
             </div>
-
-            <!--ALERT DANGER-->
-            <div class="alert alert-danger" role="alert">
-                <b>Oh snap!</b> Change a few things up and try submitting again.
+            <!--TEXTAREA-->
+            <div class="form-group">
+                <label for="bio">Biografie:</label>
+                <textarea class="form-control" id="bio" cols="30" rows="10">Lorem Ipsum is slechts een proeftekst.</textarea>
             </div>
+            <!--PROFIELFOTO-->
+            <div class="form-group">
+                <label for="profilePicInputFile">Profielfoto uploaden</label>
+                <input type="file" id="profileInputFile">
+            </div>
+            <button type="submit" class="btn btn-default">Registreren</button>
+            </form>
          
         </section>
+        
+        <br>
 
         <!-- FOOTER -->
         <footer class="footer">
