@@ -3,6 +3,11 @@
   $error;
   $succes;
 
+
+Feest het is weekend!
+
+github sucked
+
 	if (!empty($_POST)) 
     {
         try
