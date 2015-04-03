@@ -2,7 +2,7 @@
 
   $error;
   $succes;
-github is niet mijn vriend!!!
+joepie
 
 	if (!empty($_POST)) 
     {
