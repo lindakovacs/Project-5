@@ -2,7 +2,9 @@
 
   $error;
   $succes;
-en nu wel ok!!!!!!
+
+
+hopelijk nu werkend!
 
 github sucked
 
