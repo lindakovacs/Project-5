@@ -4,7 +4,7 @@
   $succes;
 
 
-hopelijk nu werkend!
+Feest het is weekend!
 
 github sucked
 
