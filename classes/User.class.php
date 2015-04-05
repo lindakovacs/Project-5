@@ -32,15 +32,36 @@
                     break;
 
                     case 'Lastname':
-                    $this->m_sLastname = $p_vValue;
+                    if($p_vValue=="")
+                    {
+                        throw new Exception("Achternaam moet ingevuld zijn.");
+                    }
+                    else
+                    {
+                        $this->m_sLastname = $p_vValue;   
+                    }
                     break;
 
                     case 'Email':
-                    $this->m_sEmail = $p_vValue;
+                    if($p_vValue=="")
+                    {
+                        throw new Exception("Geen geldig e-mailadres.");
+                    }
+                    else
+                    {
+                        $this->m_sEmail = $p_vValue;    
+                    }
                     break;
 
                     case 'Password':
-                    $this->m_sPassword = $p_vValue;
+                    if($p_vValue=="")
+                    {
+                        throw new Exception("Geen geldig wachtwoord");
+                    }
+                    else
+                    {
+                        $this->m_sPassword = $p_vValue;   
+                    }
                     break;
 
                     case 'Year':

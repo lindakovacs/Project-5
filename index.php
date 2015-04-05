@@ -4,36 +4,27 @@
 
     if (!empty($_POST)) 
     {
-        try
-        {
-            $salt = "DMIqsegmiF§MEIfjé2";
-            $Gebruikersnaam = $_POST['gebruikersnaam'];
-            $options = [ 'cost' => 12,];
-            $Wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT, $options); // php 5.5
+        $Gebruikersnaam = $_POST['gebruikersnaam'];
+        $Wachtwoord = $_POST['wachtwoord'];
 
-            $conn = new mysqli("localhost", "phpproject", "root","");
-            if (!$conn->connect_errno)
+        $conn = new mysqli("localhost", "root", "","phpproject");
+        if (!$conn->connect_errno)
+        {
+            $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
+            $result = $conn->query($query);
+            $row_hash = $result->fetch_array();
+            if (password_verify($Wachtwoord, $row_hash['wachtwoord'])) 
             {
-                $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
-                $result = $conn->query($query);
-                // echo $query;
-                // check of password_verify(wachtwoord) == hash
-                $row_hash = $result->fetch_array();
-                if (password_verify($Wachtwoord, $row_hash['wachtwoord'])) 
-                {
-                    $succes = "u bent ingelogd";
-                }
+                $success = "U bent ingelogd";
             }
-        }
-
-        catch (Exception $e)
-        {
-            $error = $e->getMessage();
+            else
+            {
+            $error = "Kan niet inloggen!";
+            }
         }
     }
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="nl">
@@ -107,22 +98,22 @@
         <section >
             
             <!--ALERT SUCCESS-->
-            <?php if(isset($succes)){ ?>
+            <?php if(isset($success)){ ?>
                 <div class="alert alert-success" role="alert">
-                    <b>Well done!</b> You successfully read this important alert message.
+<?php echo $succes ?>
                 </div>
             <?php } ?>
             
             <!--ALERT DANGER-->
             <?php if(isset($error)){ ?>
                 <div class="alert alert-danger" role="alert">
-                    <b>Oh snap!</b> Change a few things up and try submitting again.
+<?php echo $error ?>
                 </div>
             <?php } ?>
                
             <!--FORMULIER LOGIN-->
             <h1>Login</h1>
-            <form class="form-inline" role="form">
+            <form class="form-inline" role="form" method="post">
                 <div class="form-group">
                   <label class="sr-only" for="gebruikersnaam">Gebruikersnaam:</label>
                   <input type="email" class="form-control" name= "gebruikersnaam" id="email" placeholder="Gebruikersnaam">
