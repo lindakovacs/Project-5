@@ -1,28 +1,32 @@
-<?php 
+<?php
 
-include_once('classes/User.class.php');
+    spl_autoload_register( function($class)
+    {
+        include_once("classes/" . $class . ".class.php");
+    });
 
+    if(!empty($_POST))
+    {
+        try
+        {
+        $g = new User();
+        $g->Firstname=$_POST['firstname'];
+        $g->Lastname=$_POST['lastname'];
+        $g->Email=$_POST['email'];
+        $g->Password=$_POST['password'];
+        $g->Year=$_POST['year'];
+        $g->Education=$_POST['education'];
+        $g->City=$_POST['city'];
+        $g->Bio=$_POST['bio'];
+        $g->save();
+        $success ="<b>Ok!</b> Je bent succesvol geregistreerd.";
+        }
 
-if(!empty($_POST))
-{
-try{
-$g = new User();
-$g->Firstname=$_POST['firstname'];
-$g->Lastname=$_POST['lastname'];
-$g->Email=$_POST['email'];
-$g->Password=$_POST['password'];
-$g->Year=$_POST['year'];
-$g->Education=$_POST['education'];
-$g->City=$_POST['city'];
-$g->Bio=$_POST['bio'];
-$g->save();
-}
-    
-catch( Exception $e)
-{
-    $error=$e->getMessage();
-}
-}
+        catch(Exception $e)
+        {
+            $error=$e->getMessage();
+        }
+    }
 
 ?>
 <!DOCTYPE html>
@@ -67,23 +71,23 @@ catch( Exception $e)
         <!--NAV-->
         <nav>
             <ul class="nav nav-tabs nav-justified">
-              <li><a href="">Home</a></li>
+              <li><a href="index.php">Home</a></li>
               <li><a href="">About us</a></li>
               <li><a href="">Contact</a></li>
             </ul>
         </nav>
            
         <!--ALERT SUCCESS-->
-        <?php if(isset($succes)){ ?>
+        <?php if(isset($success)){ ?>
             <div class="alert alert-success" role="alert">
-                <b>Well done!</b> You successfully read this important alert message.
+            <?php echo $success ?>
             </div>
         <?php } ?>
 
         <!--ALERT DANGER-->
         <?php if(isset($error)){ ?>
             <div class="alert alert-danger" role="alert">
-                <b>Oh snap!</b> Change a few things up and try submitting again.
+                <?php echo $error ?>
             </div>
         <?php } ?>
             
@@ -136,13 +140,13 @@ catch( Exception $e)
             <!--TEXTAREA-->
            <div class="form-group">
                 <label for="bio">Biografie:</label>
-                <textarea class="form-control" id="bio" cols="30" name="bio" rows="10">Lorem Ipsum is slechts een proeftekst.</textarea>
+                <textarea class="form-control" id="bio" cols="30" name="bio" rows="10" placeholder="Lorem Ipsum is slechts een proeftekst."></textarea>
             </div>
             <!--PROFIELFOTO-->
-            <!--<div class="form-group">
+            <div class="form-group">
                 <label for="profilePicInputFile">Profielfoto uploaden</label>
-                <input type="file" id="profileInputFile">
-            </div>-->
+                <input type="file" name="fileToUpload" id="fileToUpload">
+            </div>
             <button type="submit" class="btn btn-default">Registreren</button>
             </form>
          

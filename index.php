@@ -2,9 +2,6 @@
 
     session_start();
 
-    $error;
-    $succes;
-
     if (!empty($_POST)) 
     {
         try
@@ -14,7 +11,7 @@
             $options = [ 'cost' => 12,];
             $Wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT, $options); // php 5.5
 
-            $conn = new mysqli("localhost", "root", "", "phpproject");
+            $conn = new mysqli("localhost", "phpproject", "root","");
             if (!$conn->connect_errno)
             {
                 $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
@@ -100,7 +97,7 @@
         <!--NAV-->
         <nav>
             <ul class="nav nav-tabs nav-justified">
-              <li><a href="">Home</a></li>
+              <li><a href="index.php">Home</a></li>
               <li><a href="">About us</a></li>
               <li><a href="">Contact</a></li>
             </ul>
