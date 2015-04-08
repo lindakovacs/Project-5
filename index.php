@@ -4,22 +4,24 @@
 
     if (!empty($_POST)) 
     {
-        $Gebruikersnaam = $_POST['gebruikersnaam'];
-        $Wachtwoord = $_POST['wachtwoord'];
+        $Gebruikersnaam = $_POST['email'];
+        $Wachtwoord = $_POST['password'];
 
         $conn = new mysqli("localhost", "root", "","phpproject");
         if (!$conn->connect_errno)
         {
             $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
             $result = $conn->query($query);
+            
             $row_hash = $result->fetch_array();
-            if (password_verify($Wachtwoord, $row_hash['wachtwoord'])) 
+            if (password_verify($Wachtwoord, $row_hash['gids_wachtwoord'])) 
             {
-                $success = "U bent ingelogd";
+                $success ="<b>Welkom!</b> U bent aangemeld met ".$Gebruikersnaam.".";
+                $_SESSION['logged_in'] = true;
             }
             else
             {
-            $error = "Kan niet inloggen!";
+                $error = "<b>Onjuist e-mailadres of wachtwoord!</b> U kan zich niet aanmelden met onjuiste gegevens.";
             }
         }
     }
@@ -64,15 +66,20 @@
         <!--HEADER-->
         <header class="jumbotron">
 
-            <!--LOGOUT-->
+            <!--FORMULIER LOGOUT-->
+            <?php if(isset($_SESSION['logged_in'])){ ?>
+                <a id="logout" href="logout.php">Afmelden</a>
+            <?php } ?>
+                    
+            <!--FACEBOOK LOGOUT-->
             <?php if (isset($_SESSION['FBID'])){ ?>
-                <a id="logout" href="facebook/logout.php">Logout</a>
+                <a id="logout" href="facebook/logout.php">Afmelden</a>
             <?php } ?>
 
             <a href="index.php"><img src="img/vector-logo.png" alt="logo"></a>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
             
-            <!--FACEBOOK-->
+            <!--FACEBOOK LOGIN-->
             <?php if(isset($_SESSION['FBID'])){ ?>
                 <!--  After user login  -->
                 <img class="img-rounded" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
@@ -100,27 +107,27 @@
             <!--ALERT SUCCESS-->
             <?php if(isset($success)){ ?>
                 <div class="alert alert-success" role="alert">
-<?php echo $succes ?>
+                    <?php echo $success; ?>
                 </div>
             <?php } ?>
             
             <!--ALERT DANGER-->
             <?php if(isset($error)){ ?>
                 <div class="alert alert-danger" role="alert">
-<?php echo $error ?>
+                    <?php echo $error; ?>
                 </div>
             <?php } ?>
-               
+            
             <!--FORMULIER LOGIN-->
             <h1>Login</h1>
             <form class="form-inline" role="form" method="post">
                 <div class="form-group">
                   <label class="sr-only" for="gebruikersnaam">Gebruikersnaam:</label>
-                  <input type="email" class="form-control" name= "gebruikersnaam" id="email" placeholder="Gebruikersnaam">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="E-mailadres">
                 </div>
                 <div class="form-group">
                   <label class="sr-only" for="pwd">Wachtwoord:</label>
-                  <input type="password" class="form-control" name="wachtwoord" id="pwd" placeholder="Wachtwoord">
+                  <input type="password" class="form-control" name="password" id="password" placeholder="Wachtwoord">
                 </div>
                 <button type="submit" class="btn btn-default">Verstuur</button>
                 <br>

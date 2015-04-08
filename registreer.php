@@ -4,22 +4,25 @@
     {
         include_once("classes/" . $class . ".class.php");
     });
-
+    
     if(!empty($_POST))
     {
         try
-        {
-        $g = new User();
-        $g->Firstname=$_POST['firstname'];
-        $g->Lastname=$_POST['lastname'];
-        $g->Email=$_POST['email'];
-        $g->Password=$_POST['password'];
-        $g->Year=$_POST['year'];
-        $g->Education=$_POST['education'];
-        $g->City=$_POST['city'];
-        $g->Bio=$_POST['bio'];
-        $g->save();
-        $success ="<b>Ok!</b> Je bent succesvol geregistreerd.";
+        {             
+            $g = new User();
+            $g->Firstname=$_POST['firstname'];
+            $g->Lastname=$_POST['lastname'];
+            $g->Email=$_POST['email'];
+            //PASSWORD HASH
+            $options=['cost'=>12,];
+            $g->Password = password_hash($_POST['password'],PASSWORD_DEFAULT, $options);
+            $g->Year=$_POST['year'];
+            $g->Education=$_POST['education'];
+            $g->City=$_POST['city'];
+            $g->Bio=$_POST['bio'];
+            $g->checkuser($email);
+            $g->save();
+            $success ="<b>Ok!</b> Je bent succesvol geregistreerd.";
         }
 
         catch(Exception $e)
