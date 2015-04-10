@@ -1,31 +1,6 @@
 <?php
-
     session_start();
-
-    if (!empty($_POST)) 
-    {
-        $Gebruikersnaam = $_POST['email'];
-        $Wachtwoord = $_POST['password'];
-
-        $conn = new mysqli("localhost", "root", "","phpproject");
-        if (!$conn->connect_errno)
-        {
-            $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";
-            $result = $conn->query($query);
-            
-            $row_hash = $result->fetch_array();
-            if (password_verify($Wachtwoord, $row_hash['gids_wachtwoord'])) 
-            {
-                $success ="<b>Welkom!</b> U bent aangemeld met ".$Gebruikersnaam.".";
-                $_SESSION['logged_in'] = true;
-            }
-            else
-            {
-                $error = "<b>Onjuist e-mailadres of wachtwoord!</b> U kan zich niet aanmelden met onjuiste gegevens.";
-            }
-        }
-    }
-
+    include_once("login.php");
 ?>
 
 <!DOCTYPE html>
@@ -39,17 +14,18 @@
     <meta name="keywords" content="Rent,Student,Multimedia,Thomas More, Mechelen">
     <meta name="author" content="Ande Timmerman,Manuel van den Notelaer,Nick van Puyvelde,Stijn Van Doorslaer">
     
-    <link rel="icon" href="img/Rent-A-Student.png">
+    <link rel="icon" href="img/favicon.png">
     <title>Rent-A-Student</title>
     
     <!-- OPENGRAPH TAGS -->
-    <meta property="og:image" content="img/Rent-A-Student.png"/>
+    <meta property="og:image" content="img/favicon.png"/>
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -60,115 +36,117 @@
     <![endif]-->    
 </head>
 <body>
+
+    <!--NAVIGATIE-->
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand" href="index.php">Rent-A-Student</a></li>
+                <li><a href="index.php">Over ons</a></li>
+                <li><a href="index.php">Contact</a></li>
+            </ul>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form method="post" class="navbar-form navbar-right">
+            <!--FORMULIER INGELOGD + UITLOGGEN-->
+            <?php if(isset($_SESSION['logged_in'])){ ?>
+                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p>
+                <a class="btn btn-primary" href="logout.php">Afmelden</a>
+            <?php } ?>
+            
+            <!--FACEBOOK INGELOGD + UITLOGGEN-->
+            <?php if(isset($_SESSION['FBID'])){ ?>
+                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
+                <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
+                <span class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></span>
+                <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
+            <?php } ?>
+
+            <!--FORMULIER INLOGGEN-->
+            <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
+            <div class="form-group has-feedback">
+              <input type="text" name="email" id="email" placeholder="E-mailadres" class="form-control email-inloggen">
+            </div>
+            <div class="form-group">
+              <input type="password" name="password" id="password" placeholder="Wachtwoord" class="form-control">
+            </div>
+            <input type="submit" name="aanmelden" class="btn btn-primary" value="Aanmelden"></input>
+            <!--REGISTREREN-->
+            <a href="registreer.php"><button type="button" class="btn btn-primary">Registreren</button></a>
+            <?php } ?>
+          </form>
+        </div>
+      </div>
+    </nav>
+    
     <!--CONTAINER-->
     <div class="container">
+      
+        <!--ALERT SUCCESS-->
+        <?php if(isset($success)){ ?>
+            <div class="alert alert-success" role="alert">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <?php echo $success; ?>
+            </div>
+        <?php } ?>
+
+        <!--ALERT DANGER-->
+        <?php if(isset($error)){ ?>
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <?php echo $error; ?>
+            </div>
+        <?php } ?>
        
         <!--HEADER-->
         <header class="jumbotron">
 
-            <!--FORMULIER LOGOUT-->
-            <?php if(isset($_SESSION['logged_in'])){ ?>
-                <a id="logout" href="logout.php">Afmelden</a>
-            <?php } ?>
-                    
-            <!--FACEBOOK LOGOUT-->
-            <?php if (isset($_SESSION['FBID'])){ ?>
-                <a id="logout" href="facebook/logout.php">Afmelden</a>
-            <?php } ?>
-
-            <a href="index.php"><img src="img/vector-logo.png" alt="logo"></a>
+            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive" alt="logo"></a>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
             
-            <!--FACEBOOK LOGIN-->
-            <?php if(isset($_SESSION['FBID'])){ ?>
-                <!--  After user login  -->
-                <img class="img-rounded" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
-                <?php echo $_SESSION['FULLNAME']; ?>
-            <?php }else{ ?>
-                <!--  Before user login  -->  
-                <a href="facebook/fbconfig.php">
+            <!--FACEBOOK INLOGGEN-->
+            <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
+                <a href="facebook/fbconfig.php">Lorem Ipsum is slechts een proeftekst.<br>
                 <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
                 </a>
-            <?php } ?> 
+            <?php } ?>
+
         </header>
 
-        <!--NAV-->
-        <nav>
-            <ul class="nav nav-tabs nav-justified">
-              <li><a href="index.php">Home</a></li>
-              <li><a href="">About us</a></li>
-              <li><a href="">Contact</a></li>
-            </ul>
-        </nav>
-
         <!--SECTION-->
-        <section >
-            
-            <!--ALERT SUCCESS-->
-            <?php if(isset($success)){ ?>
-                <div class="alert alert-success" role="alert">
-                    <?php echo $success; ?>
-                </div>
-            <?php } ?>
-            
-            <!--ALERT DANGER-->
-            <?php if(isset($error)){ ?>
-                <div class="alert alert-danger" role="alert">
-                    <?php echo $error; ?>
-                </div>
-            <?php } ?>
-            
-            <!--FORMULIER LOGIN-->
-            <h1>Login</h1>
-            <form class="form-inline" role="form" method="post">
-                <div class="form-group">
-                  <label class="sr-only" for="gebruikersnaam">Gebruikersnaam:</label>
-                  <input type="email" class="form-control" name="email" id="email" placeholder="E-mailadres">
-                </div>
-                <div class="form-group">
-                  <label class="sr-only" for="pwd">Wachtwoord:</label>
-                  <input type="password" class="form-control" name="password" id="password" placeholder="Wachtwoord">
-                </div>
-                <button type="submit" class="btn btn-default">Verstuur</button>
-                <br>
-                <div class="checkbox">
-                  <label><input type="checkbox"> Aangemeld blijven</label>
-                </div>
-                <br>
-                <a href="registreer.php">Indien je nog niet bent ingeschreven moet je dit hier doen.</a>
-            </form>
-
-           <br>
-           
-            <!--3xROW-->
+        <section>
+                                    
+        <div class="container marketing">
             <div class="row">
-                <div class="col-sm-4">
-                    <img class="img-rounded img-responsive" src="http://placehold.it/150">
-                    <h3>Column 1</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+                <div class="col-lg-4">
+                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
+                <h2>Titel</h2>
+                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
                 </div>
-                <div class="col-sm-4">
-                    <img class="img-rounded img-responsive" src="http://placehold.it/150">
-                    <h3>Column 2</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+
+                <div class="col-lg-4">
+                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
+                <h2>Titel</h2>
+                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
                 </div>
-                <div class="col-sm-4">
-                    <img class="img-rounded img-responsive" src="http://placehold.it/150">
-                    <h3>Column 3</h3>        
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+
+                <div class="col-lg-4">
+                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
+                <h2>Titel</h2>
+                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
                 </div>
             </div>
+        </div>
          
         </section>
 
-        <!-- FOOTER -->
+        <!--FOOTER-->
         <footer>
-            <p>&copy;2015</p>    
+            <p>&copy; Rent-A-Student 2015</p>    
         </footer>
         
-    </div>  
+    </div><!--/CONTAINER-->
+
 </body>
 </html>

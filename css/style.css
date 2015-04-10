@@ -1,18 +1,10 @@
-.jumbotron {
+/* ALGEMEEN ------------------------------------------ */
+.jumbotron{
 	text-align:center;
 }
 
-header{
-    padding-right: 10px;
-}
-
-.fa-facebook{
-    margin-right: 10px;
-}
-
-#logout{
-    position:absolute;
-    margin-left: 48%;
+.img-responsive{
+    margin: 0 auto;
 }
 
 .required{
@@ -22,4 +14,44 @@ header{
 footer{
     background-color:lightgray;
     text-align: center;
+    margin:0 auto;
+}
+
+/* INLOGGEN & UITLOGGEN ------------------------------ */
+.email-ingelogd{
+    color:white;
+    position: absolute;
+    margin-top:7px;
+    margin-left:-170px;
+}
+
+.fa-facebook{
+    margin-right: 10px;
+}
+
+.fb-ingelogd{
+    color:white;
+    position: absolute;
+    margin-top: 7px;
+    margin-left:-140px;
+}
+
+.fb-img{
+    height: 40px;
+    position: absolute;
+    margin-left:-190px;
+    margin-top: -2px;
+}
+
+/* MARKETING CONTENT --------------------------------- */
+.marketing .col-lg-4 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.marketing h2 {
+    font-weight: normal;
+}
+.marketing .col-lg-4 p {
+    margin-right: 10px;
+    margin-left: 10px;
 }

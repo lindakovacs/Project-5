@@ -1,4 +1,5 @@
 <?php
+
     spl_autoload_register( function($class)
     {
         include_once("classes/" . $class . ".class.php");
@@ -20,10 +21,11 @@
         {
                 switch($p_sProperty)
                 {
+                    //VOORNAAM
                     case 'Firstname':
                     if($p_vValue=="")
                     {
-                        throw new Exception("Voornaam moet ingevuld zijn.");
+                        throw new Exception("<b>Voornaam niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
                     }
                     else
                     {
@@ -31,10 +33,11 @@
                     }
                     break;
 
+                    //ACHTERNAAM
                     case 'Lastname':
                     if($p_vValue=="")
                     {
-                        throw new Exception("Achternaam moet ingevuld zijn.");
+                        throw new Exception("<b>Achternaam niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
                     }
                     else
                     {
@@ -42,10 +45,11 @@
                     }
                     break;
 
+                    //E-MAILADRES
                     case 'Email':
                     if($p_vValue=="")
                     {
-                        throw new Exception("Geen geldig e-mailadres.");
+                        throw new Exception("<b>Geen geldig e-mailadres!</b> Alle verplichte velden moeten ingevuld zijn.");
                     }
                     else
                     {
@@ -53,10 +57,11 @@
                     }
                     break;
 
+                    //WACHTWOORD
                     case 'Password':
                     if($p_vValue=="")
                     {
-                        throw new Exception("Geen geldig wachtwoord");
+                        throw new Exception("<b>Geen geldig wachtwoord!</b> Alle verplichte velden moeten ingevuld zijn.");
                     }
                     else
                     {
@@ -64,10 +69,12 @@
                     }
                     break;
 
+                    //JAAR
                     case 'Year':
                     $this->m_iYear = $p_vValue;
                     break;
 
+                    //RICHTING
                     case 'Education':
                     $this->m_sEducation = $p_vValue;
                     break;
@@ -79,7 +86,6 @@
                     case 'Bio':
                     $this->m_sBio = $p_vValue;
                     break;
-
                 }
         }
 
@@ -159,8 +165,7 @@
              $statement->bindValue(':stad',$this->City);
              $statement->bindValue(':bio',$this->Bio);
              $statement->execute();
-
         }
-
     }
+
 ?>
