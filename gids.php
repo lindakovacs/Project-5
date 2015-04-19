@@ -1,6 +1,9 @@
 <?php
+
     session_start();
     include_once("login.php");
+    include_once("classes/User.class.php")
+
 ?>
 
 <!DOCTYPE html>
@@ -51,8 +54,7 @@
           <form method="post" class="navbar-form navbar-right">
             <!--FORMULIER INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['logged_in'])){ ?>
-                
-                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p><a href="gids.php" id="gids_change_profile_btn">Change profile</a>
+                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
             
@@ -118,27 +120,70 @@
         <!--SECTION-->
         <section>
                                     
-        <div class="container marketing">
-            <div class="row">
-                <div class="col-lg-4">
-                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
-                <h2>Titel</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
-                </div>
+        	<div class="container marketing">
+                
+            	<?php
+            		$link = new mysqli("localhost", "root", "");
+        			$link->select_db("phpproject");
+                    //test
 
-                <div class="col-lg-4">
-                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
-                <h2>Titel</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
-                </div>
+        			$sqlquery = "SELECT * FROM gids";
+        			$result = $link->query($sqlquery);
 
-                <div class="col-lg-4">
-                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
-                <h2>Titel</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
-                </div>
-            </div>
-        </div>
+        			
+        			
+
+        			while($line = $result->fetch_array())
+        			{
+        				if($Gebruikersnaam==$line['gids_email']){
+        				
+        					echo "Voornaam: " . $line['gids_voornaam'] . "<br>";
+        						?><form method="POST">
+        							<input type="text" name="update_voornaam">
+        							<input type="submit" value="Aanpassen">
+        						</form><?php 
+        					echo "<br>Naam: " . $line['gids_naam'] . "<br>";
+        						?><form method="POST">
+        							<input type="text" name="update_naam">
+        							<input type="submit" value="Aanpassen">
+        						</form><?php 
+        					echo "<br>Foto: " . $line['gids_foto'] . "<br>";
+        						?><form method="POST">
+        							<input type="text" name="update_foto">
+        							<input type="submit" value="Aanpassen">
+        						</form><?php 
+        					echo "<br>Bio: " . $line['gids_bio'] . "<br>";
+        						?><form method="POST">
+        							<input type="text" name="update_bio">
+        							<input type="submit" value="Aanpassen">
+        						</form><?php 
+        					echo "<br>Richting: " . $line['gids_richting'] . "<br>";
+        						?><form method="POST">
+        							<input type="text" name="update_richting">
+        							<input type="submit" value="Aanpassen">
+        						</form><?php 
+        					echo "<br>Jaar: " . $line['gids_jaar'] . "<br>";
+        						?><form method="POST">
+        							<input type="text" name="update_jaar">
+        							<input type="submit" value="Aanpassen">
+        						</form><?php 
+        					echo "<br>Stad: " . $line['gids_stad'] . "<br>";
+        						?><form method="POST">
+        							<input type="text" name="update_stad">
+        							<input type="submit" value="Aanpassen">
+        						</form><?php 
+        					echo "<br>Email: " . $line['gids_email'] . "<br>";
+        						?><form method="POST">
+        							<input type="text" name="update_email">
+        							<input type="submit" value="Aanpassen">
+        						</form><?php 
+
+        				}
+        			}
+
+        		?>
+
+        	</div>
          
         </section>
 

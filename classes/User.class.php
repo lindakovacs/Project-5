@@ -3,6 +3,7 @@
     spl_autoload_register( function($class)
     {
         include_once("classes/" . $class . ".class.php");
+        include_once("../login.php");
     });
 
     class User
@@ -166,6 +167,23 @@
              $statement->bindValue(':bio',$this->Bio);
              $statement->execute();
         }
+
+
+        //TO STRING---------------------------------------
+        /*public function __toString(){
+            $obj = $this->m_sFirstname . " " . $this->m_sLastname;
+            return($obj);
+        }*/
+
+        
     }
+
+    //UPDATE PROFIEL----------------------------------
+
+        if (!empty($_POST["update_voornaam"])){
+            $update_voornaam = $_POST['update_voornaam'];
+                $sqlquery2 = "UPDATE gids SET gids_voornaam='$update_voornaam' WHERE gids_email = $Gebruikersnaam";
+            
+        }
 
 ?>
