@@ -89,11 +89,7 @@ catch(Exception $e)
     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-            <ul class="nav navbar-nav">
-                <li><a class="navbar-brand" href="index.php">Rent-A-Student</a></li>
-                <li><a href="index.php">Over ons</a></li>
-                <li><a href="index.php">Contact</a></li>
-            </ul>
+           <a class="navbar-brand" href="index.php">Rent-A-Student</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="post" class="navbar-form navbar-right">
