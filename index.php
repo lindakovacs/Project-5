@@ -2,53 +2,30 @@
     session_start();
     include_once("login.php");
 
+    try{
+        spl_autoload_register(function($class){
+            include_once("class/".$class.".class.php"); 
+        });
+    
+        include_once("classes/boek.class.php");
 
+        if(!empty($_POST['voegtoe'])){   
+            //echo "gelukt!";
+            $book = new Book();
 
-try {
-    
-    spl_autoload_register(function($class){
-        include_once("class/".$class.".class.php"); 
-        
-    });
-    
-    
-    
-    
-include_once("classes/boek.class.php");
+            $book->Gidsid=$_POST['gidsid'];
+            $book->Isgeboekt=$_POST['isgeboekt'];
 
+            $book->save();
+            echo $book->Gidsid;
+            echo $book->Isgeboekt;
+            echo "gelukt!";
+        }
+    }
 
- if (!empty($_POST['voegtoe'])){ 
-    
-      //echo "gelukt!";
-      $book = new Book();
-     
-      $book->Gidsid=$_POST['gidsid'];
-      $book->Isgeboekt=$_POST['isgeboekt'];
-     
-      $book->save();
-      echo $book->Gidsid;
-      echo $book->Isgeboekt;
-      echo "gelukt!";
-     
- }
-    
-    
-
- 
-
-}
-
-catch(Exception $e)
-    
-    
-{
-    
-    $error = $e->getMessage();
-    
-    
-}
-
-
+    catch(Exception $e){
+        $error = $e->getMessage();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -77,6 +54,9 @@ catch(Exception $e)
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -89,13 +69,18 @@ catch(Exception $e)
     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-           <a class="navbar-brand" href="index.php">Rent-A-Student</a>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="post" class="navbar-form navbar-right">
             <!--FORMULIER INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['logged_in'])){ ?>
-                
                 <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p><a href="gids.php" id="gids_change_profile_btn">Change profile</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
@@ -147,7 +132,7 @@ catch(Exception $e)
         <!--HEADER-->
         <header class="jumbotron">
 
-            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive" alt="logo"></a>
+            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
             
             <!--FACEBOOK INLOGGEN-->
@@ -180,7 +165,7 @@ catch(Exception $e)
 
 
         // Create connection
-        $conn = new mysqli("localhost", "root", "root", "phpproject");
+        $conn = new mysqli("localhost", "root", "", "phpproject");
         // Check connection
         if ($conn->connect_error) {
              die("Connection failed: " . $conn->connect_error);

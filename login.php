@@ -5,7 +5,7 @@
         $Gebruikersnaam = $_POST['email'];
         $Wachtwoord = $_POST['password'];
 
-        $conn = new mysqli("localhost:3306", "root", "root","phpproject");
+        $conn = new mysqli("localhost", "root", "","phpproject");
         if (!$conn->connect_errno)
         {
             $query = "SELECT * FROM gids WHERE gids_email = '".$conn->real_escape_string($Gebruikersnaam)."';";

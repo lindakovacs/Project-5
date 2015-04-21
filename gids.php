@@ -32,6 +32,9 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -44,11 +47,13 @@
     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-            <ul class="nav navbar-nav">
-                <li><a class="navbar-brand" href="index.php">Rent-A-Student</a></li>
-                <li><a href="index.php">Over ons</a></li>
-                <li><a href="index.php">Contact</a></li>
-            </ul>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+          <a class="navbar-brand" href="#">Project name</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="post" class="navbar-form navbar-right">
@@ -75,8 +80,6 @@
               <input type="password" name="password" id="password" placeholder="Wachtwoord" class="form-control">
             </div>
             <input type="submit" name="aanmelden" class="btn btn-primary" value="Aanmelden"></input>
-            <!--REGISTREREN-->
-            <a href="registreer.php"><button type="button" class="btn btn-primary">Registreren</button></a>
             <?php } ?>
           </form>
         </div>
@@ -105,7 +108,7 @@
         <!--HEADER-->
         <header class="jumbotron">
 
-            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive" alt="logo"></a>
+            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
             
             <!--FACEBOOK INLOGGEN-->

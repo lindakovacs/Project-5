@@ -10,9 +10,6 @@
         private $m_sBeschikbaardag;
         private $m_sGidsid;
         private $m_sIsgeboekt;
-        
-    
-
 
         //SET----------------------------------------
         public function __set($p_sProperty,$p_vValue)
@@ -41,8 +38,7 @@
                     }
                     break;
                     
-                    
-                           case 'Gidsid':
+                    case 'Gidsid':
                     if($p_vValue=="")
                     {
                         throw new Exception("gidsid invullen");
@@ -53,9 +49,7 @@
                     }
                     break;
                     
-                    
-                    
-                                 case 'Isgeboekt':
+                    case 'Isgeboekt':
                     if($p_vValue=="")
                     {
                         throw new Exception("");
@@ -65,8 +59,6 @@
                         $this->m_sIsgeboekt = $p_vValue;   
                     }
                     break;
-
-                   
                 }
         }
 
@@ -83,57 +75,36 @@
                     return $this->m_sBeschikbaaruur;
                     break;
                     
-                    
-                         case 'Gidsid':
+                    case 'Gidsid':
                     return $this->m_sGidsid;
                     break;
-
                     
-                              case 'Isgeboekt':
+                    case 'Isgeboekt':
                     return $this->m_sIsgeboekt;
                     break;
-                
-
                 }
         }
 
-         //SAVE---------------------------------------
-   
-         public function save(){
-         $conn = Db::getInstance();
-        $fb = $_SESSION['FBID'];
-         $statement = $conn->prepare("INSERT INTO geboekt  (
-                                                        
-                                                     
-                                                        bezoeker_id,
-                                                        gids_id,
-                                                        geboekt_isgeboekt
-                                                        
-                                                        
-                                                        )
+        //SAVE---------------------------------------
+        public function save(){
+            $conn = Db::getInstance();
+            $fb = $_SESSION['FBID'];
+            $statement = $conn->prepare("INSERT INTO geboekt(                         
+                                                            bezoeker_id,
+                                                            gids_id,
+                                                            geboekt_isgeboekt
+                                                            )
 
-                                                 VALUES(
-                                                        
-                                                      
-                                                        $fb,
-                                                        :gidsid,
-                                                        :isgeboekt
-                                                        
-                                
-                                                        )"
-                                       ); 
+                                                     VALUES(
+                                                            $fb,
+                                                            :gidsid,
+                                                            :isgeboekt
+                                                            )"
+                                           ); 
 
-             $statement->bindValue(':isgeboekt',$this->Isgeboekt);
-             $statement->bindValue(':gidsid',$this->Gidsid);
-             $statement->execute();
-             
-             
-             
-             
-         }
-             
-             
-
+            $statement->bindValue(':isgeboekt',$this->Isgeboekt);
+            $statement->bindValue(':gidsid',$this->Gidsid);
+            $statement->execute();
         }
-
+    }
 ?>

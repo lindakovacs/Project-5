@@ -1,9 +1,11 @@
 /* ALGEMEEN ------------------------------------------ */
 .jumbotron{
-	text-align:center;
+	text-align: center;
 }
 
-
+.center-logo{
+    margin: 0 auto;
+}
 
 .required{
     color:red;
