@@ -1,6 +1,54 @@
 <?php
     session_start();
     include_once("login.php");
+
+
+
+try {
+    
+    spl_autoload_register(function($class){
+        include_once("class/".$class.".class.php"); 
+        
+    });
+    
+    
+    
+    
+include_once("classes/boek.class.php");
+
+
+ if (!empty($_POST['voegtoe'])){ 
+    
+      //echo "gelukt!";
+      $book = new Book();
+     
+      $book->Gidsid=$_POST['gidsid'];
+      $book->Isgeboekt=$_POST['isgeboekt'];
+     
+      $book->save();
+      echo $book->Gidsid;
+      echo $book->Isgeboekt;
+      echo "gelukt!";
+     
+ }
+    
+    
+
+ 
+
+}
+
+catch(Exception $e)
+    
+    
+{
+    
+    $error = $e->getMessage();
+    
+    
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -118,27 +166,92 @@
         <!--SECTION-->
         <section>
                                     
-        <div class="container marketing">
-            <div class="row">
-                <div class="col-lg-4">
-                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
-                <h2>Titel</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
-                </div>
 
-                <div class="col-lg-4">
-                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
-                <h2>Titel</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
-                </div>
+        
+        
+        
+        
+        
+        <!-- bezoeker moet gidsen kunnen raadplegen -->
 
-                <div class="col-lg-4">
-                <img class="img-circle" src="http://placehold.it/150x150" alt="Generic placeholder image" width="150" height="150">
-                <h2>Titel</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
-                </div>
-            </div>
-        </div>
+        <div class="row">
+
+        <?php 
+
+        if(isset($_SESSION['FBID'])){
+            
+           echo  '<h2>Welke gids is beschikbaar... en wanneer?</h2>';
+
+
+        // Create connection
+        $conn = new mysqli("localhost", "root", "root", "phpproject");
+        // Check connection
+        if ($conn->connect_error) {
+             die("Connection failed: " . $conn->connect_error);
+        }
+
+
+            
+                  //$sql = "SELECT g.gids_voornaam, g.gids_naam, g.gids_bio, g.gids_richting, g.gids_jaar, g.gids_stad, //c.contact_dag, c.contact_uur  FROM gids g JOIN contact c ON c.gids_id = g.gids_id ORDER BY c.contact_dag";  
+            
+            
+            
+            //$sql = "SELECT g.gids_id, g.gids_voornaam, g.gids_naam, g.gids_bio, g.gids_richting, g.gids_jaar, g.gids_stad, b.geboekt_dag, b.geboekt_uur  FROM gids g JOIN geboekt b ON b.gids_id = g.gids_id ORDER BY b.geboekt_dag";
+            
+            
+            $sql = "SELECT * FROM gids INNER JOIN beschikbaar ON gids.gids_id = beschikbaar.gids_fk";
+            
+            
+        $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+         // output data of each row
+   // output data of each row
+        //new variable
+ $counter = 1; 
+        
+ while($row = $result->fetch_assoc()) {
+     echo
+'<div class="col-sm-4">'.
+        "<br>".'<img class="img-rounded img-responsive" src="http://placehold.it/150">'.
+        "<br>"."voornaam: ".$row["gids_voornaam"].
+        "<br>". "Achternaam: ". $row["gids_naam"].
+        "<br>". "Richting: ". $row["gids_richting"].
+        "<br>". "Jaar: ". $row["gids_jaar"].
+        "<br>". "Biografie:  " . $row["gids_bio"]. 
+        "<br>"." Afspraakuur:  " . $row["beschikbaar_uur"].
+         "<br>"."Afspraakdag: " . $row["beschikbaar_dag"].
+         
+         
+        "<form method='post'>
+        <input type='hidden' name='gidsid' value='".$row["gids_id"]."'/>
+        <input type='hidden' name='isgeboekt' value='1'/>
+        <input type='submit' class='data' name='voegtoe' value='Boek mij'/></form>".
+'</div>';
+//$counter++; //increment it with every row
+     
+
+
+ }
+        
+        
+    } else {
+         echo "0 results";
+    }
+
+    $conn->close();
+    }
+
+
+
+         ?>
+             </div>
+                                    
+        
+        
+        
+        
+        
          
         </section>
 
