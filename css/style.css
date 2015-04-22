@@ -20,27 +20,26 @@ footer{
 /* INLOGGEN & UITLOGGEN ------------------------------ */
 .email-ingelogd{
     color:white;
-    position: absolute;
-    margin-top:7px;
-    margin-left:-170px;
+    float: left;
+    padding-right:20px;
+    margin-top: 6px;
 }
 
 .fa-facebook{
     margin-right: 10px;
 }
 
-.fb-ingelogd{
-    color:white;
-    position: absolute;
-    margin-top: 7px;
-    margin-left:-140px;
+.fb-img{
+    height: 37px;
+    float: left;
+    padding-right:10px;
 }
 
-.fb-img{
-    height: 40px;
-    position: absolute;
-    margin-left:-190px;
-    margin-top: -2px;
+.fb-ingelogd{
+    color:white;
+    float: left;
+    padding-right: 10px;
+    margin-top: 7px;
 }
 
 /* MARKETING CONTENT --------------------------------- */
@@ -54,9 +53,4 @@ footer{
 .marketing .col-lg-4 p {
     margin-right: 10px;
     margin-left: 10px;
-}
-
-
-#gids_change_profile_btn{
-    
 }

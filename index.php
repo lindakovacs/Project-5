@@ -57,6 +57,9 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    
+    <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1" async="async"></script>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -75,13 +78,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="index.php">Rent-A-Student</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="post" class="navbar-form navbar-right">
             <!--FORMULIER INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['logged_in'])){ ?>
-                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p><a href="gids.php" id="gids_change_profile_btn">Change profile</a>
+                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p>
+                <a class="btn btn-primary" href="gids.php">Change profile</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
             
@@ -89,13 +93,13 @@
             <?php if(isset($_SESSION['FBID'])){ ?>
                 <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
                 <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
-                <span class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></span>
+                <p class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></p>
                 <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
             <?php } ?>
 
             <!--FORMULIER INLOGGEN-->
             <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
-            <div class="form-group has-feedback">
+            <div class="form-group">
               <input type="text" name="email" id="email" placeholder="E-mailadres" class="form-control email-inloggen">
             </div>
             <div class="form-group">
@@ -146,94 +150,63 @@
 
         <!--SECTION-->
         <section>
-                                    
-
-        
-        
-        
-        
-        
+                
         <!-- bezoeker moet gidsen kunnen raadplegen -->
-
         <div class="row">
-
         <?php 
-
         if(isset($_SESSION['FBID'])){
-            
-           echo  '<h2>Welke gids is beschikbaar... en wanneer?</h2>';
+            echo  '<h2>Welke gids is beschikbaar... en wanneer?</h2>';
 
+            // Create connection
+            $conn = new mysqli("localhost", "root", "", "phpproject");
+            // Check connection
+            if ($conn->connect_error) {
+                 die("Connection failed: " . $conn->connect_error);
+            }
 
-        // Create connection
-        $conn = new mysqli("localhost", "root", "", "phpproject");
-        // Check connection
-        if ($conn->connect_error) {
-             die("Connection failed: " . $conn->connect_error);
+            //$sql = "SELECT g.gids_voornaam, g.gids_naam, g.gids_bio, g.gids_richting, g.gids_jaar, g.gids_stad, //c.contact_dag, c.contact_uur  FROM gids g JOIN contact c ON c.gids_id = g.gids_id ORDER BY c.contact_dag";  
+                                
+            //$sql = "SELECT g.gids_id, g.gids_voornaam, g.gids_naam, g.gids_bio, g.gids_richting, g.gids_jaar, g.gids_stad, b.geboekt_dag, b.geboekt_uur  FROM gids g JOIN geboekt b ON b.gids_id = g.gids_id ORDER BY b.geboekt_dag";
+                        
+            $sql = "SELECT * FROM gids INNER JOIN beschikbaar ON gids.gids_id = beschikbaar.gids_fk";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+            // output data of each row
+            // output data of each row
+            //new variable
+            $counter = 1; 
+        
+                while($row = $result->fetch_assoc()) {
+                    echo
+                    '<div class="col-sm-4">'.
+                    "<br>".'<img class="img-rounded img-responsive" src="http://placehold.it/150">'.
+                    "<br>"."Voornaam: ".$row["gids_voornaam"].
+                    "<br>". "Achternaam: ". $row["gids_naam"].
+                    "<br>". "Richting: ". $row["gids_richting"].
+                    "<br>". "Jaar: ". $row["gids_jaar"].
+                    "<br>". "Biografie:  " . $row["gids_bio"]. 
+                    "<br>"." Afspraakuur:  " . $row["beschikbaar_uur"].
+                    "<br>"."Afspraakdag: " . $row["beschikbaar_dag"].
+
+                    "<form method='post'>
+                    <input type='hidden' name='gidsid' value='".$row["gids_id"]."'/>
+                    <input type='hidden' name='isgeboekt' value='1'/>
+                    <input type='submit' class='data' name='voegtoe' value='Boek mij'/></form>".
+        '</div>';
+                    //$counter++; //increment it with every row
+                }
+        
+            }else{
+                echo "0 results";
+            }
+
+        $conn->close();
         }
 
-
-            
-                  //$sql = "SELECT g.gids_voornaam, g.gids_naam, g.gids_bio, g.gids_richting, g.gids_jaar, g.gids_stad, //c.contact_dag, c.contact_uur  FROM gids g JOIN contact c ON c.gids_id = g.gids_id ORDER BY c.contact_dag";  
-            
-            
-            
-            //$sql = "SELECT g.gids_id, g.gids_voornaam, g.gids_naam, g.gids_bio, g.gids_richting, g.gids_jaar, g.gids_stad, b.geboekt_dag, b.geboekt_uur  FROM gids g JOIN geboekt b ON b.gids_id = g.gids_id ORDER BY b.geboekt_dag";
-            
-            
-            $sql = "SELECT * FROM gids INNER JOIN beschikbaar ON gids.gids_id = beschikbaar.gids_fk";
-            
-            
-        $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-         // output data of each row
-   // output data of each row
-        //new variable
- $counter = 1; 
-        
- while($row = $result->fetch_assoc()) {
-     echo
-'<div class="col-sm-4">'.
-        "<br>".'<img class="img-rounded img-responsive" src="http://placehold.it/150">'.
-        "<br>"."voornaam: ".$row["gids_voornaam"].
-        "<br>". "Achternaam: ". $row["gids_naam"].
-        "<br>". "Richting: ". $row["gids_richting"].
-        "<br>". "Jaar: ". $row["gids_jaar"].
-        "<br>". "Biografie:  " . $row["gids_bio"]. 
-        "<br>"." Afspraakuur:  " . $row["beschikbaar_uur"].
-         "<br>"."Afspraakdag: " . $row["beschikbaar_dag"].
-         
-         
-        "<form method='post'>
-        <input type='hidden' name='gidsid' value='".$row["gids_id"]."'/>
-        <input type='hidden' name='isgeboekt' value='1'/>
-        <input type='submit' class='data' name='voegtoe' value='Boek mij'/></form>".
-'</div>';
-//$counter++; //increment it with every row
-     
-
-
- }
-        
-        
-    } else {
-         echo "0 results";
-    }
-
-    $conn->close();
-    }
-
-
-
-         ?>
-             </div>
+        ?>
+        </div>
                                     
-        
-        
-        
-        
-        
-         
         </section>
 
         <!--FOOTER-->
