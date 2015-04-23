@@ -54,3 +54,17 @@ footer{
     margin-right: 10px;
     margin-left: 10px;
 }
+
+/* Footer ----------------------------------------- */
+.snapwidget-widget
+{
+    width:100%;
+}
+
+
+@media screen and (min-width: 500px) {
+    .snapwidget-widget
+{
+    width:70%;
+}
+}

@@ -1,0 +1,113 @@
+.jumbotron {
+	text-align:center;
+}
+
+header{
+    padding-right: 10px;
+}
+
+.fa-facebook{
+    margin-right: 10px;
+}
+
+#logout{
+    position:absolute;
+    margin-left: 48%;
+}
+
+.required{
+    color:red;
+}
+
+footer{
+    background-color:lightgray;
+    text-align: center;
+}
+
+/*#chatbox{
+    text-align: center;
+    color:red;
+    height:300px;
+    background-color:lightgray;
+    margin-bottom: 20px;
+}
+
+.article{
+    background-color: #1892c7;
+    margin-left:0px;
+    margin-right:0px;
+    color:white;
+    
+}*/
+
+ul li{
+    list-style-type:none;
+}
+#chatbox
+{
+	width: 80%;
+	padding: 0 10%;
+	max-width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.article
+{
+position: relative;
+padding: 0px;
+background: #E5E5EA;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+}
+
+.article:after 
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 8px 11px 8px 0;
+border-color: transparent #E5E5EA;
+display: block;
+width: 0;
+z-index: 1;
+left: -11px;
+top: 4px;
+}
+
+.them 
+{
+position: relative;
+float: right;
+padding: 0px;
+background: #2A96F6;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+color: white;
+}
+
+.them:after 
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 8px 0 8px 11px;
+border-color: transparent #2A96F6;
+display: block;
+width: 0;
+z-index: 1;
+right: -11px;
+top: 4px;
+}
+
+.article, .them
+{
+	padding: 5px;
+	margin: 0.5em 0;
+	box-sizing: border-box;
+	clear: both;
+	width: 60%;
+	min-width: 200px;
+}

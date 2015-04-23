@@ -211,6 +211,11 @@
 
         <!--FOOTER-->
         <footer>
+           <!-- SnapWidget -->
+           <h1>Vergeet niet mee te instagrammen met ons!</h1>
+           <h2>#weareimd</h2>
+<script src="http://snapwidget.com/js/snapwidget.js"></script>
+<iframe src="http://snapwidget.com/in/?h=d2VhcmVpbWR8aW58MjB8NXwyfHx5ZXN8NXxmYWRlSW58b25TdGFydHx5ZXN8eWVz&ve=150415" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden;"></iframe>
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
         
