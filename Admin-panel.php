@@ -1,4 +1,15 @@
-<!DOCTYPE html>
+
+          <?php 
+
+    session_start();
+ include_once("class/".$class.".class.php"); 
+
+
+
+
+?>
+
+
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
@@ -20,13 +31,7 @@
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/bootstrap-social.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -39,7 +44,7 @@
            
         <!--HEADER-->
         <header class="jumbotron">
-            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
+            <a href="index.php"><img src="img/vector-logo.png" alt="logo"></a>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
         </header>
 
@@ -97,7 +102,7 @@
             <button type="submit" class="btn btn-default">Registreren</button>
             </form>
          
-        </section>
+     
         
         <br>
                 
@@ -108,11 +113,79 @@
                 
                 
                 
+            
+                 <h2 id="registration">Lijst opvragen van boekingen</h2>
+                 <br>
+        <form role="form" method="post" >
+            <button type="submit" name= "lijst" class="btn btn-default">Toon alle boekingen</button>
+           <!--<input type='hidden' name='geboektfk' value='".$row["geboekt_fk"]."'/>-->
+           <input type='hidden' name='geboektfk' value='".$row["geboekt_fk"]."'/>
+            </form>   
+                   
+           
+                      
+    <h2>Welke gids is beschikbaar... en wanneer?</h2>
+       <br>
+        
+        
+        
+    <table style="width:100%">
+  <tr>
+    <th>Naam</th>
+    <th>E-mail</th>
+    <th>Datum</th>
+    <th>tijdstip</th>
+  </tr>
+ 
+
+
+<?php 
+
+$conn = new mysqli("localhost", "root", "root", "phpproject");
+        if ($conn->connect_error) {
+             die("Connection failed: " . $conn->connect_error);
+        }
+
+
+$sql = "SELECT * FROM beschikbaar INNER JOIN gids ON beschikbaar.gids_fk = gids.gids_id INNER JOIN geboekt ON gids.gids_id = geboekt.gids_id INNER JOIN bezoeker ON geboekt.bezoeker_id = bezoeker.bezoeker_id WHERE geboekt_isgeboekt = 1";
+
+
+
+$run = $conn->query($sql);
+    
+    while($row = $run->fetch_assoc()) {
+     $bezoeker_naam = $row["bezoeker_naam"];
+     $bezoeker_email = $row["bezoeker_email"];
+     $beschikbaar_uur = $row["beschikbaar_uur"];
+     $beschikbaar_dag = $row["beschikbaar_dag"];
+
+?>
+       
+       
+    <td><?php echo $bezoeker_naam; ?></td>
+    <td><?php echo $bezoeker_email; ?></td>
+    <td><?php echo $beschikbaar_uur; ?></td>
+    <td><?php echo $beschikbaar_dag; ?></td>
+    <td></td>
+    <td></td>
+  </tr>
+             
+<?php } ?>
+              
+                              
+        </table>
+                                              
+         
+               <br> 
+               <br>
+                
         <!-- FOOTER -->
         <footer class="footer">
-            <p>&copy;2015</p>    
+           <br> 
+            <p>&copy;2015</p>
+            <br>    
         </footer>
         
-    </div>  
+ 
 </body>
 </html>
