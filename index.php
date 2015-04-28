@@ -4,10 +4,8 @@
 
     try{
         spl_autoload_register(function($class){
-            include_once("class/".$class.".class.php"); 
+            include_once("classes/".$class.".class.php"); 
         });
-    
-        include_once("classes/boek.class.php");
 
         if(!empty($_POST['voegtoe'])){   
             //echo "gelukt!";
@@ -84,7 +82,7 @@
           <form method="post" class="navbar-form navbar-right">
             <!--FORMULIER INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['logged_in'])){ ?>
-                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p>
+                <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
                 <a class="btn btn-primary" href="gids.php">Change profile</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>

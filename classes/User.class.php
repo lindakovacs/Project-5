@@ -47,13 +47,20 @@
 
                     //E-MAILADRES
                     case 'Email':
-                    if($p_vValue=="")
+                    if ($p_vValue!="")
                     {
-                        throw new Exception("<b>Geen geldig e-mailadres!</b> Alle verplichte velden moeten ingevuld zijn.");
+                        if ($this->checkEmail($p_vValue) === true)
+                        {
+                            $this->m_sEmail = $p_vValue;
+                        }
+                        else
+                        {
+                            throw new Exception("<b>E-mailadres is al in gebruik!</b> Probeer opnieuw met een ander e-mailadres.");
+                        }
                     }
                     else
                     {
-                        $this->m_sEmail = $p_vValue;    
+                        throw new Exception("<b>E-mailadres niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
                     }
                     break;
 
@@ -128,6 +135,27 @@
 
 
                 }
+        }
+        
+        public function getAll()
+        {
+            $conn = Db::getInstance();
+            $allposts = $conn->query("SELECT * FROM gids");
+            return $allposts;
+        }
+        
+                
+        public function checkEmail($m_sEmail)
+        {
+            $ret = true;
+            $all_mails = $this->getAll();
+            while($row = $all_mails->fetch(PDO::FETCH_ASSOC)) {
+                if($row['gids_email'] == $m_sEmail)
+                {
+                    $ret = false;
+                }
+            }
+            return $ret;
         }
 
          //SAVE---------------------------------------

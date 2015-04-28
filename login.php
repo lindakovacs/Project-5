@@ -16,6 +16,7 @@
             {
                 $success ="<b>Welkom!</b> U bent aangemeld met ".$Gebruikersnaam.".";
                 $_SESSION['logged_in'] = true;
+                $_SESSION['username'] = $Gebruikersnaam;
             }
             else
             {

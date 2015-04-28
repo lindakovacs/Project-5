@@ -2,7 +2,6 @@
 
     session_start();
     include("login.php");
-//    include_once("classes/User.class.php");
 
 ?>
 
@@ -62,7 +61,7 @@
           <form method="post" class="navbar-form navbar-right">
             <!--FORMULIER INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['logged_in'])){ ?>
-                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p>
+                <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
             
@@ -124,8 +123,7 @@
         </header>
 
         <!--SECTION-->
-        <section>
-                                    
+        <section>                      
         	<div class="container marketing">
                 
             	<?php
@@ -136,61 +134,71 @@
         			$sqlquery = "SELECT * FROM gids";
         			$result = $link->query($sqlquery);
 
-        			
-        			
-
         			while($line = $result->fetch_array())
         			{
-        				if($Gebruikersnaam==$line['gids_email']){
-        				
-        					echo "Voornaam: " . $line['gids_voornaam'] . "<br>";
-        						?><form method="POST">
-        							<input type="text" name="update_voornaam">
-        							<input type="submit" value="Aanpassen">
-        						</form><?php 
-        					echo "<br>Naam: " . $line['gids_naam'] . "<br>";
-        						?><form method="POST">
-        							<input type="text" name="update_naam">
-        							<input type="submit" value="Aanpassen">
-        						</form><?php 
-        					echo "<br>Foto: " . $line['gids_foto'] . "<br>";
-        						?><form method="POST">
-        							<input type="text" name="update_foto">
-        							<input type="submit" value="Aanpassen">
-        						</form><?php 
-        					echo "<br>Bio: " . $line['gids_bio'] . "<br>";
-        						?><form method="POST">
-        							<input type="text" name="update_bio">
-        							<input type="submit" value="Aanpassen">
-        						</form><?php 
-        					echo "<br>Richting: " . $line['gids_richting'] . "<br>";
-        						?><form method="POST">
-        							<input type="text" name="update_richting">
-        							<input type="submit" value="Aanpassen">
-        						</form><?php 
-        					echo "<br>Jaar: " . $line['gids_jaar'] . "<br>";
-        						?><form method="POST">
-        							<input type="text" name="update_jaar">
-        							<input type="submit" value="Aanpassen">
-        						</form><?php 
-        					echo "<br>Stad: " . $line['gids_stad'] . "<br>";
-        						?><form method="POST">
-        							<input type="text" name="update_stad">
-        							<input type="submit" value="Aanpassen">
-        						</form><?php 
-        					echo "<br>Email: " . $line['gids_email'] . "<br>";
-        						?><form method="POST">
-        							<input type="text" name="update_email">
-        							<input type="submit" value="Aanpassen">
-        						</form><?php 
-
-        				}
+        				if($_SESSION['username']==$line['gids_email'])
+                        {
+                ?>
+                            <!--VOORNAAM-->
+                            <?php echo "Voornaam: ".$line['gids_voornaam']."<br>"; ?>
+        				    <form method="POST">
+                                <input type="text" name="update_voornaam">
+                                <input type="submit" value="Aanpassen">
+        				    </form>
+                           
+                            <!--ACHTERNAAM-->
+        					<?php echo "<br>Achternaam: ".$line['gids_naam']."<br>"; ?>
+                            <form method="POST">
+                                <input type="text" name="update_naam">
+                                <input type="submit" value="Aanpassen">
+                            </form>
+                            
+                            <!--E-MAILADRES-->
+        					<?php echo "<br>Email: ".$line['gids_email']."<br>"; ?>
+                            <form method="POST">
+                                <input type="text" name="update_email">
+                                <input type="submit" value="Aanpassen">
+                            </form>
+                            
+                            <!--JAAR-->
+        					<?php echo "<br>Jaar: ".$line['gids_jaar']."<br>"; ?>
+                            <form method="POST">
+                                <input type="text" name="update_jaar">
+                                <input type="submit" value="Aanpassen">
+                            </form>
+                            
+                            <!--RICHTING-->
+        					<?php echo "<br>Richting: ".$line['gids_richting']."<br>"; ?>
+        				    <form method="POST">
+                                <input type="text" name="update_richting">
+                                <input type="submit" value="Aanpassen">
+                            </form>
+                            
+                            <!--WOONPLAATS-->
+        					<?php echo "<br>Stad: ".$line['gids_stad']."<br>"; ?>
+                            <form method="POST">
+                                <input type="text" name="update_stad">
+                                <input type="submit" value="Aanpassen">
+                            </form>
+                            
+                            <!--BIOGRAFIE-->
+        					<?php echo "<br>Bio: " .$line['gids_bio']."<br>"; ?>
+        				    <form method="POST">
+                                <input type="text" name="update_bio">
+                                <input type="submit" value="Aanpassen">
+                            </form>
+                            
+                            <!--PROFIELFOTO-->
+        					<?php echo "<br>Foto: ".$line['gids_foto']."<br>"; ?>
+        				    <form method="POST">
+                                <input type="text" name="update_foto">
+                                <input type="submit" value="Aanpassen">
+                            </form>
+                    <?php }
         			}
-
         		?>
 
         	</div>
-         
         </section>
 
         <!--FOOTER-->
