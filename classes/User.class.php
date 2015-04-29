@@ -15,6 +15,7 @@
         private $m_sEducation;
         private $m_sCity;
         private $m_sBio;
+        private $m_sPicture;
 
         //SET----------------------------------------
         public function __set($p_sProperty,$p_vValue)
@@ -93,6 +94,10 @@
                     case 'Bio':
                     $this->m_sBio = $p_vValue;
                     break;
+                    
+                    case 'Picture':
+                    $this->m_sPicture = $p_vValue;
+                    break;
                 }
         }
 
@@ -132,8 +137,10 @@
                     case 'Bio':
                     return $this->m_sBio;
                     break;
-
-
+                    
+                    case 'Picture':
+                    return $this->m_sPicture;
+                    break;
                 }
         }
         
@@ -143,8 +150,7 @@
             $allposts = $conn->query("SELECT * FROM gids");
             return $allposts;
         }
-        
-                
+             
         public function checkEmail($m_sEmail)
         {
             $ret = true;
@@ -157,6 +163,15 @@
             }
             return $ret;
         }
+        
+        //PROFIELFOTO
+        public function createFolderSaveImage($p_iId){
+            $curdir = getcwd()."/img/profielfotos/";
+            if(mkdir($curdir.$p_iId,0777)){
+                move_uploaded_file($_FILES['profilepic']['tmp_name'],"img/profielfotos/".$p_iId."/".$_FILES['profilepic']['name']);
+
+            }
+         }
 
          //SAVE---------------------------------------
          public function save(){
@@ -169,7 +184,8 @@
                                                         gids_jaar,
                                                         gids_richting,
                                                         gids_stad,
-                                                        gids_bio        
+                                                        gids_bio,
+                                                        gids_foto
                                                         )
 
                                                  VALUES(
@@ -180,7 +196,8 @@
                                                         :jaar,
                                                         :richting,
                                                         :stad,
-                                                        :bio
+                                                        :bio,
+                                                        :picture
                                                         )"
                                        ); 
 
@@ -192,7 +209,14 @@
              $statement->bindValue(':richting',$this->Education);
              $statement->bindValue(':stad',$this->City);
              $statement->bindValue(':bio',$this->Bio);
+             $statement->bindValue(':picture',$this->Picture);
              $statement->execute();
+             
+             if(!empty($_POST['gids_foto'])){
+                $insert_id = $conn->lastInsertId();
+                $this->createFolderSaveImage($insert_id);  
+             }
+
         }
 
         //TO STRING---------------------------------------

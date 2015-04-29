@@ -7,22 +7,27 @@
     margin: 0 auto;
 }
 
+.text-align{
+    text-align: center;
+}
+
 .required{
     color:red;
 }
 
-footer{
-    background-color:lightgray;
-    text-align: center;
-    margin:0 auto;
+/* INLOGGEN & UITLOGGEN ------------------------------ */
+.img-profile{
+    width: 38px;
+    float: left;
+    margin-right: 10px;
+    margin-left: -50px
 }
 
-/* INLOGGEN & UITLOGGEN ------------------------------ */
 .email-ingelogd{
     color:white;
     float: left;
-    padding-right:20px;
-    margin-top: 6px;
+    padding-right: 10px;
+    margin-top: 8px;
 }
 
 .fa-facebook{
@@ -30,41 +35,47 @@ footer{
 }
 
 .fb-img{
-    height: 37px;
+    height: 38px;
     float: left;
-    padding-right:10px;
+    margin-right: 10px;
 }
 
 .fb-ingelogd{
     color:white;
     float: left;
     padding-right: 10px;
-    margin-top: 7px;
+    margin-top: 8px;
 }
 
 /* MARKETING CONTENT --------------------------------- */
 .marketing .col-lg-4 {
-    margin-bottom: 20px;
     text-align: center;
-}
-.marketing h2 {
-    font-weight: normal;
-}
-.marketing .col-lg-4 p {
-    margin-right: 10px;
-    margin-left: 10px;
+    margin-left: -15px;
 }
 
-/* Footer ----------------------------------------- */
+/*STUDENT BESCHIKBAAR ------------------------------ */
+.img-beschikbaar{
+    width: 150px;
+    float: left;
+    margin-right: 20px;
+}
+
+/* FOOTER ----------------------------------------- */
+footer{
+    background-color:lightgray;
+    text-align: center;
+    margin:0 auto;
+}
+
 .snapwidget-widget
 {
     width:100%;
 }
 
-
-@media screen and (min-width: 500px) {
-    .snapwidget-widget
+@media screen and (min-width: 500px)
 {
-    width:70%;
-}
+    .snapwidget-widget
+    {
+        width:70%;
+    }
 }

@@ -1,8 +1,6 @@
 <?php
-
     session_start();
     include("login.php");
-
 ?>
 
 <!DOCTYPE html>
@@ -32,11 +30,18 @@
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
+    <!-- RESPONSIVE -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
+    <!-- DATETIME PICKER -->
+    <link href="bootstrap/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="bootstrap/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="bootstrap/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="bootstrap/bootstrap-datetimepicker.nl.js" charset="UTF-8"></script>
+    
     <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1" async="async"></script>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1"         async="async"></script>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -45,37 +50,35 @@
 </head>
 <body>
 
-    <!--NAVIGATIE-->
+    <!-- NAVIGATIE -->
     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand" href="index.php">Rent-A-Student</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="post" class="navbar-form navbar-right">
-            <!--FORMULIER INGELOGD + UITLOGGEN-->
-            <?php if(isset($_SESSION['logged_in'])){ ?>
+            <!-- FORMULIER INGELOGD + UITLOGGEN -->
+            <?php if(isset($_SESSION['logged_in'])){ 
+                if(!empty($_SESSION['gids_foto'])){ ?>
+                    <img class="img-rounded img-responsive img-profile" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="">
+                <?php }else{ ?>
+                   <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd">
+                <?php } ?>
                 <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
+                <a class="btn btn-primary" href="gids.php">Profiel</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
-            
-            <!--FACEBOOK INGELOGD + UITLOGGEN-->
-            <?php if(isset($_SESSION['FBID'])){ ?>
-                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
-                <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
-                <span class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></span>
-                <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
-            <?php } ?>
 
-            <!--FORMULIER INLOGGEN-->
+            <!-- FORMULIER INLOGGEN -->
             <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
-            <div class="form-group has-feedback">
+            <div class="form-group">
               <input type="text" name="email" id="email" placeholder="E-mailadres" class="form-control email-inloggen">
             </div>
             <div class="form-group">
@@ -88,10 +91,10 @@
       </div>
     </nav>
     
-    <!--CONTAINER-->
+    <!-- CONTAINER -->
     <div class="container">
       
-        <!--ALERT SUCCESS-->
+        <!-- ALERT SUCCESS -->
         <?php if(isset($success)){ ?>
             <div class="alert alert-success" role="alert">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
@@ -99,7 +102,7 @@
             </div>
         <?php } ?>
 
-        <!--ALERT DANGER-->
+        <!-- ALERT DANGER -->
         <?php if(isset($error)){ ?>
             <div class="alert alert-danger" role="alert">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -107,13 +110,13 @@
             </div>
         <?php } ?>
        
-        <!--HEADER-->
+        <!-- HEADER -->
         <header class="jumbotron">
 
             <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
             
-            <!--FACEBOOK INLOGGEN-->
+            <!-- FACEBOOK INLOGGEN -->
             <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
                 <a href="facebook/fbconfig.php">Lorem Ipsum is slechts een proeftekst.<br>
                 <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
@@ -122,91 +125,165 @@
 
         </header>
 
-        <!--SECTION-->
+        <!-- SECTION -->
         <section>                      
-        	<div class="container marketing">
+        	<div class="container">
+            
+            <!-- PROFIEL FOTO + INFO -->
+            <div class="page-header">
+                <h1>Profiel</h1>
+            </div>
+            <?php if(!empty($_SESSION['gids_foto'])){ ?>
+                <img class="img-rounded img-responsive img-beschikbaar" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="profielfoto">
+            <?php }else{ ?>
+                <img class="img-rounded img-responsive img-beschikbaar" src="img/weareimd.png" alt="weareimd">
+            <?php } ?>
+
+            <?php
+                $link = new mysqli("localhost", "root", "");
+                $link->select_db("phpproject");
+
+                $sqlquery = "SELECT * FROM gids";
+                $result = $link->query($sqlquery);
+
+                while($line = $result->fetch_array())
+                {
+                    if($_SESSION['username']==$line['gids_email'])
+                    {
+                        echo "<b>Voornaam:</b> ".$line['gids_voornaam']."<br>";
+                        echo "<b>Achternaam:</b> ".$line['gids_naam']."<br>";
+                        echo "<b>Email:</b> ".$line['gids_email']."<br>";
+                        echo "<b>Jaar:</b> ".$line['gids_jaar']."<br>";
+                        echo "<b>Richting:</b> ".$line['gids_richting']."<br>";
+                        echo "<b>Stad:</b> ".$line['gids_stad']."<br>";
+                        echo "<b>Bio:</b> " .$line['gids_bio']."<br>";                           
+                    }
+                }
+            ?>
+            
+            <br>
+            
+            <!-- BESCHIKBAARHEID -->
+            <h3>Beschikbaarheid</h3>
+            <div class="input-append date form_datetime">
+                <input class="form-control" type="text" placeholder="Klik hier voor een datum en uur te kiezen.">
+                <span class="add-on"><i class="icon-th"></i></span>
+            </div>            
+            <br><input type="submit" name="beschikbaar" class="btn btn-primary" value="Beschikbaar"></input>
+            
+            <script type="text/javascript">
+                $(".form_datetime").datetimepicker({
+                    format: "dd MM yyyy - hh:ii"
+                });
+            </script>           
+            
+            <!-- PROFIEL UPDATEN -->
+            <div class="page-header">
+                <h1>Profiel aanpassen</h1>
+            </div>
+            <?php
+                $link = new mysqli("localhost", "root", "");
+                $link->select_db("phpproject");
+                //test
+
+                $sqlquery = "SELECT * FROM gids";
+                $result = $link->query($sqlquery);
+
+                while($line = $result->fetch_array())
+                {
+                    if($_SESSION['username']==$line['gids_email'])
+                    { ?>
+                    <form role="form" method="post" enctype="multipart/form-data" >              
+                        <!--VOORNAAM-->            
+                        <label for="firstname">Voornaam:</label>
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input type="text" class="form-control" id="firstname" name="update_voornaam" value="<?php echo $line['gids_voornaam']; ?>">  
+                        </div>
+                        
+                        <!--ACHTERNAAM-->
+                        <label for="lastname">Achternaam:</label>
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input type="text" class="form-control" id="lastname" name="update_naam" value="<?php echo $line['gids_naam']; ?>">  
+                        </div>
+
+                        <!--EMAILADRES-->
+                        <label for="email">E-mailadres:</label>
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" name="update_email" value="<?php echo $line['gids_email']; ?>">
+                        </div>
+
+                       <!--JAAR-->
+                       <div class="form-group">
+                            <label for="year">Jaar:</label>
+                            <div style="margin-bottom: 25px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                <select class="form-control" id="year" name="update_jaar">
+                                    <option><?php echo $line['gids_jaar']; ?></option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--RICHTING-->
+                        <div class="form-group">
+                            <label for="education">Richting:</label>
+                            <div style="margin-bottom: 25px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                <select class="form-control" id="education" name="update_richting">
+                                    <option><?php echo $line['gids_richting']; ?></option>
+                                    <option>Niet van toepassing</option>
+                                    <option>Webdesign</option>
+                                    <option>Webdevelopment</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--WOONPLAATS-->
+                        <label for="email">Woonplaats:</label>
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
+                            <input type="text" class="form-control" id="city" name="update_stad" value="<?php echo $line['gids_stad']; ?>">                                 
+                        </div>
+                        
+                        <!--BIOGRAFIE-->
+                        <label for="email">Biografie:</label>
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-comment"></i></span>
+                            <input type="text" class="form-control" id="bio" name="update_bio" value="<?php echo $line['gids_bio']; ?>">                                 
+                        </div>
+                        
+                        <!--PROFIELFOTO-->
+                        <label for="email">Profielfoto:</label>
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                            <input type="text" class="form-control" id="bio" name="update_foto" value="<?php echo $line['gids_foto']; ?>">                                 
+                        </div>
                 
-            	<?php
-            		$link = new mysqli("localhost", "root", "");
-        			$link->select_db("phpproject");
-                    //test
-
-        			$sqlquery = "SELECT * FROM gids";
-        			$result = $link->query($sqlquery);
-
-        			while($line = $result->fetch_array())
-        			{
-        				if($_SESSION['username']==$line['gids_email'])
-                        {
-                ?>
-                            <!--VOORNAAM-->
-                            <?php echo "Voornaam: ".$line['gids_voornaam']."<br>"; ?>
-        				    <form method="POST">
-                                <input type="text" name="update_voornaam">
-                                <input type="submit" value="Aanpassen">
-        				    </form>
-                           
-                            <!--ACHTERNAAM-->
-        					<?php echo "<br>Achternaam: ".$line['gids_naam']."<br>"; ?>
-                            <form method="POST">
-                                <input type="text" name="update_naam">
-                                <input type="submit" value="Aanpassen">
-                            </form>
-                            
-                            <!--E-MAILADRES-->
-        					<?php echo "<br>Email: ".$line['gids_email']."<br>"; ?>
-                            <form method="POST">
-                                <input type="text" name="update_email">
-                                <input type="submit" value="Aanpassen">
-                            </form>
-                            
-                            <!--JAAR-->
-        					<?php echo "<br>Jaar: ".$line['gids_jaar']."<br>"; ?>
-                            <form method="POST">
-                                <input type="text" name="update_jaar">
-                                <input type="submit" value="Aanpassen">
-                            </form>
-                            
-                            <!--RICHTING-->
-        					<?php echo "<br>Richting: ".$line['gids_richting']."<br>"; ?>
-        				    <form method="POST">
-                                <input type="text" name="update_richting">
-                                <input type="submit" value="Aanpassen">
-                            </form>
-                            
-                            <!--WOONPLAATS-->
-        					<?php echo "<br>Stad: ".$line['gids_stad']."<br>"; ?>
-                            <form method="POST">
-                                <input type="text" name="update_stad">
-                                <input type="submit" value="Aanpassen">
-                            </form>
-                            
-                            <!--BIOGRAFIE-->
-        					<?php echo "<br>Bio: " .$line['gids_bio']."<br>"; ?>
-        				    <form method="POST">
-                                <input type="text" name="update_bio">
-                                <input type="submit" value="Aanpassen">
-                            </form>
-                            
-                            <!--PROFIELFOTO-->
-        					<?php echo "<br>Foto: ".$line['gids_foto']."<br>"; ?>
-        				    <form method="POST">
-                                <input type="text" name="update_foto">
-                                <input type="submit" value="Aanpassen">
-                            </form>
-                    <?php }
-        			}
-        		?>
+                        <input type="submit" name="beschikbaar" class="btn btn-primary" value="Profiel bewerken"></input>
+                </form>
+                <?php }
+                }
+            ?>
 
         	</div>
         </section>
 
         <!--FOOTER-->
         <footer>
+           <!-- SnapWidget -->
+            <h1>Vergeet niet mee te instagrammen met ons!</h1>
+            <h2>#weareimd</h2>
+            <script src="http://snapwidget.com/js/snapwidget.js"></script>
+            <iframe src="http://snapwidget.com/in/?h=d2VhcmVpbWR8aW58MjB8NXwyfHx5ZXN8NXxmYWRlSW58b25TdGFydHx5ZXN8eWVz&ve=150415" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden;"></iframe>
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
         
-    </div><!--/CONTAINER-->
+    </div><!-- /CONTAINER -->
 
 </body>
 </html>

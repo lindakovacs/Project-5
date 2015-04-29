@@ -1,12 +1,9 @@
 <?php
-
     session_start();
-
     spl_autoload_register( function($class)
     {
         include_once("classes/" . $class . ".class.php");
     });
-
     include_once("login.php");
     
     if(!empty($_POST["registreren"]))
@@ -24,6 +21,7 @@
             $g->Education=$_POST['education'];
             $g->City=$_POST['city'];
             $g->Bio=$_POST['bio'];
+            $g->Picture=$_FILES['profilepic']['name'];
             $g->save();
             $success ="<b>Ok!</b> Je bent succesvol geregistreerd.";
         }
@@ -62,6 +60,7 @@
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
+    <!-- RESPONSIVE -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
@@ -93,16 +92,8 @@
             <?php if(isset($_SESSION['logged_in'])){ ?>
                 <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
-            <?php } ?>
+            <?php header("Location:index.php"); } ?>
             
-            <!--FACEBOOK INGELOGD + UITLOGGEN-->
-            <?php if(isset($_SESSION['FBID'])){ ?>
-                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
-                <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
-                <span class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></span>
-                <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
-            <?php } ?>
-
             <!--FORMULIER INLOGGEN-->
             <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
             <div class="form-group has-feedback">
@@ -150,26 +141,26 @@
             
         <!--FORMULIER REGISTREREN-->
         <h2 id="registration">Registratie</h2>
-        <form role="form" method="post" >
+        <form role="form" method="post" enctype="multipart/form-data" >
             <!--VOORNAAM-->            
             <label for="firstname">Voornaam:<span class="required">*</span></label>
             <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Voornaam">     
+                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Voornaam">  
             </div>
             
             <!--ACHTERNAAM-->
             <label for="lastname">Achternaam:<span class="required">*</span></label>
             <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Achternaam">     
+                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Achternaam">  
             </div>
             
             <!--EMAILADRES-->
             <label for="email">E-mailadres:<span class="required">*</span></label>
             <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                <input type="email" class="form-control" id="email" name="email" placeholder="E-emailadres">                             </div>
+                <input type="email" class="form-control" id="email" name="email" placeholder="E-emailadres">                 </div>
                 
             <!--WACHTWOORD-->
             <label for="password">Wachtwoord:<span class="required">*</span></label>
@@ -205,6 +196,7 @@
             </div>
             
             <!--WOONPLAATS-->
+            <label for="email">Woonplaats:</label>
             <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
                 <input type="text" class="form-control" id="city" name="city" placeholder="Woonplaats">                                 </div>
@@ -218,7 +210,7 @@
             <!--PROFIELFOTO-->
             <div class="form-group">
                 <label for="profilePicInputFile">Profielfoto uploaden</label>
-                <input type="file" name="fileToUpload" id="fileToUpload">
+                <input type="file" name="profilepic" id="fileToUpload">
             </div>
             <input type="submit" name="registreren" class="btn btn-primary" value="Registreren"></input>
             </form>

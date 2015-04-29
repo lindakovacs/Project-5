@@ -7,12 +7,8 @@
     $link = new mysqli("localhost", "root", "");
     $link->select_db("phpproject");
 
-
-
-
     if(!empty($_POST["feedback"]) && !empty($_POST["rating"]) && !empty($_POST["naam_gids"]) && !empty($_POST["voornaam_gids"]))
     {   
-        
         $feedback = $_POST["feedback"];
         $rating = $_POST["rating"];
         $naam_gids = $_POST["naam_gids"];
@@ -25,34 +21,24 @@
         $sqlquery3 = "SELECT bezoeker_id FROM bezoeker WHERE bezoeker_naam='$naam_bezoeker'";
         $result3 = $link->query($sqlquery3);
 
-
-        
-
-            while($line=$result2->fetch_array())
-            {
-                //echo $line['gids_id'];
-                
-
-                $feedback = new Feedback();
-                $feedback->Feedback_tekst = $_POST['feedback'];
-                
-                $feedback->Feedback_rating = $_POST['rating'];
-                $feedback->Gids_id = $line['gids_id']; 
-                
-            }
-            while($line=$result3->fetch_array())
-            {
-                //echo $line['bezoeker_id'];
-                $feedback->Bezoeker_id = $line['bezoeker_id'];
-                $feedback->Save();
-            }
-            
-            
+        while($line=$result2->fetch_array())
+        {
+            //echo $line['gids_id'];
+            $feedback = new Feedback();
+            $feedback->Feedback_tekst = $_POST['feedback'];
+            $feedback->Feedback_rating = $_POST['rating'];
+            $feedback->Gids_id = $line['gids_id']; 
+        }
+        while($line=$result3->fetch_array())
+        {
+            //echo $line['bezoeker_id'];
+            $feedback->Bezoeker_id = $line['bezoeker_id'];
+            $feedback->Save();
+        }      
     }
     else{
         //echo "failed!";
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -82,22 +68,23 @@
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
+    <!-- RESPONSIVE -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
     <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1" async="async"></script>
+    
+    <style>
+        #feedback_all{
+            width:250px; 
+        }
+    </style>  
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->  
-    <style>
-        #feedback_all{
-            width:250px;
-            
-        }
-    </style>  
+    <![endif]-->    
 </head>
 <body>
 
@@ -115,10 +102,15 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="post" class="navbar-form navbar-right">
-            <!--FORMULIER INGELOGD + UITLOGGEN-->
-            <?php if(isset($_SESSION['logged_in'])){ ?>
-                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p>
-                <a class="btn btn-primary" href="gids.php">Change profile</a>
+            <!-- FORMULIER INGELOGD + UITLOGGEN -->
+            <?php if(isset($_SESSION['logged_in'])){ 
+                if(!empty($_SESSION['gids_foto'])){ ?>
+                    <img class="img-rounded img-responsive img-profile" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="">
+                <?php }else{ ?>
+                   <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd">
+                <?php } ?>
+                <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
+                <a class="btn btn-primary" href="gids.php">Profiel</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
             
@@ -185,7 +177,7 @@
 
             <!--SECTION-->
             <section>
-                    <h1>Feedback over jouw bezoek</h1>
+            <div class="page-header"><h2>Feedback over jouw bezoek</h2></div>
             <p>Gelieve hier wat feedback en een rating op 5 te geven over de gids en het verloop van jouw bezoek.</p><br>
             <div id="feedback_all">
                 <?php
@@ -207,12 +199,12 @@
                 <form method="POST">
                 <div class="form-group">
                     <label for="education">Voornaam gids:</label><br>
-                    <textarea class="form-control" cols="30" rows="1" name="voornaam_gids" placeholder="voornaam van je gids"></textarea> <br><br>
+                    <textarea class="form-control" cols="30" rows="1" name="voornaam_gids" placeholder="Voornaam van je gids"></textarea>
 
-                    <label for="education">Naam gids:</label><br>
-                    <textarea class="form-control" cols="30" rows="1" name="naam_gids" placeholder="naam van je gids"></textarea> <br><br>
+                    <br><label for="education">Naam gids:</label><br>
+                    <textarea class="form-control" cols="30" rows="1" name="naam_gids" placeholder="Naam van je gids"></textarea>
                     
-                    <label for="education">Rating:</label><br>
+                    <br><label for="education">Rating:</label><br>
                     <select class="form-control" name="rating">
                         <option>1</option>
                         <option>2</option>
@@ -220,13 +212,13 @@
                         <option>4</option>
                         <option>5</option>
                     </select>
-                </div><br>
+                </div>
 
                 <div class="form-group">
                     <label for="bio">Feedback:</label><br>
-                    <textarea class="form-control" id="bio" cols="30" rows="10" name="feedback" placeholder="plaats hier je feedback"></textarea>
-                </div><br>
-                <input type="submit"><br>
+                    <textarea class="form-control" id="bio" cols="30" rows="10" name="feedback" placeholder="Plaats hier je feedback"></textarea>
+                </div>
+                <input type="submit" name="" class="btn btn-primary"></input>
             </form><br>
         </div>
                             
@@ -239,13 +231,13 @@
         
          ?>
 
-        
-
-
-        
-
         <!--FOOTER-->
         <footer>
+           <!-- SnapWidget -->
+           <h1>Vergeet niet mee te instagrammen met ons!</h1>
+           <h2>#weareimd</h2>
+<script src="http://snapwidget.com/js/snapwidget.js"></script>
+<iframe src="http://snapwidget.com/in/?h=d2VhcmVpbWR8aW58MjB8NXwyfHx5ZXN8NXxmYWRlSW58b25TdGFydHx5ZXN8eWVz&ve=150415" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden;"></iframe>
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
         
