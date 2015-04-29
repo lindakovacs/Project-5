@@ -5,6 +5,8 @@
         include_once("../login.php");
     });
 
+    $Gebruikersnaam = $_SESSION['username'];
+
     class User
     {
         private $m_sFirstname;

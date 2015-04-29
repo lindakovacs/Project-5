@@ -1,6 +1,69 @@
 <?php
     session_start();
     include("login.php");
+    include_once('classes/User.class.php');
+    include_once('classes/Db.class.php');
+
+    $link = new mysqli("localhost", "root", "");
+    $link->select_db("phpproject");
+    $Gebruikersnaam = $_SESSION['username'];
+
+    // UPDATE VOORNAAM
+    if (!empty($_POST['update_voornaam'])){ 
+        $update_voornaam = $_POST['update_voornaam'];
+        $sqlquery2 = "UPDATE gids SET gids_voornaam='$update_voornaam' WHERE gids_email='$Gebruikersnaam'";
+        $res = $link->query($sqlquery2);
+    }
+
+    // UPDATE NAAM
+    if (!empty($_POST['update_naam'])){
+        $update_naam = $_POST['update_naam'];
+        $sqlquery3 = "UPDATE gids SET gids_naam='$update_naam' WHERE gids_email='$Gebruikersnaam'";
+        $res2 = $link->query($sqlquery3);
+    }
+
+    // UPDATE EMAIL
+    if (!empty($_POST['update_email'])){
+        $update_email = $_POST['update_email'];
+        $sqlquery4 = "UPDATE gids SET gids_email='$update_email' WHERE gids_email='$Gebruikersnaam'";
+        $res3 = $link->query($sqlquery4);
+    }
+
+    // UPDATE JAAR
+    if (!empty($_POST['update_jaar'])){
+        $update_jaar = $_POST['update_jaar'];
+        $sqlquery4 = "UPDATE gids SET gids_jaar='$update_jaar' WHERE gids_email='$Gebruikersnaam'";
+        $res3 = $link->query($sqlquery4);
+    }
+
+    // UPDATE RICHTING
+    if (!empty($_POST['update_richting'])){
+        $update_richting = $_POST['update_richting'];
+        $sqlquery5 = "UPDATE gids SET gids_richting='$update_richting' WHERE gids_email='$Gebruikersnaam'";
+        $res4 = $link->query($sqlquery5);
+    }
+
+    // UPDATE STAD
+    if (!empty($_POST['update_stad'])){
+        $update_stad = $_POST['update_stad'];
+        $sqlquery6 = "UPDATE gids SET gids_stad='$update_stad' WHERE gids_email='$Gebruikersnaam'";
+        $res5 = $link->query($sqlquery6);
+    }
+
+    // UPDATE BIO
+    if (!empty($_POST['update_bio'])){
+        $update_bio = $_POST['update_bio'];
+        $sqlquery7 = "UPDATE gids SET gids_bio='$update_bio' WHERE gids_email='$Gebruikersnaam'";
+        $res6 = $link->query($sqlquery7);
+    }
+
+    // UPDATE FOTO
+    if (!empty($_POST['update_foto'])){
+        $update_foto = $_POST['update_foto'];
+        $sqlquery7 = "UPDATE gids SET gids_foto='$update_foto' WHERE gids_email='$Gebruikersnaam'";
+        $res6 = $link->query($sqlquery7);
+    }
+
 ?>
 
 <!DOCTYPE html>
