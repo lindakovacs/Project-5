@@ -52,11 +52,11 @@
     <meta name="keywords" content="Rent,Student,Multimedia,Thomas More, Mechelen">
     <meta name="author" content="Ande Timmerman,Manuel van den Notelaer,Nick van Puyvelde,Stijn Van Doorslaer">
     
-    <link rel="icon" href="img/favicon.png">
+    <link rel="icon" href="img/weareimd.png">
     <title>Rent-A-Student</title>
     
     <!-- OPENGRAPH TAGS -->
-    <meta property="og:image" content="img/favicon.png"/>
+    <meta property="og:image" content="img/weareimd.png"/>
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
