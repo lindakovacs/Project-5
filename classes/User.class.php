@@ -5,6 +5,8 @@
         include_once("../login.php");
     });
 
+    $Gebruikersnaam = $_SESSION['username'];
+
     class User
     {
         private $m_sFirstname;
@@ -15,6 +17,7 @@
         private $m_sEducation;
         private $m_sCity;
         private $m_sBio;
+        private $m_sPicture;
 
         //SET----------------------------------------
         public function __set($p_sProperty,$p_vValue)
@@ -47,13 +50,20 @@
 
                     //E-MAILADRES
                     case 'Email':
-                    if($p_vValue=="")
+                    if ($p_vValue!="")
                     {
-                        throw new Exception("<b>Geen geldig e-mailadres!</b> Alle verplichte velden moeten ingevuld zijn.");
+                        if ($this->checkEmail($p_vValue) === true)
+                        {
+                            $this->m_sEmail = $p_vValue;
+                        }
+                        else
+                        {
+                            throw new Exception("<b>E-mailadres is al in gebruik!</b> Probeer opnieuw met een ander e-mailadres.");
+                        }
                     }
                     else
                     {
-                        $this->m_sEmail = $p_vValue;    
+                        throw new Exception("<b>E-mailadres niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
                     }
                     break;
 
@@ -85,6 +95,10 @@
 
                     case 'Bio':
                     $this->m_sBio = $p_vValue;
+                    break;
+                    
+                    case 'Picture':
+                    $this->m_sPicture = $p_vValue;
                     break;
                 }
         }
@@ -125,10 +139,41 @@
                     case 'Bio':
                     return $this->m_sBio;
                     break;
-
-
+                    
+                    case 'Picture':
+                    return $this->m_sPicture;
+                    break;
                 }
         }
+        
+        public function getAll()
+        {
+            $conn = Db::getInstance();
+            $allposts = $conn->query("SELECT * FROM gids");
+            return $allposts;
+        }
+             
+        public function checkEmail($m_sEmail)
+        {
+            $ret = true;
+            $all_mails = $this->getAll();
+            while($row = $all_mails->fetch(PDO::FETCH_ASSOC)) {
+                if($row['gids_email'] == $m_sEmail)
+                {
+                    $ret = false;
+                }
+            }
+            return $ret;
+        }
+        
+        //PROFIELFOTO
+        public function createFolderSaveImage($p_iId){
+            $curdir = getcwd()."/img/profielfotos/";
+            if(mkdir($curdir.$p_iId,0777)){
+                move_uploaded_file($_FILES['profilepic']['tmp_name'],"img/profielfotos/".$p_iId."/".$_FILES['profilepic']['name']);
+
+            }
+         }
 
          //SAVE---------------------------------------
          public function save(){
@@ -141,7 +186,8 @@
                                                         gids_jaar,
                                                         gids_richting,
                                                         gids_stad,
-                                                        gids_bio        
+                                                        gids_bio,
+                                                        gids_foto
                                                         )
 
                                                  VALUES(
@@ -152,7 +198,8 @@
                                                         :jaar,
                                                         :richting,
                                                         :stad,
-                                                        :bio
+                                                        :bio,
+                                                        :picture
                                                         )"
                                        ); 
 
@@ -164,7 +211,14 @@
              $statement->bindValue(':richting',$this->Education);
              $statement->bindValue(':stad',$this->City);
              $statement->bindValue(':bio',$this->Bio);
+             $statement->bindValue(':picture',$this->Picture);
              $statement->execute();
+             
+             if(!empty($_POST['gids_foto'])){
+                $insert_id = $conn->lastInsertId();
+                $this->createFolderSaveImage($insert_id);  
+             }
+
         }
 
         //TO STRING---------------------------------------

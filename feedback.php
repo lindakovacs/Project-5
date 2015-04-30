@@ -1,10 +1,44 @@
-<?php 
+<?php
     session_start();
     include_once("login.php");
+    //include_once("classes/Db.class.php");    
+    include_once('classes/feedback.class.php');
 
-    spl_autoload_register(function($class){
-        include_once("classes/".$class.".class.php"); 
-    });
+    $link = new mysqli("localhost", "root", "");
+    $link->select_db("phpproject");
+
+    if(!empty($_POST["feedback"]) && !empty($_POST["rating"]) && !empty($_POST["naam_gids"]) && !empty($_POST["voornaam_gids"]))
+    {   
+        $feedback = $_POST["feedback"];
+        $rating = $_POST["rating"];
+        $naam_gids = $_POST["naam_gids"];
+        $voornaam_gids = $_POST["voornaam_gids"];
+        $naam_bezoeker = $_SESSION['FULLNAME'];
+
+        $sqlquery2 = "SELECT gids_id FROM gids WHERE gids_voornaam='$voornaam_gids' && gids_naam='$naam_gids' ";
+        $result2 = $link->query($sqlquery2);
+
+        $sqlquery3 = "SELECT bezoeker_id FROM bezoeker WHERE bezoeker_naam='$naam_bezoeker'";
+        $result3 = $link->query($sqlquery3);
+
+        while($line=$result2->fetch_array())
+        {
+            //echo $line['gids_id'];
+            $feedback = new Feedback();
+            $feedback->Feedback_tekst = $_POST['feedback'];
+            $feedback->Feedback_rating = $_POST['rating'];
+            $feedback->Gids_id = $line['gids_id']; 
+        }
+        while($line=$result3->fetch_array())
+        {
+            //echo $line['bezoeker_id'];
+            $feedback->Bezoeker_id = $line['bezoeker_id'];
+            $feedback->Save();
+        }      
+    }
+    else{
+        //echo "failed!";
+    }
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +74,12 @@
     
     <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1" async="async"></script>
+    
+    <style>
+        #feedback_all{
+            width:250px; 
+        }
+    </style>  
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -47,6 +87,7 @@
     <![endif]-->    
 </head>
 <body>
+
     <!--NAVIGATIE-->
     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
@@ -72,6 +113,14 @@
                 <a class="btn btn-primary" href="gids.php">Profiel</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
+            
+            <!--FACEBOOK INGELOGD + UITLOGGEN-->
+            <?php if(isset($_SESSION['FBID'])){ ?>
+                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
+                <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
+                <p class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></p>
+                <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
+            <?php } ?>
 
             <!--FORMULIER INLOGGEN-->
             <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
@@ -82,7 +131,8 @@
               <input type="password" name="password" id="password" placeholder="Wachtwoord" class="form-control">
             </div>
             <input type="submit" name="aanmelden" class="btn btn-primary" value="Aanmelden"></input>
-            
+            <!--REGISTREREN-->
+            <a href="registreer.php"><button type="button" class="btn btn-primary">Registreren</button></a>
             <?php } ?>
           </form>
         </div>
@@ -110,97 +160,77 @@
        
         <!--HEADER-->
         <header class="jumbotron">
+
             <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
             <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
-        </header>
-        
-        <!--SECTION-->
-        <section>
-        <div class="container">
             
-        <!--FORMULIER REGISTREREN-->
-        <div class="page-header" id="registration"><h2>Nieuwe Admin Toevoegen</h2></div>
-        <form role="form" method="post" >
-            <!--VOORNAAM-->
-            <div class="form-group">
-                <label for="firstname">Voornaam:<span class="required">*</span></label>
-                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Voornaam">
-            </div>
-            <!--ACHTERNAAM-->
-               <div class="form-group">
-                <label for="lastname">Achternaam:<span class="required">*</span></label>
-                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Achternaam">
-            </div>
-            <!--EMAILADRES-->
-            <div class="form-group">
-                <label for="email">E-mailadres:<span class="required">*</span></label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="E-emailadres">
-            </div>
-            <!--WACHTWOORD-->
-            <div class="form-group">
-                <label for="password">Wachtwoord:<span class="required">*</span></label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Wachtwoord">
-            </div>
-            <!--PROFIELFOTO-->
-            <div class="form-group">
-                <label for="profilePicInputFile">Profielfoto uploaden</label>
-                <input type="file" name="fileToUpload" id="fileToUpload">
-            </div>
-            <button type="submit" class="btn btn-primary">Registreren</button>
-        </form>
-                      
-        <!-- Hier Moet Een tabel komen zodat hij zijn eigen gegevens kan aanpassen -->
-        <!-- PROFIELFOTO -->
-        <!-- EMAILADRES -->
-        <!-- WACHTWOORD -->
+            <!--FACEBOOK INLOGGEN-->
+            <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
+                <a href="facebook/fbconfig.php">Lorem Ipsum is slechts een proeftekst.<br>
+                <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
+                </a>
+            <?php } ?>
 
-        <div class="page-header" id="registration"><h2>Lijst opvragen van boekingen</h2></div>
-        <form role="form" method="post" >
-            <button type="submit" name= "lijst" class="btn btn-default">Toon alle boekingen</button>
-            <!--<input type='hidden' name='geboektfk' value='".$row["geboekt_fk"]."'/>-->
-            <input type='hidden' name='geboektfk' value='".$row["geboekt_fk"]."'/>
-        </form>   
-                
-        <div class="page-header"><h2>Welke gids is beschikbaar en wanneer?</h2></div>           
-        <table style="width:100%">
-            <tr>
-                <th>Naam</th>
-                <th>E-mail</th>
-                <th>Datum</th>
-                <th>tijdstip</th>
-            </tr>
+        </header>
 
-            <?php 
+        <?php if (isset($_SESSION['FULLNAME'])){ ?>
 
-            $conn = new mysqli("localhost", "root", "", "phpproject");
-            if ($conn->connect_error) {
-                 die("Connection failed: " . $conn->connect_error);
-            }
+            <!--SECTION-->
+            <section>
+            <div class="page-header"><h2>Feedback over jouw bezoek</h2></div>
+            <p>Gelieve hier wat feedback en een rating op 5 te geven over de gids en het verloop van jouw bezoek.</p><br>
+            <div id="feedback_all">
+                <?php
 
-            $sql = "SELECT * FROM beschikbaar INNER JOIN gids ON beschikbaar.gids_fk = gids.gids_id INNER JOIN geboekt ON gids.gids_id = geboekt.gids_id INNER JOIN bezoeker ON geboekt.bezoeker_id = bezoeker.bezoeker_id WHERE geboekt_isgeboekt = 1";
+                    $sqlquery = "SELECT feedback_tekst, feedback_rating FROM feedback;";
+                    //$sqlquery2 = "SELECT bezoeker_naam FROM bezoeker WHERE bezoeker_id=m_iBezoeker_id;";
+                    $result = $link->query($sqlquery);
 
-            $run = $conn->query($sql);
+                    // INFO AFDRUKKEN!!!!!
+                    /*while($line = $result->fetch_array())
+                    {
+                        echo 'feedback: ' . $line['feedback_tekst'] . '<br>';
+                        echo 'rating: ' . $line['feedback_rating'] . '/5' . '<br>';
+                        echo '<br><hr><br>';
+                    }*/
 
-            while($row = $run->fetch_assoc()){
-                $bezoeker_naam = $row["bezoeker_naam"];
-                $bezoeker_email = $row["bezoeker_email"];
-                $beschikbaar_uur = $row["beschikbaar_uur"];
-                $beschikbaar_dag = $row["beschikbaar_dag"];
-            ?>
+                ?>
 
-            <tr>
-                <td><?php echo $bezoeker_naam; ?></td>
-                <td><?php echo $bezoeker_email; ?></td>
-                <td><?php echo $beschikbaar_uur; ?></td>
-                <td><?php echo $beschikbaar_dag; ?></td>
-            </tr>
+                <form method="POST">
+                <div class="form-group">
+                    <label for="education">Voornaam gids:</label><br>
+                    <textarea class="form-control" cols="30" rows="1" name="voornaam_gids" placeholder="Voornaam van je gids"></textarea>
 
-            <?php } ?>                  
-        </table>
-        
-        </div>                      
+                    <br><label for="education">Naam gids:</label><br>
+                    <textarea class="form-control" cols="30" rows="1" name="naam_gids" placeholder="Naam van je gids"></textarea>
+                    
+                    <br><label for="education">Rating:</label><br>
+                    <select class="form-control" name="rating">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Feedback:</label><br>
+                    <textarea class="form-control" id="bio" cols="30" rows="10" name="feedback" placeholder="Plaats hier je feedback"></textarea>
+                </div>
+                <input type="submit" name="" class="btn btn-primary"></input>
+            </form><br>
+        </div>
+                            
         </section>
-                
+        <?php }
+        
+            else{
+                echo 'Log in met facebook om feedback te kunnen geven.';
+            }
+        
+         ?>
+
         <!--FOOTER-->
         <footer>
            <!-- SnapWidget -->
@@ -212,6 +242,15 @@
         </footer>
         
     </div><!--/CONTAINER-->
-    
+
 </body>
 </html>
+
+
+
+
+<?php 
+
+   
+
+?>

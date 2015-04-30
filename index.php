@@ -4,10 +4,8 @@
 
     try{
         spl_autoload_register(function($class){
-            include_once("class/".$class.".class.php"); 
+            include_once("classes/".$class.".class.php"); 
         });
-    
-        include_once("classes/boek.class.php");
 
         if(!empty($_POST['voegtoe'])){   
             //echo "gelukt!";
@@ -39,11 +37,11 @@
     <meta name="keywords" content="Rent,Student,Multimedia,Thomas More, Mechelen">
     <meta name="author" content="Ande Timmerman,Manuel van den Notelaer,Nick van Puyvelde,Stijn Van Doorslaer">
     
-    <link rel="icon" href="img/favicon.png">
+    <link rel="icon" href="img/weareimd.png">
     <title>Rent-A-Student</title>
     
     <!-- OPENGRAPH TAGS -->
-    <meta property="og:image" content="img/favicon.png"/>
+    <meta property="og:image" content="img/weareimd.png"/>
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
@@ -55,6 +53,7 @@
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
+    <!-- RESPONSIVE -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
@@ -82,10 +81,15 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="post" class="navbar-form navbar-right">
-            <!--FORMULIER INGELOGD + UITLOGGEN-->
-            <?php if(isset($_SESSION['logged_in'])){ ?>
-                <p class="email-ingelogd"><?php echo $Gebruikersnaam ?></p>
-                <a class="btn btn-primary" href="gids.php">Change profile</a>
+            <!-- FORMULIER INGELOGD + UITLOGGEN -->
+            <?php if(isset($_SESSION['logged_in'])){ 
+                if(!empty($_SESSION['gids_foto'])){ ?>
+                    <img class="img-rounded img-responsive img-profile" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="">
+                <?php }else{ ?>
+                   <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd">
+                <?php } ?>
+                <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
+                <a class="btn btn-primary" href="gids.php">Profiel</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
             
@@ -150,12 +154,42 @@
 
         <!--SECTION-->
         <section>
-                
-        <!-- bezoeker moet gidsen kunnen raadplegen -->
+        <div class="container">
+        
+        <!-- INHOUD WANNEER NIET INGELOGD -->
+        <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
+        <div class="container marketing">
+            <div class="row">
+
+                <!-- INHOUD 1 -->
+                <div class="col-lg-4">
+                <img class="img-rounded" src="img/weareimd.png">
+                <h2>Lorem Ipsum</h2>
+                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
+                </div>
+
+                <!-- INHOUD 2 -->
+                <div class="col-lg-4">
+                <img class="img-rounded" src="img/weareimd.png">
+                <h2>Lorem Ipsum</h2>
+                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
+                </div>
+
+                <!-- INHOUD 3 -->
+                <div class="col-lg-4">
+                <img class="img-rounded" src="img/weareimd.png">
+                <h2>Lorem Ipsum</h2>
+                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+        
+        <!-- BEZOEKER MOET GIDSEN KUNNEN RAADPLEGEN -->
         <div class="row">
         <?php 
         if(isset($_SESSION['FBID'])){
-            echo  '<h2>Welke gids is beschikbaar... en wanneer?</h2>';
+            echo  '<div class="page-header"><h1>Welke gids is beschikbaar en wanneer?</h1></div>';
 
             // Create connection
             $conn = new mysqli("localhost", "root", "", "phpproject");
@@ -206,7 +240,8 @@
 
         ?>
         </div>
-                                    
+        
+        </div>                      
         </section>
 
         <!--FOOTER-->

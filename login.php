@@ -1,5 +1,4 @@
 <?php 
-
     if (!empty($_POST["aanmelden"])) 
     {
         $Gebruikersnaam = $_POST['email'];
@@ -16,6 +15,9 @@
             {
                 $success ="<b>Welkom!</b> U bent aangemeld met ".$Gebruikersnaam.".";
                 $_SESSION['logged_in'] = true;
+                $_SESSION['username'] = $Gebruikersnaam;
+                $_SESSION['gids_id']=$row_hash['gids_id'];
+                $_SESSION['gids_foto']=$row_hash['gids_foto'];
             }
             else
             {
@@ -23,5 +25,4 @@
             }
         }
     }
-
 ?>

@@ -41,7 +41,8 @@ if ( isset( $session ) ) {
 	    $_SESSION['EMAIL'] =  $femail;
     checkuser($fbid,$fbfullname,$femail); // To update local DB
     /* ---- header location after session ----*/
-  header("Location: ../index.php");
+$link3 = $_SERVER['HTTP_REFERER'];
+  header("Location: $link3");
 } else {
   $loginUrl = $helper->getLoginUrl();
  header("Location: ".$loginUrl);
