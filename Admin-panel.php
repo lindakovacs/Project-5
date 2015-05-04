@@ -108,12 +108,6 @@
             </div>
         <?php } ?>
        
-        <!--HEADER-->
-        <header class="jumbotron">
-            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
-            <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
-        </header>
-        
         <!--SECTION-->
         <section>
         <div class="container">

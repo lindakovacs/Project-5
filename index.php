@@ -146,11 +146,11 @@
                 <?php echo $info; ?>
             </div>
         <?php } ?>
-
+</div>
        
         <!--HEADER-->
-        <header class="jumbotron">
-
+        <header class="inleiding">
+            <div class="container">
             <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
             <p>Rent a Student is een platform waar bezoekers IMD-studenten kunnen boeken.</p>
             
@@ -161,18 +161,18 @@
                 </a>
                 <p class="fb">Enkel voor bezoekers.</p>
             <?php } ?>
-
+</div>
         </header>
 
         <!--SECTION-->
         <section>
-        <div class="container">
+        
         
         <!-- INHOUD WANNEER NIET INGELOGD -->
         <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
-        <div class="container marketing">
+        <div class="marketing">
             <div class="row">
-
+                <div class="container">
                 <!-- INHOUD 1 -->
                 <div class="col-lg-4">
                 <img class="img-rounded" src="img/weareimd.png">
@@ -198,7 +198,6 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
                 </div>
             </div>
         </div>
-        <?php } ?>
         
         <!-- BEZOEKER MOET GIDSEN KUNNEN RAADPLEGEN -->
         <div class="row">
@@ -256,12 +255,15 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
         ?>
         </div>
         
-        </div>                      
-        </section>
-        
+        </div>
         <div class="buddy">
+        <div class="container">
         <h1>Hier komen de foto's van onze gidsen</h1>
         </div>
+        </div>
+        <?php } ?>                      
+        </section>
+        
 
         <!--FOOTER-->
         <footer>

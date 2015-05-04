@@ -142,7 +142,6 @@ class Admin
              $statement->bindValue(':email',$this->Email);
              $statement->execute();  
              }
-
         }
 
 ?>
