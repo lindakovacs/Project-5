@@ -4,7 +4,7 @@
     include_once('classes/User.class.php');
     include_once('classes/Db.class.php');
 
-    $link = new mysqli("localhost", "root", "");
+    $link = new mysqli("localhost", "root", "root");
     $link->select_db("phpproject");
 //    $Gebruikersnaam = $_SESSION['username'];
 
@@ -145,7 +145,7 @@
             <?php if(isset($_SESSION['logged_in'])){ 
                 if(!empty($_SESSION['gids_foto'])){ ?>
                     <img class="img-rounded img-responsive img-profile" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="">
-                <?php }else{ ?>
+                <?php
                    <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd">
                 <?php } ?>
                 <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
@@ -217,7 +217,7 @@
             <?php } ?>
 
             <?php
-                $link = new mysqli("localhost", "root", "");
+                $link = new mysqli("localhost", "root", "root");
                 $link->select_db("phpproject");
 
                 $sqlquery = "SELECT * FROM gids";
@@ -261,7 +261,7 @@
                 <h1>Profiel aanpassen</h1>
             </div>
             <?php
-                $link = new mysqli("localhost", "root", "");
+                $link = new mysqli("localhost", "root", "root");
                 $link->select_db("phpproject");
                 //test
 
