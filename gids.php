@@ -145,8 +145,8 @@
             <?php if(isset($_SESSION['logged_in'])){ 
                 if(!empty($_SESSION['gids_foto'])){ ?>
                     <img class="img-rounded img-responsive img-profile" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="">
-                <?php
-                   <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd">
+                
+                   <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd"/>
                 <?php } ?>
                 <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
                 <a class="btn btn-primary" href="gids.php">Profiel</a>

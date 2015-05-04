@@ -1,6 +1,27 @@
 /* ALGEMEEN ------------------------------------------ */
-.jumbotron{
+header{
 	text-align: center;
+}
+
+.inleiding{
+    height:600px;
+}
+
+.inleiding img{
+    margin-top: 150px;
+    margin-bottom: 20px;
+}
+
+.inleiding p{
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
+.inleiding .fb
+{
+    font-size: 17px;
+    margin-top: 5px;
+    color:#2d4373;
 }
 
 .center-logo{
@@ -29,6 +50,12 @@
     -webkit-filter: grayscale(0);
 }
 
+.row
+{
+    padding-top: 50px;
+    padding-bottom: -50px;
+    background-color: #F1E859;
+}
 /* INLOGGEN & UITLOGGEN ------------------------------ */
 .img-profile{
     width: 38px;
@@ -67,6 +94,9 @@
     margin-left: -15px;
 }
 
+.col-lg-4{
+    margin-bottom: 50px;
+}
 /*STUDENT BESCHIKBAAR ------------------------------ */
 .img-beschikbaar{
     width: 150px;
@@ -80,6 +110,7 @@ footer{
     text-align: center;
     margin:0 auto;
 }
+
 
 .snapwidget-widget
 {
