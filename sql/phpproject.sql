@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: 127.0.0.1
--- Gegenereerd op: 04 mei 2015 om 23:15
+-- Gegenereerd op: 04 mei 2015 om 23:53
 -- Serverversie: 5.6.21
 -- PHP-versie: 5.6.3
 
@@ -62,9 +62,9 @@ CREATE TABLE IF NOT EXISTS `beschikbaarheid` (
 
 CREATE TABLE IF NOT EXISTS `bezoeker` (
 `bezoeker_id` int(10) NOT NULL,
-  `bezoeker_facebookid` int(50) NOT NULL,
-  `bezoeker_naam` varchar(200) NOT NULL,
-  `bezoeker_email` varchar(200) NOT NULL
+  `bezoeker_facebookid` varchar(100) NOT NULL,
+  `bezoeker_naam` varchar(60) NOT NULL,
+  `bezoeker_email` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
