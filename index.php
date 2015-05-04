@@ -141,13 +141,14 @@
         <header class="jumbotron">
 
             <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
-            <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
+            <p>Rent a Student is een platform waar bezoekers IMD-studenten kunnen boeken.</p>
             
             <!--FACEBOOK INLOGGEN-->
             <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
-                <a href="facebook/fbconfig.php">Lorem Ipsum is slechts een proeftekst.<br>
+                <a href="facebook/fbconfig.php">
                 <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
                 </a>
+                <p class="fb">Enkel voor bezoekers.</p>
             <?php } ?>
 
         </header>
@@ -164,22 +165,25 @@
                 <!-- INHOUD 1 -->
                 <div class="col-lg-4">
                 <img class="img-rounded" src="img/weareimd.png">
-                <h2>Lorem Ipsum</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
+                <h2>Bezoeker of Gids?</h2>
+                <p>Ben jij een bezoeker en kom je onze richting ontdekken. Dan kan je dit vanaf nu doen met een IMD-student. Het enige wat je daarvoor moet doen is je inloggen via facebook door op bovenstaande knop te klikken je gids uit te kiezen.<br><br>
+Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registreer je dan nu. </p>
                 </div>
 
                 <!-- INHOUD 2 -->
                 <div class="col-lg-4">
                 <img class="img-rounded" src="img/weareimd.png">
-                <h2>Lorem Ipsum</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
+                <h2>Voor jouw bezoek</h2>
+                <p>Voor jouw bezoek kan je nog chatten met jouw gids over onze opleiding of kan je enkele zaken praktisch regelen. Dit zal ervoor zorgen dat jouw bezoek aan onze opleiding op een foutloze manier verloopt, zodat je meteen van minuut 1 geboeid kan raken over onze opleiding.<br><br>
+                IMD is onze passie en die willen we ook aan jouw doorgeven.</p>
                 </div>
 
                 <!-- INHOUD 3 -->
                 <div class="col-lg-4">
                 <img class="img-rounded" src="img/weareimd.png">
-                <h2>Lorem Ipsum</h2>
-                <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw.</p>
+                <h2>Na jouw bezoek</h2>
+                <p>Na jouw bezoek aan onze opleiding met een van onze gidsen, kan je vertellen wat je ervan vond. Hiervoor bestaat er het feedback formulier die jouw zal toegestuurd worden via mail zodra de opleiding is afgelopen. Dan kan je vertellen hoe jouw gids je heeft rondgeleid doorheen de opleiding, en wat je persoonlijk van hem vond.<br><br>
+                En wie weet word jij dan volgend jaar wel een gids!</p>
                 </div>
             </div>
         </div>
@@ -192,7 +196,7 @@
             echo  '<div class="page-header"><h1>Welke gids is beschikbaar en wanneer?</h1></div>';
 
             // Create connection
-            $conn = new mysqli("localhost", "root", "", "phpproject");
+            $conn = new mysqli("localhost", "root", "root", "phpproject");
             // Check connection
             if ($conn->connect_error) {
                  die("Connection failed: " . $conn->connect_error);
@@ -243,6 +247,10 @@
         
         </div>                      
         </section>
+        
+        <div class="buddy">
+        <h1>Hier komen de foto's van onze gidsen</h1>
+        </div>
 
         <!--FOOTER-->
         <footer>
