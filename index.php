@@ -3,7 +3,6 @@
     include_once("login.php");
 
     try{
-
         include_once("classes/boek.class.php");
 
         if(!empty($_POST['voegtoe'])){   
@@ -59,7 +58,6 @@
     <script type="text/javascript" src="js/instafeed.min.js"></script>
     <script type="text/javascript" src="js/instagram.js"></script>
     
-
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -81,6 +79,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="post" class="navbar-form navbar-right">
+           
             <!-- FORMULIER INGELOGD + UITLOGGEN -->
             <?php if(isset($_SESSION['logged_in'])){ 
                 if(!empty($_SESSION['gids_foto'])){ ?>
@@ -110,6 +109,7 @@
               <input type="password" name="password" id="password" placeholder="Wachtwoord" class="form-control">
             </div>
             <input type="submit" name="aanmelden" class="btn btn-primary" value="Aanmelden"></input>
+            
             <!--REGISTREREN-->
             <a href="registreer.php"><button type="button" class="btn btn-primary">Registreren</button></a>
             <?php } ?>
@@ -118,9 +118,8 @@
       </div>
     </nav>
     
-    <!--CONTAINER-->
-    <div class="container">
-      
+    <!-- ALERTS -->
+    <div class="container"> 
         <!--ALERT SUCCESS-->
         <?php if(isset($success)){ ?>
             <div class="alert alert-success" role="alert">
@@ -146,33 +145,28 @@
                 <?php echo $info; ?>
             </div>
         <?php } ?>
-</div>
+    </div>
        
         <!--HEADER-->
         <header class="inleiding">
             <div class="container">
-            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
-            <p>Rent a Student is een platform waar bezoekers IMD-studenten kunnen boeken.</p>
-            
-            <!--FACEBOOK INLOGGEN-->
-            <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
-                <a href="facebook/fbconfig.php">
-                <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
-                </a>
-                <p class="fb">Enkel voor bezoekers.</p>
-            <?php } ?>
-</div>
-        </header>
+                <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
+                <p>Rent a Student is een platform waar bezoekers IMD-studenten kunnen boeken.</p>
 
-        <!--SECTION-->
-        <section>
-        
+                <!--FACEBOOK INLOGGEN-->
+                <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
+                    <a href="facebook/fbconfig.php">
+                    <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
+                    </a>
+                    <p class="fb">Enkel voor bezoekers.</p>
+                <?php } ?>
+            </div>
+        </header>
         
         <!-- INHOUD WANNEER NIET INGELOGD -->
         <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
         <div class="marketing">
-            <div class="row">
-                <div class="container">
+            <div class="container">
                 <!-- INHOUD 1 -->
                 <div class="col-lg-4">
                 <img class="img-rounded" src="img/weareimd.png">
@@ -183,98 +177,75 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
 
                 <!-- INHOUD 2 -->
                 <div class="col-lg-4">
-                <img class="img-rounded" src="img/weareimd.png">
-                <h2>Voor jouw bezoek</h2>
-                <p>Voor jouw bezoek kan je nog chatten met jouw gids over onze opleiding of kan je enkele zaken praktisch regelen. Dit zal ervoor zorgen dat jouw bezoek aan onze opleiding op een foutloze manier verloopt, zodat je meteen van minuut 1 geboeid kan raken over onze opleiding.<br><br>
-                IMD is onze passie en die willen we ook aan jouw doorgeven.</p>
+                    <img class="img-rounded" src="img/weareimd.png">
+                    <h2>Voor jouw bezoek</h2>
+                    <p>Voor jouw bezoek kan je nog chatten met jouw gids over onze opleiding of kan je enkele zaken praktisch regelen. Dit zal ervoor zorgen dat jouw bezoek aan onze opleiding op een foutloze manier verloopt, zodat je meteen van minuut 1 geboeid kan raken over onze opleiding.<br><br>
+                    IMD is onze passie en die willen we ook aan jouw doorgeven.</p>
                 </div>
 
                 <!-- INHOUD 3 -->
                 <div class="col-lg-4">
-                <img class="img-rounded" src="img/weareimd.png">
-                <h2>Na jouw bezoek</h2>
-                <p>Na jouw bezoek aan onze opleiding met een van onze gidsen, kan je vertellen wat je ervan vond. Hiervoor bestaat er het feedback formulier die jouw zal toegestuurd worden via mail zodra de opleiding is afgelopen. Dan kan je vertellen hoe jouw gids je heeft rondgeleid doorheen de opleiding, en wat je persoonlijk van hem vond.<br><br>
-                En wie weet word jij dan volgend jaar wel een gids!</p>
+                    <img class="img-rounded" src="img/weareimd.png">
+                    <h2>Na jouw bezoek</h2>
+                    <p>Na jouw bezoek aan onze opleiding met een van onze gidsen, kan je vertellen wat je ervan vond. Hiervoor bestaat er het feedback formulier die jouw zal toegestuurd worden via mail zodra de opleiding is afgelopen. Dan kan je vertellen hoe jouw gids je heeft rondgeleid doorheen de opleiding, en wat je persoonlijk van hem vond.<br><br>
+                    En wie weet word jij dan volgend jaar wel een gids!</p>
                 </div>
             </div>
         </div>
+        <?php } ?>
         
         <!-- BEZOEKER MOET GIDSEN KUNNEN RAADPLEGEN -->
-        <div class="row">
-        <?php 
-        if(isset($_SESSION['FBID'])){
-            echo  '<div class="page-header"><h1>Welke gids is beschikbaar en wanneer?</h1></div>';
-
-            // Create connection
-            $conn = new mysqli("localhost", "root", "root", "phpproject");
-            // Check connection
-            if ($conn->connect_error) {
-                 die("Connection failed: " . $conn->connect_error);
-            }
-
-            //$sql = "SELECT g.gids_voornaam, g.gids_naam, g.gids_bio, g.gids_richting, g.gids_jaar, g.gids_stad, //c.contact_dag, c.contact_uur  FROM gids g JOIN contact c ON c.gids_id = g.gids_id ORDER BY c.contact_dag";  
-                                
-            //$sql = "SELECT g.gids_id, g.gids_voornaam, g.gids_naam, g.gids_bio, g.gids_richting, g.gids_jaar, g.gids_stad, b.geboekt_dag, b.geboekt_uur  FROM gids g JOIN geboekt b ON b.gids_id = g.gids_id ORDER BY b.geboekt_dag";
-                        
-            $sql = "SELECT * FROM gids INNER JOIN beschikbaar ON gids.gids_id = beschikbaar.gids_fk";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-            // output data of each row
-            // output data of each row
-            //new variable
-            $counter = 1; 
+        <div class="container">
+        <?php if(isset($_SESSION['FBID'])){ ?>
+            <div class="page-header"><h1>Welke gids is beschikbaar en wanneer?</h1></div>
+            
+            <?php
+            $b = new UserBeschikbaar();
+            $allBeschik = $b->getAll();
         
-                while($row = $result->fetch_assoc()) {
-                    echo
-                    '<div class="col-sm-4">'.
-                    "<br>".'<img class="img-rounded img-responsive" src="img/weareimd.png" alt="weareimd">'.
-                    "<br>"."Voornaam: ".$row["gids_voornaam"].
-                    "<br>". "Achternaam: ". $row["gids_naam"].
-                    "<br>". "Richting: ". $row["gids_richting"].
-                    "<br>". "Jaar: ". $row["gids_jaar"].
-                    "<br>". "Biografie:  " . $row["gids_bio"]. 
-                    "<br>"." Afspraakuur:  " . $row["beschikbaar_uur"].
-                    "<br>"."Afspraakdag: " . $row["beschikbaar_dag"].
-
-                    "<form method='post'>
+            // LOOP ALLE BESCHIKBARE DATA
+            while($beschikbaar = $allBeschik->fetch(PDO::FETCH_ASSOC)){ ?>
+                <div class="col-sm-4">
+                   
+                    <?php if(!empty($beschikbaar['gids_foto'])){ ?>
+                        <img class="img-rounded img-responsive" src="img/profielfotos/<?php echo $beschikbaar['gids_id']."/".$beschikbaar['gids_foto']; ?>" alt="profielfoto" width="150">
+                    <?php }else{ ?>
+                        <img class="img-rounded img-responsive" src="img/weareimd.png" alt="weareimd">
+                    <?php } ?>
+                    <p>
+                    <br><b>Voornaam: </b><?php echo $beschikbaar['gids_voornaam'] ?>
+                    <br><b>Achternaam: </b><?php echo $beschikbaar['gids_naam'] ?>
+                    <br><b>Richting: </b><?php echo $beschikbaar['gids_richting'] ?>
+                    <br><b>Jaar: </b><?php echo $beschikbaar['gids_jaar'] ?>
+                    <br><b>Biografie: </b><?php echo $beschikbaar['gids_bio'] ?>
+                    <br><b>Afspraak: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?>
+                    </p>
+                        
+                    <form method='post'>
                     <input type='hidden' name='gidsid' value='".$row["gids_id"]."'/>
                     <input type='hidden' name='isgeboekt' value='1'/>
-                    <input type='submit' class='data' name='voegtoe' value='Boek mij'/></form>".
-        '</div>';
-                    //$counter++; //increment it with every row
-                }
-        
-            }else{
-                echo "0 results";
-            }
-
-        $conn->close();
-        }
-
-        ?>
+                    <input type='submit' class='data btn btn-primary' name='voegtoe' value='Boek mij'/>                       </form>
+                    <br>
+                </div>            
+            <?php }} ?>
         </div>
         
-        </div>
-        <div class="buddy">
-        <div class="container">
-        <h1>Hier komen de foto's van onze gidsen</h1>
-        </div>
-        </div>
-        <?php } ?>                      
-        </section>
-        
+        <!-- FOTO'S VAN GIDSEN -->
+        <div class="buddy text-align">
+            <div class="container">
+            <h1>Hier komen de foto's van onze gidsen</h1>
+            <img src="img/weareimd.png" alt="gidsen" width="150">
+            </div>
+        </div>                      
 
         <!--FOOTER-->
         <footer>
-           <!-- INSTAFEED -->
-           <h1>Vergeet niet mee te instagrammen met ons!</h1>
-           <h2>#weareimd</h2>
+            <!-- INSTAFEED -->
+            <h1>Vergeet niet mee te instagrammen met ons!</h1>
+            <h2>#weareimd</h2>
             <div id="instafeed"></div>
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
-        
-    </div><!--/CONTAINER-->
 
 </body>
 </html>

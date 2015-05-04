@@ -1,12 +1,31 @@
 <?php
     session_start();
     include("login.php");
-    include_once('classes/User.class.php');
-    include_once('classes/Db.class.php');
 
-    $link = new mysqli("localhost", "root", "root");
+    spl_autoload_register( function($class)
+    {
+        include_once("classes/".$class.".class.php");
+    });
+
+    //BUTTON BESCHIKBAAR
+    $b = new UserBeschikbaar();
+    if(!empty($_POST['beschikbaar'])){
+        try{
+            $b->Beschikbaar=$_POST['beschikbaarDagUur'];
+            $b->save($_SESSION['gids_id']);
+            $success = "<b>U bent beschikbaar op ".$_POST['beschikbaarDagUur']."!</b> Het is succesvol genoteerd.";
+        }
+        catch(Exception $e){
+            $error = $e->getMessage();
+        }
+    }
+
+    //BUTTON UPDATE
+    if(!empty($_POST['update'])){
+    
+    $link = new mysqli("localhost", "root", "");
     $link->select_db("phpproject");
-//    $Gebruikersnaam = $_SESSION['username'];
+    $Gebruikersnaam = $_SESSION['username'];
 
     // UPDATE VOORNAAM
     if (!empty($_POST['update_voornaam'])){ 
@@ -63,20 +82,7 @@
         $sqlquery7 = "UPDATE gids SET gids_foto='$update_foto' WHERE gids_email='$Gebruikersnaam'";
         $res6 = $link->query($sqlquery7);
     }
-
-    //BESCHIKBAAR
-    include_once('classes/Beschikbaar.class.php');
-    $b = new Beschikbaar();
-    if(!empty($_POST['beschikbaar'])){
-        try{
-            $b->Beschikbaar=$_POST['beschikbaarDagUur'];
-            $b->save();
-            $success = "<b>Boeking gelukt!</b>";
-        }
-        catch(Exception $e){
-            $error = $e->getMessage();
-        }
-    }
+}
 
 ?>
 
@@ -111,15 +117,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
+    <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1" async="async"></script>
+    
+    <!-- INSTAGRAM -->
+    <script type="text/javascript" src="js/instafeed.min.js"></script>
+    <script type="text/javascript" src="js/instagram.js"></script>
+    
     <!-- DATETIME PICKER -->
     <link href="bootstrap/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <script type="text/javascript" src="bootstrap/jquery-1.8.3.min.js" charset="UTF-8"></script>
     <script type="text/javascript" src="bootstrap/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-    <script type="text/javascript" src="bootstrap/bootstrap-datetimepicker.nl.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="bootstrap/bootstrap-datetimepicker.nl.js" charset="UTF-8">  </script>
     
-    <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1"         async="async"></script>
-
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -145,8 +155,8 @@
             <?php if(isset($_SESSION['logged_in'])){ 
                 if(!empty($_SESSION['gids_foto'])){ ?>
                     <img class="img-rounded img-responsive img-profile" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="">
-                
-                   <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd"/>
+                <?php }else{ ?>
+                   <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd">
                 <?php } ?>
                 <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
                 <a class="btn btn-primary" href="gids.php">Profiel</a>
@@ -186,21 +196,6 @@
                 <?php echo $error; ?>
             </div>
         <?php } ?>
-       
-        <!-- HEADER -->
-        <header class="jumbotron">
-
-            <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
-            <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
-            
-            <!-- FACEBOOK INLOGGEN -->
-            <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
-                <a href="facebook/fbconfig.php">Lorem Ipsum is slechts een proeftekst.<br>
-                <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
-                </a>
-            <?php } ?>
-
-        </header>
 
         <!-- SECTION -->
         <section>                      
@@ -217,7 +212,7 @@
             <?php } ?>
 
             <?php
-                $link = new mysqli("localhost", "root", "root");
+                $link = new mysqli("localhost", "root", "");
                 $link->select_db("phpproject");
 
                 $sqlquery = "SELECT * FROM gids";
@@ -261,7 +256,7 @@
                 <h1>Profiel aanpassen</h1>
             </div>
             <?php
-                $link = new mysqli("localhost", "root", "root");
+                $link = new mysqli("localhost", "root", "");
                 $link->select_db("phpproject");
                 //test
 
@@ -343,7 +338,7 @@
                             <input type="text" class="form-control" id="bio" name="update_foto" value="<?php echo $line['gids_foto']; ?>">                                 
                         </div>
                 
-                        <input type="submit" name="beschikbaar" class="btn btn-primary" value="Profiel bewerken"></input>
+                        <input type="submit" name="update" class="btn btn-primary" value="Profiel bewerken"></input>
                 </form>
                 <?php }
                 }
