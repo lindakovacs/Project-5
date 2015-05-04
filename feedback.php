@@ -4,7 +4,7 @@
     //include_once("classes/Db.class.php");    
     include_once('classes/feedback.class.php');
 
-    $link = new mysqli("localhost", "root", "");
+    $link = new mysqli("localhost", "root", "root");
     $link->select_db("phpproject");
 
     if(!empty($_POST["feedback"]) && !empty($_POST["rating"]) && !empty($_POST["naam_gids"]) && !empty($_POST["voornaam_gids"]))
