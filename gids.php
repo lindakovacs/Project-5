@@ -6,7 +6,7 @@
 
     $link = new mysqli("localhost", "root", "root");
     $link->select_db("phpproject");
-    $Gebruikersnaam = $_SESSION['username'];
+//    $Gebruikersnaam = $_SESSION['username'];
 
     // UPDATE VOORNAAM
     if (!empty($_POST['update_voornaam'])){ 
@@ -62,6 +62,20 @@
         $update_foto = $_POST['update_foto'];
         $sqlquery7 = "UPDATE gids SET gids_foto='$update_foto' WHERE gids_email='$Gebruikersnaam'";
         $res6 = $link->query($sqlquery7);
+    }
+
+    //BESCHIKBAAR
+    include_once('classes/Beschikbaar.class.php');
+    $b = new Beschikbaar();
+    if(!empty($_POST['beschikbaar'])){
+        try{
+            $b->Beschikbaar=$_POST['beschikbaarDagUur'];
+            $b->save();
+            $success = "<b>Boeking gelukt!</b>";
+        }
+        catch(Exception $e){
+            $error = $e->getMessage();
+        }
     }
 
 ?>
@@ -228,17 +242,19 @@
             
             <!-- BESCHIKBAARHEID -->
             <h3>Beschikbaarheid</h3>
-            <div class="input-append date form_datetime">
-                <input class="form-control" type="text" placeholder="Klik hier voor een datum en uur te kiezen.">
-                <span class="add-on"><i class="icon-th"></i></span>
-            </div>            
-            <br><input type="submit" name="beschikbaar" class="btn btn-primary" value="Beschikbaar"></input>
+            <form method="post">
+                <div class="input-append date form_datetime">
+                    <input class="form-control" type="text" placeholder="Klik hier voor een datum en uur te kiezen." name="beschikbaarDagUur">
+                    <span class="add-on"><i class="icon-th"></i></span>
+                </div>            
+                <br><input type="submit" name="beschikbaar" class="btn btn-primary" value="Beschikbaar"></input>
+            </form>
             
             <script type="text/javascript">
                 $(".form_datetime").datetimepicker({
                     format: "dd MM yyyy - hh:ii"
                 });
-            </script>           
+            </script>        
             
             <!-- PROFIEL UPDATEN -->
             <div class="page-header">
@@ -338,11 +354,10 @@
 
         <!--FOOTER-->
         <footer>
-           <!-- SnapWidget -->
-            <h1>Vergeet niet mee te instagrammen met ons!</h1>
-            <h2>#weareimd</h2>
-            <script src="http://snapwidget.com/js/snapwidget.js"></script>
-            <iframe src="http://snapwidget.com/in/?h=d2VhcmVpbWR8aW58MjB8NXwyfHx5ZXN8NXxmYWRlSW58b25TdGFydHx5ZXN8eWVz&ve=150415" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden;"></iframe>
+           <!-- INSTAFEED -->
+           <h1>Vergeet niet mee te instagrammen met ons!</h1>
+           <h2>#weareimd</h2>
+            <div id="instafeed"></div>
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
         

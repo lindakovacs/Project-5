@@ -15,6 +15,20 @@
     color:red;
 }
 
+#instafeed{
+        max-height:150px;
+        overflow:hidden;
+        text-align:center;
+}
+
+#instafeed a{
+    -webkit-filter: grayscale(0.5);
+}
+
+#instafeed a:hover{
+    -webkit-filter: grayscale(0);
+}
+
 /* INLOGGEN & UITLOGGEN ------------------------------ */
 .img-profile{
     width: 38px;
