@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
  * bootstrap-datetimepicker.js
  * =========================================================
  * Copyright 2012 Stefan Petre
@@ -49,8 +49,8 @@
 		// when page switch the datetimepicker div will be removed also.
 		this.container = options.container || 'body';
 
-		this.language = options.language || this.element.data('date-language') || "en";
-		this.language = this.language in dates ? this.language : "en";
+		this.language = options.language || this.element.data('date-language') || "nl";
+		this.language = this.language in dates ? this.language : "nl";
 		this.isRTL = dates[this.language].rtl || false;
 		this.formatType = options.formatType || this.element.data('format-type') || 'standard';
 		this.format = DPGlobal.parseFormat(options.format || this.element.data('date-format') || dates[this.language].format || DPGlobal.getDefaultFormat(this.formatType, 'input'), this.formatType);
@@ -1337,15 +1337,15 @@
 	};
 	$.fn.datetimepicker.Constructor = Datetimepicker;
 	var dates = $.fn.datetimepicker.dates = {
-		en: {
-			days:        ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-			daysShort:   ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-			daysMin:     ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-			months:      ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-			meridiem:    ["am", "pm"],
-			suffix:      ["st", "nd", "rd", "th"],
-			today:       "Today"
+		nl: {
+			days: ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
+            daysShort: ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"],
+            daysMin: ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"],
+            months: ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"],
+            monthsShort: ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"],
+            today: "Vandaag",
+            suffix: [],
+		    meridiem: []
 		}
 	};
 

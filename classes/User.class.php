@@ -1,7 +1,7 @@
 <?php
     spl_autoload_register( function($class)
     {
-        include_once("classes/" . $class . ".class.php");
+        include_once("classes/".$class.".class.php");
         include_once("../login.php");
     });
 
@@ -146,13 +146,15 @@
                 }
         }
         
+        //GET ALL---------------------------------------
         public function getAll()
         {
             $conn = Db::getInstance();
             $allposts = $conn->query("SELECT * FROM gids");
             return $allposts;
         }
-             
+        
+        //CHECK IF EMAIL EXIST--------------------------
         public function checkEmail($m_sEmail)
         {
             $ret = true;
@@ -166,7 +168,7 @@
             return $ret;
         }
         
-        //PROFIELFOTO
+        //PROFIELFOTO----------------------------------
         public function createFolderSaveImage($p_iId){
             $curdir = getcwd()."/img/profielfotos/";
             if(mkdir($curdir.$p_iId,0777)){
@@ -218,14 +220,7 @@
                 $insert_id = $conn->lastInsertId();
                 $this->createFolderSaveImage($insert_id);  
              }
-
         }
-
-        //TO STRING---------------------------------------
-        /*public function __toString(){
-            $obj = $this->m_sFirstname . " " . $this->m_sLastname;
-            return($obj);
-        }*/
     }
 
     //UPDATE PROFIEL----------------------------------

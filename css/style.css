@@ -36,26 +36,6 @@ header{
     color:red;
 }
 
-#instafeed{
-        max-height:150px;
-        overflow:hidden;
-        text-align:center;
-}
-
-#instafeed a{
-    -webkit-filter: grayscale(0.5);
-}
-
-#instafeed a:hover{
-    -webkit-filter: grayscale(0);
-}
-
-.row
-{
-    padding-top: 50px;
-    padding-bottom: -50px;
-    background-color: #F1E859;
-}
 /* INLOGGEN & UITLOGGEN ------------------------------ */
 .img-profile{
     width: 38px;
@@ -88,15 +68,20 @@ header{
     margin-top: 8px;
 }
 
-/* MARKETING CONTENT --------------------------------- */
+/* MARKETING CONTENT WANNEER NIET INGELOGD --------- */
+.marketing{
+    padding-top: 50px;
+    background-color: #F1E859; 
+}
+
 .marketing .col-lg-4 {
     text-align: center;
-    margin-left: -15px;
 }
 
 .col-lg-4{
     margin-bottom: 50px;
 }
+
 /*STUDENT BESCHIKBAAR ------------------------------ */
 .img-beschikbaar{
     width: 150px;
@@ -104,23 +89,24 @@ header{
     margin-right: 20px;
 }
 
+/* INSTAFEED--------------------------------------- */
+#instafeed{
+        max-height:150px;
+        overflow:hidden;
+        text-align:center;
+}
+
+#instafeed a{
+    -webkit-filter: grayscale(0.5);
+}
+
+#instafeed a:hover{
+    -webkit-filter: grayscale(0);
+}
+
 /* FOOTER ----------------------------------------- */
 footer{
     background-color:lightgray;
     text-align: center;
     margin:0 auto;
-}
-
-
-.snapwidget-widget
-{
-    width:100%;
-}
-
-@media screen and (min-width: 500px)
-{
-    .snapwidget-widget
-    {
-        width:70%;
-    }
 }
