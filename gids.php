@@ -161,6 +161,14 @@
                 <a class="btn btn-primary" href="gids.php">Profiel</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
             <?php } ?>
+            
+            <!--FACEBOOK INGELOGD + UITLOGGEN-->
+            <?php if(isset($_SESSION['FBID'])){ ?>
+                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
+                <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
+                <p class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></p>
+                <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
+            <?php } ?>
 
             <!-- FORMULIER INLOGGEN -->
             <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
@@ -200,6 +208,9 @@
         <section>                      
         	<div class="container">
             
+            <!-- GIDS ZELF ZIET DEZE DATA -->
+            <?php if(isset($_SESSION['logged_in'])){ ?>
+             
             <!-- PROFIEL FOTO + INFO -->
             <div class="page-header">
                 <h1>Profiel</h1>
@@ -237,18 +248,28 @@
             <!-- BESCHIKBAARHEID -->
             <h3>Beschikbaarheid</h3>
             <form method="post">
-                <div class="input-append date form_datetime">
-                    <input class="form-control" type="text" placeholder="Klik hier voor een datum en uur te kiezen." name="beschikbaarDagUur">
-                    <span class="add-on"><i class="icon-th"></i></span>
-                </div>            
-                <br><input type="submit" name="beschikbaar" class="btn btn-primary" value="Beschikbaar"></input>
+                <div class="row">
+                    <div class='col-sm-5'>
+                        <div class="form-group">
+                            <div class='input-group date' id='datetimepicker1'>
+                                <input type='text' class="form-control" placeholder="Klik op de kalender voor een datum en uur te kiezen." name="beschikbaarDagUur"readonly/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#datetimepicker1').datetimepicker({
+                              format: "dd/mm/yyyy - hh:ii",
+                              startDate: '+1d'
+                            });
+                        });
+                    </script>
+                </div>                
+                <input type="submit" name="beschikbaar" class="btn btn-primary" value="Beschikbaar"></input>
             </form>
-            
-            <script type="text/javascript">
-                $(".form_datetime").datetimepicker({
-                    format: "dd MM yyyy - hh:ii"
-                });
-            </script>        
             
             <!-- PROFIEL UPDATEN -->
             <div class="page-header">
@@ -267,7 +288,7 @@
                     if($_SESSION['username']==$line['gids_email'])
                     { ?>
                     <form role="form" method="post" enctype="multipart/form-data" >              
-                        <!--VOORNAAM-->            
+                        <!--VOORNAAM-->          
                         <label for="firstname">Voornaam:</label>
                         <div style="margin-bottom: 25px" class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -341,6 +362,7 @@
                 </form>
                 <?php }
                 }
+            }
             ?>
 
         	</div>
