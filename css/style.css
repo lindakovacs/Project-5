@@ -36,6 +36,15 @@ header{
     color:red;
 }
 
+/* DATE TIME PICKER ---------------------------------- */
+.date input:read-only{
+    background-color: white;
+}
+
+.date input:-moz-read-only{
+    background-color: white;
+}
+
 /* INLOGGEN & UITLOGGEN ------------------------------ */
 .img-profile{
     width: 38px;

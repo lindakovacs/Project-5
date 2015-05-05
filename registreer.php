@@ -9,21 +9,20 @@
     if(!empty($_POST["registreren"]))
     {
         try
-        {             
+        {       
             $g = new User();
             $g->Firstname=$_POST['firstname'];
             $g->Lastname=$_POST['lastname'];
             $g->Email=$_POST['email'];
-            //PASSWORD HASH
-            $options=['cost'=>12,];
-            $g->Password = password_hash($_POST['password'],PASSWORD_DEFAULT, $options);
+            $g->Password = $_POST['password'];
+            $g->checkPassword($_POST['password'],$_POST['repeat-password']);
             $g->Year=$_POST['year'];
             $g->Education=$_POST['education'];
             $g->City=$_POST['city'];
             $g->Bio=$_POST['bio'];
             $g->Picture=$_FILES['profilepic']['name'];
             $g->save();
-            $success ="<b>Ok!</b> Je bent succesvol geregistreerd.";
+            $success ="<b>Bedankt!</b> Je bent succesvol geregistreerd.";
         }
 
         catch(Exception $e)
@@ -31,7 +30,6 @@
             $error=$e->getMessage();
         }
     }
-
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -66,7 +64,7 @@
     
     <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1" async="async"></script>
-
+    
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -116,15 +114,16 @@
         <header class="jumbotron">
 
             <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
-            <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
+            <p>Rent a Student is een platform waar bezoekers IMD-studenten kunnen boeken.</p>
             
         </header>
           
         <!--ALERT SUCCESS-->
         <?php if(isset($success)){ ?>
             <div class="alert alert-success" role="alert">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-            <?php echo $success ?>
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <?php echo $success ?>
             </div>
         <?php } ?>
 
@@ -160,13 +159,27 @@
             <label for="email">E-mailadres:<span class="required">*</span></label>
             <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                <input type="email" class="form-control" id="email" name="email" placeholder="E-emailadres">                 </div>
+                <input type="email" class="form-control" id="email" name="email" placeholder="E-emailadres">                 
+            </div>
                 
             <!--WACHTWOORD-->
-            <label for="password">Wachtwoord:<span class="required">*</span></label>
-            <div style="margin-bottom: 25px" class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Wachtwoord">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="password">Wachtwoord:<span class="required">*</span></label>
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Wachtwoord">
+                    </div>
+                </div>            
+
+                <!--HERHAAL WACHTWOORD-->
+                <div class="col-md-6">
+                    <label for="password">Herhaal wachtwoord:<span class="required">*</span></label>
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="repeat-password" placeholder="Herhaal wachtwoord">
+                    </div>
+                    </div>
             </div>
             
             <!--JAAR-->
@@ -199,24 +212,26 @@
             <label for="email">Woonplaats:</label>
             <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
-                <input type="text" class="form-control" id="city" name="city" placeholder="Woonplaats">                                 </div>
+                <input type="text" class="form-control" id="city" name="city" placeholder="Woonplaats">               </div>
             
-            <!--TEXTAREA-->
+           <!--BIOGRAFE-->
            <div class="form-group">
                 <label for="bio">Biografie:</label>
-                <textarea class="form-control" id="bio" cols="30" name="bio" rows="10" placeholder="Lorem Ipsum is slechts een proeftekst."></textarea>
+                <textarea class="form-control" id="bio" name="bio" rows="7" placeholder="Lorem Ipsum is slechts een proeftekst."></textarea>
             </div>
             
             <!--PROFIELFOTO-->
             <div class="form-group">
-                <label for="profilePicInputFile">Profielfoto uploaden</label>
+                <label for="profilePicInputFile">Profielfoto uploaden:<span class="required">*</span></label>
                 <input type="file" name="profilepic" id="fileToUpload">
             </div>
+            
+            <!--REGISTREREN-->
             <input type="submit" name="registreren" class="btn btn-primary" value="Registreren"></input>
             </form>
          
         </section>
-
+        
         <br>
         
         <!--FOOTER-->

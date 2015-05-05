@@ -197,7 +197,7 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
         <!-- BEZOEKER MOET GIDSEN KUNNEN RAADPLEGEN -->
         <div class="container">
         <?php if(isset($_SESSION['FBID'])){ ?>
-            <div class="page-header"><h1>Welke gids is beschikbaar en wanneer?</h1></div>
+        <h1 class="page-header">Welke gids is beschikbaar en wanneer?</h1>
             
             <?php
             $b = new UserBeschikbaar();
@@ -205,6 +205,42 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
         
             // LOOP ALLE BESCHIKBARE DATA
             while($beschikbaar = $allBeschik->fetch(PDO::FETCH_ASSOC)){ ?>
+                <div class="col-sm-4">
+                   
+                    <?php if(!empty($beschikbaar['gids_foto'])){ ?>
+                        <img class="img-rounded img-responsive" src="img/profielfotos/<?php echo $beschikbaar['gids_id']."/".$beschikbaar['gids_foto']; ?>" alt="profielfoto" width="150">
+                    <?php }else{ ?>
+                        <img class="img-rounded img-responsive" src="img/weareimd.png" alt="weareimd">
+                    <?php } ?>
+                    <p>
+                    <br><b>Voornaam: </b><?php echo $beschikbaar['gids_voornaam'] ?>
+                    <br><b>Achternaam: </b><?php echo $beschikbaar['gids_naam'] ?>
+                    <br><b>Richting: </b><?php echo $beschikbaar['gids_richting'] ?>
+                    <br><b>Jaar: </b><?php echo $beschikbaar['gids_jaar'] ?>
+                    <br><b>Biografie: </b><?php echo $beschikbaar['gids_bio'] ?>
+                    <br><b>Afspraak: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?>
+                    </p>
+                        
+                    <form method='post'>
+                    <input type='hidden' name='gidsid' value='".$row["gids_id"]."'/>
+                    <input type='hidden' name='isgeboekt' value='1'/>
+                    <input type='submit' class='data btn btn-primary' name='voegtoe' value='Boek mij'/>                       </form>
+                    <br>
+                </div>            
+            <?php }} ?>
+        </div>
+        
+        <!-- GIDSEN ZIEN HUN EIGEN AFSPRAKEN -->
+        <div class="container">
+        <?php if(isset($_SESSION['username'])){ ?>
+            <div class="page-header"><h1>Wanneer heb ik afspraken ingesteld?</h1></div>
+            
+            <?php
+            $b = new UserBeschikbaar();
+            $allAfspraak = $b->getAllSelf();
+        
+            // LOOP ALLE BESCHIKBARE DATA
+            while($beschikbaar = $allAfspraak->fetch(PDO::FETCH_ASSOC)){ ?>
                 <div class="col-sm-4">
                    
                     <?php if(!empty($beschikbaar['gids_foto'])){ ?>

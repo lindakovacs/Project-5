@@ -5,8 +5,6 @@
         include_once("../login.php");
     });
 
-    $Gebruikersnaam = $_SESSION['username'];
-
     class User
     {
         private $m_sFirstname;
@@ -26,25 +24,25 @@
                 {
                     //VOORNAAM
                     case 'Firstname':
-                    if($p_vValue=="")
+                    if($p_vValue!="")
                     {
-                        throw new Exception("<b>Voornaam niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
+                        $this->m_sFirstname = $p_vValue; 
                     }
                     else
                     {
-                        $this->m_sFirstname = $p_vValue;    
+                        throw new Exception("<b>Voornaam is niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn."); 
                     }
                     break;
 
                     //ACHTERNAAM
                     case 'Lastname':
-                    if($p_vValue=="")
+                    if($p_vValue!="")
                     {
-                        throw new Exception("<b>Achternaam niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
+                        $this->m_sLastname = $p_vValue; 
                     }
                     else
                     {
-                        $this->m_sLastname = $p_vValue;   
+                        throw new Exception("<b>Achternaam is niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
                     }
                     break;
 
@@ -52,7 +50,7 @@
                     case 'Email':
                     if ($p_vValue!="")
                     {
-                        if ($this->checkEmail($p_vValue) === true)
+                        if($this->checkEmail($p_vValue) === true)
                         {
                             $this->m_sEmail = $p_vValue;
                         }
@@ -63,19 +61,20 @@
                     }
                     else
                     {
-                        throw new Exception("<b>E-mailadres niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
+                        throw new Exception("<b>E-mailadres is niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");
                     }
                     break;
 
                     //WACHTWOORD
                     case 'Password':
-                    if($p_vValue=="")
+                    if($p_vValue!="")
                     {
-                        throw new Exception("<b>Geen geldig wachtwoord!</b> Alle verplichte velden moeten ingevuld zijn.");
+                        $options=['cost'=>12,];
+                        $this->m_sPassword = password_hash($p_vValue,PASSWORD_BCRYPT, $options);
                     }
                     else
                     {
-                        $this->m_sPassword = $p_vValue;   
+                        throw new Exception("<b>Wachtwoord is niet ingevuld!</b> Alle verplichte velden moeten ingevuld zijn.");     
                     }
                     break;
 
@@ -98,7 +97,14 @@
                     break;
                     
                     case 'Picture':
-                    $this->m_sPicture = $p_vValue;
+                    if($p_vValue!="")
+                    {
+                        $this->m_sPicture = $p_vValue;  
+                    }
+                    else
+                    {
+                        throw new Exception("<b>Er is geen foto geüpload!</b> Alle verplichte velden moeten ingevuld zijn."); 
+                    }
                     break;
                 }
         }
@@ -146,19 +152,11 @@
                 }
         }
         
-        //GET ALL---------------------------------------
-        public function getAll()
-        {
-            $conn = Db::getInstance();
-            $allposts = $conn->query("SELECT * FROM gids");
-            return $allposts;
-        }
-        
-        //CHECK IF EMAIL EXIST--------------------------
+        //E-MAILADRES BESTAAT AL----------------------
         public function checkEmail($m_sEmail)
         {
             $ret = true;
-            $all_mails = $this->getAll();
+            $all_mails = $this->getAllInfo();
             while($row = $all_mails->fetch(PDO::FETCH_ASSOC)) {
                 if($row['gids_email'] == $m_sEmail)
                 {
@@ -168,42 +166,57 @@
             return $ret;
         }
         
-        //PROFIELFOTO----------------------------------
+        //HERHAAL WACHTWOORD--------------------------
+        public function checkPassword($pass1, $pass2)
+        {
+            if ($pass1 != $pass2)
+            {
+                throw new Exception("<b>Wachtwoord is niet gelijk!</b> De wachtwoorden moeten overeenkomen.");
+            }
+        }
+        
+        //PROFIELFOTO UPLOADEN---------------------------
         public function createFolderSaveImage($p_iId){
             $curdir = getcwd()."/img/profielfotos/";
             if(mkdir($curdir.$p_iId,0777)){
                 move_uploaded_file($_FILES['profilepic']['tmp_name'],"img/profielfotos/".$p_iId."/".$_FILES['profilepic']['name']);
 
             }
-         }
+        }
+        
+        //GET ALL INFO-----------------------------------
+        public function getAllInfo()
+        {
+            $conn = Db::getInstance();
+            $allInfo = $conn->query("SELECT * FROM gids");
+            return $allInfo;
+        }
 
          //SAVE---------------------------------------
          public function save(){
          $conn = Db::getInstance();
-         $statement = $conn->prepare("INSERT INTO gids  (
-                                                        gids_voornaam,
-                                                        gids_naam,
-                                                        gids_email,
-                                                        gids_wachtwoord,
-                                                        gids_jaar,
-                                                        gids_richting,
-                                                        gids_stad,
-                                                        gids_bio,
-                                                        gids_foto
-                                                        )
+         $statement = $conn->prepare("INSERT INTO gids(gids_voornaam,
+                                                       gids_naam,
+                                                       gids_email,
+                                                       gids_wachtwoord,
+                                                       gids_jaar,
+                                                       gids_richting,
+                                                       gids_stad,
+                                                       gids_bio,
+                                                       gids_foto
+                                                       )
 
-                                                 VALUES(
-                                                        :firstname,
-                                                        :lastname,
-                                                        :email,
-                                                        :wachtwoord,
-                                                        :jaar,
-                                                        :richting,
-                                                        :stad,
-                                                        :bio,
-                                                        :picture
-                                                        )"
-                                       ); 
+                                                VALUES(:firstname,
+                                                       :lastname,
+                                                       :email,
+                                                       :wachtwoord,
+                                                       :jaar,
+                                                       :richting,
+                                                       :stad,
+                                                       :bio,
+                                                       :picture
+                                                       )
+                                       "); 
 
              $statement->bindValue(':firstname',$this->Firstname);
              $statement->bindValue(':lastname',$this->Lastname);
@@ -216,16 +229,8 @@
              $statement->bindValue(':picture',$this->Picture);
              $statement->execute();
              
-             if(!empty($_POST['gids_foto'])){
-                $insert_id = $conn->lastInsertId();
-                $this->createFolderSaveImage($insert_id);  
-             }
+             $insert_id = $conn->lastInsertId();
+             $this->createFolderSaveImage($insert_id);  
         }
-    }
-
-    //UPDATE PROFIEL----------------------------------
-    if (!empty($_POST["update_voornaam"])){
-        $update_voornaam = $_POST['update_voornaam'];
-        $sqlquery2 = "UPDATE gids SET gids_voornaam='$update_voornaam' WHERE gids_email = $Gebruikersnaam";
     }
 ?>
