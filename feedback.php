@@ -4,30 +4,36 @@
     //include_once("classes/Db.class.php");    
     include_once('classes/feedback.class.php');
 
-    $link = new mysqli("localhost", "root", "root");
+    $link = new mysqli("localhost", "root", "");
     $link->select_db("phpproject");
 
-    if(!empty($_POST["feedback"]) && !empty($_POST["rating"]) && !empty($_POST["naam_gids"]) && !empty($_POST["voornaam_gids"]))
+    if(!empty($_POST["feedback"]) && !empty($_POST["rating"]) && !empty($_POST["vol_naam_gids"]))
     {   
         $feedback = $_POST["feedback"];
         $rating = $_POST["rating"];
-        $naam_gids = $_POST["naam_gids"];
-        $voornaam_gids = $_POST["voornaam_gids"];
+        $vol_naam_gids = $_POST["vol_naam_gids"];
+        //$voornaam_gids = $_POST["voornaam_gids"];
         $naam_bezoeker = $_SESSION['FULLNAME'];
 
-        $sqlquery2 = "SELECT gids_id FROM gids WHERE gids_voornaam='$voornaam_gids' && gids_naam='$naam_gids' ";
+        
+
+        $sqlquery2 = "SELECT gids_id FROM gids WHERE gids_voornaam + ' ' + gids_naam='$vol_naam_gids'";
         $result2 = $link->query($sqlquery2);
+
+
 
         $sqlquery3 = "SELECT bezoeker_id FROM bezoeker WHERE bezoeker_naam='$naam_bezoeker'";
         $result3 = $link->query($sqlquery3);
 
         while($line=$result2->fetch_array())
         {
-            //echo $line['gids_id'];
+            
             $feedback = new Feedback();
             $feedback->Feedback_tekst = $_POST['feedback'];
             $feedback->Feedback_rating = $_POST['rating'];
             $feedback->Gids_id = $line['gids_id']; 
+
+            echo $line['gids_id'];
         }
         while($line=$result3->fetch_array())
         {
@@ -198,11 +204,37 @@
 
                 <form method="POST">
                 <div class="form-group">
-                    <label for="education">Voornaam gids:</label><br>
+                    <!--<label for="education">Voornaam gids:</label><br>
                     <textarea class="form-control" cols="30" rows="1" name="voornaam_gids" placeholder="Voornaam van je gids"></textarea>
 
                     <br><label for="education">Naam gids:</label><br>
-                    <textarea class="form-control" cols="30" rows="1" name="naam_gids" placeholder="Naam van je gids"></textarea>
+                    <textarea class="form-control" cols="30" rows="1" name="naam_gids" placeholder="Naam van je gids"></textarea>-->
+
+                    
+                    <div class="form-group">
+                        <label for="year">Naam gids:<span class="required">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i></i></span>
+
+                            <?php 
+
+
+                            mysql_connect('localhost', 'root', '');
+                            mysql_select_db('phpproject');
+
+                            
+
+                            echo '<select class="form-control" name="vol_naam_gids">';
+                            $sql8 = "SELECT gids_voornaam, gids_naam FROM gids";
+                            $result8 = mysql_query($sql8);
+                            while ($row = mysql_fetch_array($result8)) {
+                                echo "<option value='" . $row['gids_voornaam'] . " " . $row['gids_naam'] ."'>" . $row['gids_voornaam'] . " " . $row['gids_naam'] ."</option>";
+                            }
+                            echo "</select>";
+
+                            ?>
+                    </div>
+            </div>
                     
                     <br><label for="education">Rating:</label><br>
                     <select class="form-control" name="rating">
