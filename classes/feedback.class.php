@@ -72,7 +72,7 @@
 		public function Save()
 		{
             $db = new Db();
-            $sql = "insert into feedback2 (feedback_tekst, bezoeker_id, feedback_rating, gids_id) values ('". $db->conn->real_escape_string($this->m_sFeedback_tekst) ."', '" . $db->conn->real_escape_string($this->m_iBezoeker_id) . "', '" . $db->conn->real_escape_string($this->m_iFeedback_rating) . "', '". $db->conn->real_escape_string($this->m_iGids_id) .  "')";
+            $sql = "insert into feedback (feedback_tekst, bezoeker_id, feedback_rating, gids_id) values ('". $db->conn->real_escape_string($this->m_sFeedback_tekst) ."', '" . $db->conn->real_escape_string($this->m_iBezoeker_id) . "', '" . $db->conn->real_escape_string($this->m_iFeedback_rating) . "', '". $db->conn->real_escape_string($this->m_iGids_id) .  "')";
             $db->conn->query($sql);
 		}
 

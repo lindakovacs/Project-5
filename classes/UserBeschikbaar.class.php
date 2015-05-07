@@ -74,5 +74,17 @@
             $allAfspraak = $conn->query("SELECT * FROM gids INNER JOIN beschikbaarheid ON gids.gids_id = beschikbaarheid.gids_id WHERE beschikbaarheid.gids_id = gids.gids_id AND beschikbaarheid.gids_id = $current_id;");
             return $allAfspraak;
         }
+        
+        //GET ALL GEBOEKT------------------------------------
+        public function getAllGeboekt()
+        {
+            $conn = Db::getInstance();
+            $allGeboekt = $conn->query("SELECT * FROM beschikbaarheid 
+INNER JOIN gids ON beschikbaarheid.gids_id = gids.gids_id 
+INNER JOIN geboekt ON gids.gids_id = geboekt.gids_id 
+INNER JOIN bezoeker ON geboekt.bezoeker_facebookid = bezoeker.bezoeker_facebookid 
+WHERE geboekt_isgeboekt = 1;");
+            return $allGeboekt;
+        }
     }
 ?>

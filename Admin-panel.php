@@ -154,39 +154,54 @@
             <!--<input type='hidden' name='geboektfk' value='".$row["geboekt_fk"]."'/>-->
             <input type='hidden' name='geboektfk' value='".$row["geboekt_fk"]."'/>
         </form>   
-                
+           
+        <div class="page-header">
+        <h2>Welke bezoeker heeft welke gids geboekt?</h2>
+        </div> 
+        <?php
+           
+            $a = new Admin();
+            $all_boekingen = $a->boekingen();
+            
+            while($row = $all_boekingen->fetch(PDO::FETCH_ASSOC))
+            {
+                $bezoeker_naam = $row["bezoeker_naam"];
+                $gids_voornaam = $row["gids_voornaam"];
+                $gids_naam = $row["gids_naam"];
+            
+?>
+           <div class="lijst">
+            <div class="col-lg-4">
+                <p>Bezoeker: <strong><?php echo $bezoeker_naam; ?></strong> heeft </p>
+                <p><strong><?php echo $gids_voornaam?> <?php echo $gids_naam ?></strong> geboekt als gids.</p>
+            </div>
+    </div>
+          <?php } ?>     
+
+            
         <div class="page-header"><h2>Welke gids is beschikbaar en wanneer?</h2></div>           
         <table style="width:100%">
             <tr>
                 <th>Naam</th>
                 <th>E-mail</th>
                 <th>Datum</th>
-                <th>tijdstip</th>
             </tr>
 
             <?php 
-
-            $conn = new mysqli("localhost", "root", "root", "phpproject");
-            if ($conn->connect_error) {
-                 die("Connection failed: " . $conn->connect_error);
-            }
-
-            $sql = "SELECT * FROM beschikbaar INNER JOIN gids ON beschikbaar.gids_fk = gids.gids_id INNER JOIN geboekt ON gids.gids_id = geboekt.gids_id INNER JOIN bezoeker ON geboekt.bezoeker_id = bezoeker.bezoeker_id WHERE geboekt_isgeboekt = 1";
-
-            $run = $conn->query($sql);
-
-            while($row = $run->fetch_assoc()){
+            $b = new UserBeschikbaar();
+            $allGeboekt = $b->getAllGeboekt();
+        
+            // LOOP ALLE BESCHIKBARE DATA
+            while($row = $allGeboekt->fetch(PDO::FETCH_ASSOC)){
                 $bezoeker_naam = $row["bezoeker_naam"];
                 $bezoeker_email = $row["bezoeker_email"];
-                $beschikbaar_uur = $row["beschikbaar_uur"];
-                $beschikbaar_dag = $row["beschikbaar_dag"];
+                $beschikbaar_uur = $row["beschikbaar_dag_uur"];
             ?>
 
             <tr>
                 <td><?php echo $bezoeker_naam; ?></td>
                 <td><?php echo $bezoeker_email; ?></td>
                 <td><?php echo $beschikbaar_uur; ?></td>
-                <td><?php echo $beschikbaar_dag; ?></td>
             </tr>
 
             <?php } ?>                  

@@ -8,10 +8,12 @@
         if(!empty($_POST['voegtoe'])){   
             //echo "gelukt!";
             $book = new Book();
+            $facebookid = $_SESSION['FBID'];
             $book->Gidsid=$_POST['gidsid'];
             $book->Isgeboekt=$_POST['isgeboekt'];
-            $book->save();
-            $info = "<b>Boeking gelukt!</b> GidsID: ".$book->Gidsid." IsGeboekt: ".$book->Isgeboekt;
+            $book->save($facebookid);
+//            $info = "<b>Boeking gelukt!</b> GidsID: ".$book->Gidsid." IsGeboekt: ".$book->Isgeboekt;
+            $info = "<b>Boeking is gelukt!</b>";
         }
     }
 
@@ -222,7 +224,7 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
                     </p>
                         
                     <form method='post'>
-                    <input type='hidden' name='gidsid' value='".$row["gids_id"]."'/>
+                    <input type='hidden' name='gidsid' value='<?php echo $beschikbaar['gids_id'] ?>'/>
                     <input type='hidden' name='isgeboekt' value='1'/>
                     <input type='submit' class='data btn btn-primary' name='voegtoe' value='Boek mij'/>                       </form>
                     <br>
