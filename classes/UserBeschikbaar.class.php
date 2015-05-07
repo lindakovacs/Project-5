@@ -65,5 +65,14 @@
             $allBeschik = $conn->query("SELECT * FROM gids INNER JOIN beschikbaarheid ON gids.gids_id = beschikbaarheid.gids_id WHERE beschikbaarheid.gids_id = gids.gids_id;");
             return $allBeschik;
         }
+        
+        //GET ALL SELF------------------------------------
+        public function getAllSelf()
+        {
+            $conn = Db::getInstance();
+            $current_id = $_SESSION['gids_id'];
+            $allAfspraak = $conn->query("SELECT * FROM gids INNER JOIN beschikbaarheid ON gids.gids_id = beschikbaarheid.gids_id WHERE beschikbaarheid.gids_id = gids.gids_id AND beschikbaarheid.gids_id = $current_id;");
+            return $allAfspraak;
+        }
     }
 ?>
