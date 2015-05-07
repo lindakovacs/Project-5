@@ -105,13 +105,12 @@
 
          //SAVE---------------------------------------
    
-         public function save(){
+         public function save($facebookid){
          $conn = Db::getInstance();
-        $fb = $_SESSION['FBID'];
          $statement = $conn->prepare("INSERT INTO geboekt  (
                                                         
                                                      
-                                                        bezoeker_id,
+                                                        bezoeker_facebookid,
                                                         gids_id,
                                                         geboekt_isgeboekt
                                                         
@@ -121,7 +120,7 @@
                                                  VALUES(
                                                         
                                                       
-                                                        $fb,
+                                                        :bezoeker_facebookid,
                                                         :gidsid,
                                                         :isgeboekt
                                                         
@@ -129,13 +128,10 @@
                                                         )"
                                        ); 
 
-             $statement->bindValue(':isgeboekt',$this->Isgeboekt);
+             $statement->bindValue(':bezoeker_facebookid', $facebookid);
              $statement->bindValue(':gidsid',$this->Gidsid);
-              //$statement->bindValue(':bezoekerid',$this->Bezoekerid);
+             $statement->bindValue(':isgeboekt',$this->Isgeboekt);
              $statement->execute();
-             
-             
-             
              
          }
              

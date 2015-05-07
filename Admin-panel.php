@@ -161,32 +161,37 @@
                 <th>Naam</th>
                 <th>E-mail</th>
                 <th>Datum</th>
-                <th>tijdstip</th>
+<!--                <th>tijdstip</th>-->
             </tr>
 
             <?php 
 
-            $conn = new mysqli("localhost", "root", "root", "phpproject");
-            if ($conn->connect_error) {
-                 die("Connection failed: " . $conn->connect_error);
-            }
-
-            $sql = "SELECT * FROM beschikbaar INNER JOIN gids ON beschikbaar.gids_fk = gids.gids_id INNER JOIN geboekt ON gids.gids_id = geboekt.gids_id INNER JOIN bezoeker ON geboekt.bezoeker_id = bezoeker.bezoeker_id WHERE geboekt_isgeboekt = 1";
-
-            $run = $conn->query($sql);
-
-            while($row = $run->fetch_assoc()){
+//            $conn = new mysqli("localhost", "root", "", "phpproject");
+//            if ($conn->connect_error) {
+//                 die("Connection failed: " . $conn->connect_error);
+//            }
+//
+//            $sql = "SELECT * FROM beschikbaar INNER JOIN gids ON beschikbaar.gids_fk = gids.gids_id INNER JOIN geboekt ON gids.gids_id = geboekt.gids_id INNER JOIN bezoeker ON geboekt.gids_id = bezoeker.bezoeker_id WHERE geboekt_isgeboekt = 1";
+//
+//            $run = $conn->query($sql);
+//
+//            while($row = $run->fetch_assoc()){
+            $b = new UserBeschikbaar();
+            $allGeboekt = $b->getAllGeboekt();
+        
+            // LOOP ALLE BESCHIKBARE DATA
+            while($row = $allGeboekt->fetch(PDO::FETCH_ASSOC)){
                 $bezoeker_naam = $row["bezoeker_naam"];
                 $bezoeker_email = $row["bezoeker_email"];
-                $beschikbaar_uur = $row["beschikbaar_uur"];
-                $beschikbaar_dag = $row["beschikbaar_dag"];
+                $beschikbaar_uur = $row["beschikbaar_dag_uur"];
+//                $beschikbaar_dag = $row["beschikbaar_dag"];
             ?>
 
             <tr>
                 <td><?php echo $bezoeker_naam; ?></td>
                 <td><?php echo $bezoeker_email; ?></td>
                 <td><?php echo $beschikbaar_uur; ?></td>
-                <td><?php echo $beschikbaar_dag; ?></td>
+<!--                <td><?php echo $beschikbaar_dag; ?></td>-->
             </tr>
 
             <?php } ?>                  
