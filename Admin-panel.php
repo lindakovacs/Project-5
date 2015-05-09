@@ -112,7 +112,7 @@
         <section>
         <div class="container">
             
-        <!--FORMULIER REGISTREREN-->
+        <!--NIEUWE ADMIN TOEVOEGEN-->
         <div class="page-header" id="registration"><h2>Nieuwe Admin Toevoegen</h2></div>
         <form role="form" method="post" >
             <!--VOORNAAM-->
@@ -148,18 +148,16 @@
         <!-- EMAILADRES -->
         <!-- WACHTWOORD -->
 
+        <!-- LIJST OPVRAGEN BOEKINGEN -->
         <div class="page-header" id="registration"><h2>Lijst opvragen van boekingen</h2></div>
         <form role="form" method="post" >
             <button type="submit" name= "lijst" class="btn btn-default">Toon alle boekingen</button>
-            <!--<input type='hidden' name='geboektfk' value='".$row["geboekt_fk"]."'/>-->
             <input type='hidden' name='geboektfk' value='".$row["geboekt_fk"]."'/>
         </form>   
-           
-        <div class="page-header">
-        <h2>Welke bezoeker heeft welke gids geboekt?</h2>
-        </div> 
-        <?php
-           
+        
+        <!-- WELKE BEZOEKER WELKE GIDS -->
+        <h2 class="page-header">Welke bezoeker heeft welke gids geboekt?</h2>
+        <?php 
             $a = new Admin();
             $all_boekingen = $a->boekingen();
             
@@ -167,19 +165,18 @@
             {
                 $bezoeker_naam = $row["bezoeker_naam"];
                 $gids_voornaam = $row["gids_voornaam"];
-                $gids_naam = $row["gids_naam"];
-            
-?>
-           <div class="lijst">
+                $gids_naam = $row["gids_naam"];    
+        ?>
+            <div class="row">
             <div class="col-lg-4">
-                <p>Bezoeker: <strong><?php echo $bezoeker_naam; ?></strong> heeft </p>
-                <p><strong><?php echo $gids_voornaam?> <?php echo $gids_naam ?></strong> geboekt als gids.</p>
+                <p>Bezoeker: <b><?php echo $bezoeker_naam; ?></b> heeft </p>
+                <p><b><?php echo $gids_voornaam?> <?php echo $gids_naam ?></b> geboekt als gids.</p>
             </div>
-    </div>
-          <?php } ?>     
+            </div>
+        <?php } ?>     
 
-            
-        <div class="page-header"><h2>Welke gids is beschikbaar en wanneer?</h2></div>           
+        <!-- WELKE BEZOEKER HEEFT WANNEER GEBOEKT -->
+        <h2 class="page-header">Welke bezoeker heeft wanneer geboekt?</h2>      
         <table style="width:100%">
             <tr>
                 <th>Naam</th>
@@ -212,11 +209,6 @@
                 
         <!--FOOTER-->
         <footer>
-           <!-- SnapWidget -->
-           <h1>Vergeet niet mee te instagrammen met ons!</h1>
-           <h2>#weareimd</h2>
-<script src="http://snapwidget.com/js/snapwidget.js"></script>
-<iframe src="http://snapwidget.com/in/?h=d2VhcmVpbWR8aW58MjB8NXwyfHx5ZXN8NXxmYWRlSW58b25TdGFydHx5ZXN8eWVz&ve=150415" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden;"></iframe>
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
         

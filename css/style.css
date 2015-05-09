@@ -36,6 +36,11 @@ header{
     color:red;
 }
 
+.img-gids{
+    width:150px;
+    float:left;
+}
+
 /* DATE TIME PICKER ---------------------------------- */
 .date input:read-only{
     background-color: white;
