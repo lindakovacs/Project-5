@@ -146,7 +146,7 @@ class Admin
     public function boekingen()
     {
         $conn = Db::getInstance();
-        $boek = $conn->query("SELECT bezoeker_naam,gids_voornaam,gids_naam FROM geboekt INNER JOIN gids ON geboekt.gids_id = gids.gids_id INNER JOIN bezoeker ON geboekt.bezoeker_id = bezoeker.bezoeker_id where geboekt_isgeboekt = 1");
+        $boek = $conn->query("SELECT bezoeker_naam,gids_voornaam,gids_naam FROM geboekt INNER JOIN gids ON geboekt.gids_id = gids.gids_id INNER JOIN bezoeker ON geboekt.bezoeker_facebookid = bezoeker.bezoeker_facebookid where geboekt_isgeboekt = 1;");
         return $boek;
         
         

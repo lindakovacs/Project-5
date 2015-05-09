@@ -148,7 +148,10 @@
             </div>
         <?php } ?>
     </div>
-       
+               
+        <!-- INHOUD WANNEER NIET INGELOGD -->
+        <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
+        
         <!--HEADER-->
         <header class="inleiding">
             <div class="container">
@@ -165,11 +168,9 @@
             </div>
         </header>
         
-        <!-- INHOUD WANNEER NIET INGELOGD -->
-        <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
+        <!-- INHOUD -->
         <div class="marketing">
             <div class="container">
-                <!-- INHOUD 1 -->
                 <div class="col-lg-4">
                 <img class="img-rounded" src="img/weareimd.png">
                 <h2>Bezoeker of Gids?</h2>
@@ -177,7 +178,6 @@
 Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registreer je dan nu. </p>
                 </div>
 
-                <!-- INHOUD 2 -->
                 <div class="col-lg-4">
                     <img class="img-rounded" src="img/weareimd.png">
                     <h2>Voor jouw bezoek</h2>
@@ -185,7 +185,6 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
                     IMD is onze passie en die willen we ook aan jouw doorgeven.</p>
                 </div>
 
-                <!-- INHOUD 3 -->
                 <div class="col-lg-4">
                     <img class="img-rounded" src="img/weareimd.png">
                     <h2>Na jouw bezoek</h2>
@@ -258,23 +257,25 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
                     <br><b>Biografie: </b><?php echo $beschikbaar['gids_bio'] ?>
                     <br><b>Afspraak: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?>
                     </p>
-                        
-                    <form method='post'>
-                    <input type='hidden' name='gidsid' value='".$row["gids_id"]."'/>
-                    <input type='hidden' name='isgeboekt' value='1'/>
-                    <input type='submit' class='data btn btn-primary' name='voegtoe' value='Boek mij'/>                       </form>
                     <br>
                 </div>            
             <?php }} ?>
         </div>
         
         <!-- FOTO'S VAN GIDSEN -->
-        <div class="buddy text-align">
-            <div class="container">
-            <h1>Hier komen de foto's van onze gidsen</h1>
-            <img src="img/weareimd.png" alt="gidsen" width="150">
-            </div>
-        </div>                      
+            <div class="container text-align">
+            <h1>Onze gidsen</h1>
+            <?php
+                include_once("classes/user.class.php");
+                $g = new User();
+                $allInfo = $g->getAllInfo();
+
+                while($row = $allInfo->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <a href="gids.php">
+                    <img class="img-responsive img-gids" src="img/profielfotos/<?php echo $row['gids_id']."/".$row['gids_foto']; ?>" alt="">
+                    </a>
+            <?php } ?>  
+            </div>                    
 
         <!--FOOTER-->
         <footer>

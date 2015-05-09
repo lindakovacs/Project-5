@@ -65,6 +65,33 @@
     <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1" async="async"></script>
     
+    <!-- AJAX EMAIL -->
+    <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $(".email-ajax").keyup(function (e) {
+
+            $(this).val($(this).val().replace(/\s/g, ''));
+
+            var username = $(this).val();
+            if(username.length < 10){$("#user-result").html('');return;}
+
+            if(username.length >= 10){
+                $("#user-result").html('<img src="img/ajax-loader.gif" />');
+                $.post('ajax/check_usernames.php', {'username':username}, function(data) {
+                  $("#user-result").html(data);
+                    if(data.status===true){
+                        $("#user-result").html('<img src="img/not-available.png" />');
+                    }
+                    else{
+                        $("#user-result").html('<img src="img/available.png" />');
+                    }
+                });
+            }
+        });	
+    });
+    </script>
+    
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -159,9 +186,10 @@
             <label for="email">E-mailadres:<span class="required">*</span></label>
             <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                <input type="email" class="form-control" id="email" name="email" placeholder="E-emailadres">                 
+                <input type="email" class="form-control email-ajax" id="email" name="email" placeholder="E-emailadres">  
+                <span class="input-group-addon" id="user-result"></span>          
             </div>
-                
+             
             <!--WACHTWOORD-->
             <div class="row">
                 <div class="col-md-6">
