@@ -16,7 +16,7 @@
             $book->Gidsid=$_POST['gidsid'];
             $book->Isgeboekt=$_POST['isgeboekt'];
             $book->save($facebookid);
-            $success = "<b>Boeking gelukt!</b>";
+            $success = "<b>Boeking is succesvol verwerkt!</b>";
         }
     }
 
@@ -39,74 +39,28 @@
 
     //BUTTON UPDATE
     if(!empty($_POST['update'])){
-    
-    $link = new mysqli("localhost", "root", "");
-    $link->select_db("phpproject");
-    $Gebruikersnaam = $_SESSION['username'];
-
-    // UPDATE VOORNAAM
-    if (!empty($_POST['update_voornaam'])){ 
+        $conn = Db::getInstance();
+        $Gebruikersnaam = $_SESSION['username'];
+        
         $update_voornaam = $_POST['update_voornaam'];
-        $sqlquery2 = "UPDATE gids SET gids_voornaam='$update_voornaam' WHERE gids_email='$Gebruikersnaam'";
-        $res = $link->query($sqlquery2);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE NAAM
-    if (!empty($_POST['update_naam'])){
         $update_naam = $_POST['update_naam'];
-        $sqlquery3 = "UPDATE gids SET gids_naam='$update_naam' WHERE gids_email='$Gebruikersnaam'";
-        $res2 = $link->query($sqlquery3);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE EMAIL
-    if (!empty($_POST['update_email'])){
         $update_email = $_POST['update_email'];
-        $sqlquery4 = "UPDATE gids SET gids_email='$update_email' WHERE gids_email='$Gebruikersnaam'";
-        $res3 = $link->query($sqlquery4);
-    }
-
-    // UPDATE JAAR
-    if (!empty($_POST['update_jaar'])){
         $update_jaar = $_POST['update_jaar'];
-        $sqlquery4 = "UPDATE gids SET gids_jaar='$update_jaar' WHERE gids_email='$Gebruikersnaam'";
-        $res3 = $link->query($sqlquery4);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE RICHTING
-    if (!empty($_POST['update_richting'])){
         $update_richting = $_POST['update_richting'];
-        $sqlquery5 = "UPDATE gids SET gids_richting='$update_richting' WHERE gids_email='$Gebruikersnaam'";
-        $res4 = $link->query($sqlquery5);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE STAD
-    if (!empty($_POST['update_stad'])){
         $update_stad = $_POST['update_stad'];
-        $sqlquery6 = "UPDATE gids SET gids_stad='$update_stad' WHERE gids_email='$Gebruikersnaam'";
-        $res5 = $link->query($sqlquery6);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE BIO
-    if (!empty($_POST['update_bio'])){
         $update_bio = $_POST['update_bio'];
-        $sqlquery7 = "UPDATE gids SET gids_bio='$update_bio' WHERE gids_email='$Gebruikersnaam'";
-        $res6 = $link->query($sqlquery7);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
+        
+        $statement = $conn->prepare("UPDATE gids SET gids_voornaam='$update_voornaam',
+                                                     gids_naam ='$update_naam',
+                                                     gids_email ='$update_email',
+                                                     gids_jaar ='$update_jaar',
+                                                     gids_richting ='$update_richting',
+                                                     gids_stad ='$update_stad',
+                                                     gids_bio ='$update_bio'
+        WHERE gids_email='$Gebruikersnaam'");
+        $statement->execute();
+        $success = "<b>Profiel is aangepast! </b>Je profiel is succesvol aangepast.";
     }
-
-    // UPDATE FOTO
-    if (!empty($_POST['profilepic'])){
-        $profilepic = $_FILES['profilepic']['name'];
-        $sqlquery7 = "UPDATE gids SET gids_foto='$profilepic' WHERE gids_email='$Gebruikersnaam'";
-        $res6 = $link->query($sqlquery7);
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -187,7 +141,6 @@
             
             <!--FACEBOOK INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['FBID'])){ ?>
-                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
                 <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
                 <p class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></p>
                 <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>

@@ -41,6 +41,11 @@ header{
     float:left;
 }
 
+.float-left{
+    float:left;    
+    margin-right: 5px;
+}
+
 /* DATE TIME PICKER ---------------------------------- */
 .date input:read-only{
     background-color: white;

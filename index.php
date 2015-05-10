@@ -1,25 +1,7 @@
 <?php
     session_start();
     include_once("login.php");
-
-    try{
-        include_once("classes/boek.class.php");
-
-        if(!empty($_POST['voegtoe'])){   
-            //echo "gelukt!";
-            $book = new Book();
-            $facebookid = $_SESSION['FBID'];
-            $book->Gidsid=$_POST['gidsid'];
-            $book->Isgeboekt=$_POST['isgeboekt'];
-            $book->save($facebookid);
-//            $info = "<b>Boeking gelukt!</b> GidsID: ".$book->Gidsid." IsGeboekt: ".$book->Isgeboekt;
-            $info = "<b>Boeking is gelukt!</b>";
-        }
-    }
-
-    catch(Exception $e){
-        $error = $e->getMessage();
-    }
+    include_once("classes/boek.class.php");
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +78,6 @@
             
             <!--FACEBOOK INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['FBID'])){ ?>
-                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
                 <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
                 <p class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></p>
                 <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
@@ -186,9 +167,31 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
         </div>
         <?php } ?>
         
-        <!-- GIDSEN ZIEN HUN EIGEN AFSPRAKEN -->
+        <!-- AFSPRAKEN VAN GIDS -->
         <div class="container">
         <?php if(isset($_SESSION['username'])){ ?>
+        <h1 class="page-header">Wanneer heb ik een afspraak en met wie?</h1>
+        <?php 
+            $book = new Book();
+            $afsprakenG = $book->afsprakenG();
+            
+            while($row = $afsprakenG->fetch(PDO::FETCH_ASSOC)){ ?>
+                <div class="col-sm-4">
+                   
+                    <img class="img-rounded float-left" src="https://graph.facebook.com/<?php echo $row['bezoeker_facebookid']; ?>/picture" width="59">
+
+                    <p>
+                    <b>Naam: </b><?php echo $row['bezoeker_naam'] ?>
+                    <br><b>E-mailadres: </b><?php echo $row['bezoeker_email'] ?>
+                    <br><b>Afspraak: </b><?php echo $row['beschikbaar_dag_uur'] ?>
+                    </p>
+                    <br>
+                </div>
+            <?php } ?>
+        </div>
+        
+        <!-- BESCHIKBARE DATA VAN GIDS -->
+        <div class="container">
             <div class="page-header"><h1>Wanneer heb ik afspraken ingesteld?</h1></div>
             
             <?php
@@ -197,20 +200,7 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
         
             while($beschikbaar = $allAfspraak->fetch(PDO::FETCH_ASSOC)){ ?>
                 <div class="col-sm-4">
-                   
-                    <?php if(!empty($beschikbaar['gids_foto'])){ ?>
-                        <img class="img-rounded img-responsive" src="img/profielfotos/<?php echo $beschikbaar['gids_id']."/".$beschikbaar['gids_foto']; ?>" alt="profielfoto" width="150">
-                    <?php }else{ ?>
-                        <img class="img-rounded img-responsive" src="img/weareimd.png" alt="weareimd">
-                    <?php } ?>
-                    <p>
-                    <br><b>Voornaam: </b><?php echo $beschikbaar['gids_voornaam'] ?>
-                    <br><b>Achternaam: </b><?php echo $beschikbaar['gids_naam'] ?>
-                    <br><b>Richting: </b><?php echo $beschikbaar['gids_richting'] ?>
-                    <br><b>Jaar: </b><?php echo $beschikbaar['gids_jaar'] ?>
-                    <br><b>Biografie: </b><?php echo $beschikbaar['gids_bio'] ?>
-                    <br><b>Afspraak: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?>
-                    </p>
+                    <p><br><b>Datum: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?></p>
                     <br>
                 </div>            
             <?php }} ?>
