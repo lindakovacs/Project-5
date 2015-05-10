@@ -227,7 +227,7 @@
             <?php } ?>
 
             <?php
-                $link = new mysqli("localhost", "root", "");
+                $link = new mysqli("localhost", "root", "root");
                 $link->select_db("phpproject");
 
                 $sqlquery = "SELECT * FROM gids";
@@ -282,7 +282,7 @@
                 <h1>Profiel aanpassen</h1>
             </div>
             <?php
-                $link = new mysqli("localhost", "root", "");
+                $link = new mysqli("localhost", "root", "root");
                 $link->select_db("phpproject");
                 //test
 

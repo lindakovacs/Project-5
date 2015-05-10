@@ -5,8 +5,28 @@
     spl_autoload_register(function($class){
         include_once("classes/".$class.".class.php"); 
     });
-?>
 
+ if(!empty($_POST))
+    {
+        try
+        {             
+            $a = new Admin();
+            $a->Firstname=$_POST['firstname'];
+            $a->Lastname=$_POST['lastname'];
+            $a->Email=$_POST['email'];
+            //PASSWORD HASH
+            $options=['cost'=>12,];
+            $a->Password = password_hash($_POST['password'],PASSWORD_DEFAULT, $options);
+            $a->save();
+            $success ="<b>Ok!</b> Je hebt succesvol een nieuwe admin toegevoegd.";
+        }
+
+        catch(Exception $e)
+        {
+            $error=$e->getMessage();
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
