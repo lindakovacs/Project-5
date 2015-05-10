@@ -10,6 +10,7 @@ class Admin
         private $m_sLastname;
         private $m_sEmail;
         private $m_sPassword;
+    
         
     
     //SET----------------------------------------
@@ -42,7 +43,7 @@ class Admin
                     break;
                 
                     //Email
-                    case 'Email':
+                   case 'Email':
                     if ($p_vValue!="")
                     {
                         if ($this->checkEmail($p_vValue) === true)
@@ -84,7 +85,7 @@ class Admin
                     return $this->m_sFirstname;
                     break;
                     
-                     case 'Lastname':
+                   case 'Lastname':
                     return $this->m_sLastname;
                     break;
                     
@@ -124,15 +125,15 @@ class Admin
          $statement = $conn->prepare("INSERT INTO admin  (
                                                         admin_voornaam,
                                                         admin_achternaam,
-                                                        admin_email,
-                                                        admin_wachtwoord
+                                                        admin_wachtwoord,
+                                                        admin_email
                                                         )
 
                                                  VALUES(
                                                         :firstname,
                                                         :lastname,
-                                                        :email,
-                                                        :wachtwoord
+                                                        :wachtwoord,
+                                                        :email
                                                         )"
                                        ); 
 
