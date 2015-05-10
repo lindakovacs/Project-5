@@ -66,6 +66,14 @@
             return $allBeschik;
         }
         
+        //GET ALL ID------------------------------------
+        public function getAllId($id)
+        {
+            $conn = Db::getInstance();
+            $allBeschikId = $conn->query("SELECT * FROM gids INNER JOIN beschikbaarheid ON gids.gids_id = beschikbaarheid.gids_id WHERE beschikbaarheid.gids_id = '$id' ORDER BY beschikbaarheid.beschikbaar_dag_uur ASC;");
+            return $allBeschikId;
+        }
+        
         //GET ALL SELF------------------------------------
         public function getAllSelf()
         {

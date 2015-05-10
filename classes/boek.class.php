@@ -102,6 +102,17 @@
 
                 }
         }
+        
+        public function afsprakenB($fbid)
+        {
+        $conn = Db::getInstance();
+        $afsprakenB = $conn->query("SELECT * FROM geboekt
+        INNER JOIN beschikbaarheid ON geboekt.gids_id = beschikbaarheid.gids_id
+        INNER JOIN gids ON geboekt.gids_id = gids.gids_id 
+        INNER JOIN bezoeker ON geboekt.bezoeker_facebookid = bezoeker.bezoeker_facebookid
+        WHERE geboekt_isgeboekt = 1");
+        return $afsprakenB;
+        }
 
          //SAVE---------------------------------------
    

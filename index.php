@@ -138,15 +138,6 @@
                 <?php echo $error; ?>
             </div>
         <?php } ?>
-        
-        <!--ALERT INFO-->
-        <?php if(isset($info)){ ?>
-            <div class="alert alert-info" role="alert">
-                <a href="#" class="close" data-dismiss="alert">&times;</a>
-                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                <?php echo $info; ?>
-            </div>
-        <?php } ?>
     </div>
                
         <!-- INHOUD WANNEER NIET INGELOGD -->
@@ -195,42 +186,6 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
         </div>
         <?php } ?>
         
-        <!-- BEZOEKER MOET GIDSEN KUNNEN RAADPLEGEN -->
-        <div class="container">
-        <?php if(isset($_SESSION['FBID'])){ ?>
-        <h1 class="page-header">Welke gids is beschikbaar en wanneer?</h1>
-            
-            <?php
-            $b = new UserBeschikbaar();
-            $allBeschik = $b->getAll();
-        
-            // LOOP ALLE BESCHIKBARE DATA
-            while($beschikbaar = $allBeschik->fetch(PDO::FETCH_ASSOC)){ ?>
-                <div class="col-sm-4">
-                   
-                    <?php if(!empty($beschikbaar['gids_foto'])){ ?>
-                        <img class="img-rounded img-responsive" src="img/profielfotos/<?php echo $beschikbaar['gids_id']."/".$beschikbaar['gids_foto']; ?>" alt="profielfoto" width="150">
-                    <?php }else{ ?>
-                        <img class="img-rounded img-responsive" src="img/weareimd.png" alt="weareimd">
-                    <?php } ?>
-                    <p>
-                    <br><b>Voornaam: </b><?php echo $beschikbaar['gids_voornaam'] ?>
-                    <br><b>Achternaam: </b><?php echo $beschikbaar['gids_naam'] ?>
-                    <br><b>Richting: </b><?php echo $beschikbaar['gids_richting'] ?>
-                    <br><b>Jaar: </b><?php echo $beschikbaar['gids_jaar'] ?>
-                    <br><b>Biografie: </b><?php echo $beschikbaar['gids_bio'] ?>
-                    <br><b>Afspraak: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?>
-                    </p>
-                        
-                    <form method='post'>
-                    <input type='hidden' name='gidsid' value='<?php echo $beschikbaar['gids_id'] ?>'/>
-                    <input type='hidden' name='isgeboekt' value='1'/>
-                    <input type='submit' class='data btn btn-primary' name='voegtoe' value='Boek mij'/>                       </form>
-                    <br>
-                </div>            
-            <?php }} ?>
-        </div>
-        
         <!-- GIDSEN ZIEN HUN EIGEN AFSPRAKEN -->
         <div class="container">
         <?php if(isset($_SESSION['username'])){ ?>
@@ -240,7 +195,6 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
             $b = new UserBeschikbaar();
             $allAfspraak = $b->getAllSelf();
         
-            // LOOP ALLE BESCHIKBARE DATA
             while($beschikbaar = $allAfspraak->fetch(PDO::FETCH_ASSOC)){ ?>
                 <div class="col-sm-4">
                    
@@ -262,20 +216,45 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
             <?php }} ?>
         </div>
         
+        <!-- AFSPRAKEN VAN BEZOEKER -->
+        <div class="container">
+        <?php if(isset($_SESSION['FBID'])){ 
+        $fbid = $_SESSION['FBID']; ?>
+        <h1 class="page-header">Wanneer heb ik een afspraak en met wie?</h1>
+        <?php 
+            $book = new Book();
+            $afsprakenB = $book->afsprakenB($fbid);
+            
+            while($row = $afsprakenB->fetch(PDO::FETCH_ASSOC)){ ?>
+                <div class="col-sm-4">
+                    <img class="img-rounded img-responsive" src="img/profielfotos/<?php echo $row['gids_id']."/".$row['gids_foto']; ?>" alt="profielfoto" width="150">
+                    <p>
+                    <br><b>Voornaam: </b><?php echo $row['gids_voornaam'] ?>
+                    <br><b>Achternaam: </b><?php echo $row['gids_naam'] ?>
+                    <br><b>Richting: </b><?php echo $row['gids_richting'] ?>
+                    <br><b>Jaar: </b><?php echo $row['gids_jaar'] ?>
+                    <br><b>Biografie: </b><?php echo $row['gids_bio'] ?>
+                    <br><b>Afspraak: </b><?php echo $row['beschikbaar_dag_uur'] ?>
+                    </p>
+                    <br>
+                </div>
+            <?php } ?>
+        </div>
+        
         <!-- FOTO'S VAN GIDSEN -->
-            <div class="container text-align">
-            <h1>Onze gidsen</h1>
-            <?php
-                include_once("classes/user.class.php");
-                $g = new User();
-                $allInfo = $g->getAllInfo();
+        <div class="container">
+        <h1>Onze gidsen</h1>
+        <?php
+            include_once("classes/user.class.php");
+            $g = new User();
+            $allInfo = $g->getAllInfo();
 
-                while($row = $allInfo->fetch(PDO::FETCH_ASSOC)){ ?>
-                    <a href="gids.php">
-                    <img class="img-responsive img-gids" src="img/profielfotos/<?php echo $row['gids_id']."/".$row['gids_foto']; ?>" alt="">
-                    </a>
-            <?php } ?>  
-            </div>                    
+            while($row = $allInfo->fetch(PDO::FETCH_ASSOC)){ ?>
+                <a href="gids.php?id=<?php echo $row['gids_id']; ?>">
+                <img class="img-responsive img-gids" src="img/profielfotos/<?php echo $row['gids_id']."/".$row['gids_foto']; ?>" alt="">
+                </a>
+        <?php }} ?>  
+        </div>                    
 
         <!--FOOTER-->
         <footer>

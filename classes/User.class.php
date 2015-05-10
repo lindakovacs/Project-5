@@ -191,6 +191,14 @@
             $allInfo = $conn->query("SELECT * FROM gids");
             return $allInfo;
         }
+        
+        //GET ID PROFILE-----------------------------------
+        public function getUserProfile($id)
+        {
+            $conn = Db::getInstance();
+            $userProfile = $conn->query("SELECT * FROM gids WHERE gids_id='$id'");
+            return $userProfile;
+        }
 
          //SAVE---------------------------------------
          public function save(){
