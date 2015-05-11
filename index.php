@@ -2,6 +2,19 @@
     session_start();
     include_once("login.php");
     include_once("classes/boek.class.php");
+
+    spl_autoload_register(function($class)
+    {
+        include_once("classes/".$class.".class.php");
+    });
+
+    if(!empty($_GET['id']))
+    {
+        $conn = Db::getInstance();
+        $current_id = $_GET['id'];
+        $conn->query("DELETE FROM beschikbaarheid WHERE beschikbaar_id = $current_id;");
+        header('Location:index.php');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -200,7 +213,7 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
         
             while($beschikbaar = $allAfspraak->fetch(PDO::FETCH_ASSOC)){ ?>
                 <div class="col-sm-4">
-                    <p><br><b>Datum: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?></p>
+                    <p><br><b>Datum: </b><?php echo $beschikbaar['beschikbaar_dag_uur']." "?><a href="<?php echo "?id=".$beschikbaar['beschikbaar_id'] ?>"><span style="color:#333333" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></p>
                     <br>
                 </div>            
             <?php }} ?>

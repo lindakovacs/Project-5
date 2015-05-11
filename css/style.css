@@ -46,6 +46,10 @@ header{
     margin-right: 5px;
 }
 
+#feedback_all{
+    width:300px; 
+}
+
 /* DATE TIME PICKER ---------------------------------- */
 .date input:read-only{
     background-color: white;
