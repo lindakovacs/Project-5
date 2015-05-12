@@ -1,32 +1,50 @@
 <?php
     session_start();
-    spl_autoload_register( function($class)
-    {
-        include_once("classes/" . $class . ".class.php");
-    });
-
     include_once("login.php");
+    //include_once("classes/Db.class.php");    
+    include_once('classes/feedback.class.php');
 
-    //FEEDBACK VERSTUREN
-    if(!empty($_POST["send_feedback"]))
-    {
-        include_once("classes/feedback.class.php");
-        try
-        {       
-            $f = new Feedback();
-            $fbid = $_SESSION['FBID'];
-            $f->Feedback_tekst=$_POST['feedback'];
-            $f->Feedback_rating=$_POST['rating'];
-            $f->Gids_id = $_POST['gids_id'];
-            $f->save($fbid);
-            $success ="<b>Feedback is succesvol verzonden!</b>";
-        }
+    $link = new mysqli("localhost", "root", "");
+    $link->select_db("phpproject");
 
-        catch(Exception $e)
+    if(!empty($_POST["feedback"]) && !empty($_POST["rating"]) && !empty($_POST["vol_naam_gids"]))
+    {   
+        $feedback = $_POST["feedback"];
+        $rating = $_POST["rating"];
+        $vol_naam_gids = $_POST["vol_naam_gids"];
+        //$voornaam_gids = $_POST["voornaam_gids"];
+        $naam_bezoeker = $_SESSION['FULLNAME'];
+
+        
+
+        $sqlquery2 = "SELECT gids_id FROM gids WHERE gids_voornaam + ' ' + gids_naam='$vol_naam_gids'";
+        $result2 = $link->query($sqlquery2);
+
+
+
+        $sqlquery3 = "SELECT bezoeker_id FROM bezoeker WHERE bezoeker_naam='$naam_bezoeker'";
+        $result3 = $link->query($sqlquery3);
+
+        while($line=$result2->fetch_array())
         {
-            $error=$e->getMessage();
+            
+            $feedback = new Feedback();
+            $feedback->Feedback_tekst = $_POST['feedback'];
+            $feedback->Feedback_rating = $_POST['rating'];
+            $feedback->Gids_id = $line['gids_id']; 
+
+            echo $line['gids_id'];
         }
-    }  
+        while($line=$result3->fetch_array())
+        {
+            //echo $line['bezoeker_id'];
+            $feedback->Bezoeker_id = $line['bezoeker_id'];
+            $feedback->Save();
+        }      
+    }
+    else{
+        //echo "failed!";
+    }
 ?>
 
 <!DOCTYPE html>
@@ -63,10 +81,12 @@
     <!-- SHARE TOOLS (www.addthis.com/dashboard) -->
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5534d6620e22bfa1" async="async"></script>
     
-    <!-- INSTAGRAM -->
-    <script type="text/javascript" src="js/instafeed.min.js"></script>
-    <script type="text/javascript" src="js/instagram.js"></script>
-    
+    <style>
+        #feedback_all{
+            width:250px; 
+        }
+    </style>  
+
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -102,6 +122,7 @@
             
             <!--FACEBOOK INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['FBID'])){ ?>
+                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
                 <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
                 <p class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></p>
                 <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
@@ -147,67 +168,90 @@
         <header class="jumbotron">
 
             <a href="index.php"><img src="img/vector-logo.png" class="img-responsive center-logo" alt="logo"></a>
-            <p>Rent a Student is een platform waar bezoekers IMD-studenten kunnen boeken.</p>
+            <p>Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen.</p>
             
             <!--FACEBOOK INLOGGEN-->
             <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
-                <a href="facebook/fbconfig.php">Enkel voor bezoekers.<br>
+                <a href="facebook/fbconfig.php">Lorem Ipsum is slechts een proeftekst.<br>
                 <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
                 </a>
             <?php } ?>
 
         </header>
 
-        <?php if (isset($_SESSION['FBID'])){ ?>
+        <?php if (isset($_SESSION['FULLNAME'])){ ?>
 
             <!--SECTION-->
             <section>
             <div class="page-header"><h2>Feedback over jouw bezoek</h2></div>
             <p>Gelieve hier wat feedback en een rating op 5 te geven over de gids en het verloop van jouw bezoek.</p><br>
             <div id="feedback_all">
+                <?php
+
+                    $sqlquery = "SELECT feedback_tekst, feedback_rating FROM feedback;";
+                    //$sqlquery2 = "SELECT bezoeker_naam FROM bezoeker WHERE bezoeker_id=m_iBezoeker_id;";
+                    $result = $link->query($sqlquery);
+
+                    // INFO AFDRUKKEN!!!!!
+                    /*while($line = $result->fetch_array())
+                    {
+                        echo 'feedback: ' . $line['feedback_tekst'] . '<br>';
+                        echo 'rating: ' . $line['feedback_rating'] . '/5' . '<br>';
+                        echo '<br><hr><br>';
+                    }*/
+
+                ?>
 
                 <form method="POST">
+                <div class="form-group">
+                    <!--<label for="education">Voornaam gids:</label><br>
+                    <textarea class="form-control" cols="30" rows="1" name="voornaam_gids" placeholder="Voornaam van je gids"></textarea>
+
+                    <br><label for="education">Naam gids:</label><br>
+                    <textarea class="form-control" cols="30" rows="1" name="naam_gids" placeholder="Naam van je gids"></textarea>-->
+
                     
-                <!--GIDS NAAM-->
-               <div class="form-group">
-                    <label for="year">Gids naam:<span class="required">*</span></label>
-                    <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <select class="form-control" name="gids_id">
-                        <option></option>
-                        <?php
-                            $g = new User();
-                            $allInfo = $g->getAllInfo();
-            
-                            while($row = $allInfo->fetch(PDO::FETCH_ASSOC)){ ?>
-                                <option value="<?php echo $row['gids_id'] ?>"><?php echo $row['gids_voornaam']." ".$row['gids_naam'] ?></option>
-                        <?php } ?>
-                        </select>
+                    <div class="form-group">
+                        <label for="year">Naam gids:<span class="required">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i></i></span>
+
+                            <?php 
+
+
+                            mysql_connect('localhost', 'root', '');
+                            mysql_select_db('phpproject');
+
+                            
+
+                            echo '<select class="form-control" name="vol_naam_gids">';
+                            $sql8 = "SELECT gids_voornaam, gids_naam FROM gids";
+                            $result8 = mysql_query($sql8);
+                            while ($row = mysql_fetch_array($result8)) {
+                                echo "<option value='" . $row['gids_voornaam'] . " " . $row['gids_naam'] ."'>" . $row['gids_voornaam'] . " " . $row['gids_naam'] ."</option>";
+                            }
+                            echo "</select>";
+
+                            ?>
                     </div>
-                </div>
+            </div>
                     
-                <!--RATING-->
-               <div class="form-group">
-                    <label for="rating">Rating:<span class="required">*</span></label>
-                    <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
-                        <select class="form-control" name="rating">
-                            <option></option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
+                    <br><label for="education">Rating:</label><br>
+                    <select class="form-control" name="rating">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="feedback">Feedback:<span class="required">*</span></label><br>
-                    <textarea class="form-control" id="bio" cols="50" rows="7" name="feedback" placeholder="Plaats hier je feedback."></textarea>
+                    <label for="bio">Feedback:</label><br>
+                    <textarea class="form-control" id="bio" cols="30" rows="10" name="feedback" placeholder="Plaats hier je feedback"></textarea>
                 </div>
-                <input type="submit" name="send_feedback" class="btn btn-primary" value="Feedback verzenden" width="200"></input>
-            </form>
+                <input type="submit" name="" class="btn btn-primary"></input>
+            </form><br>
         </div>
                             
         </section>
@@ -224,7 +268,8 @@
            <!-- SnapWidget -->
            <h1>Vergeet niet mee te instagrammen met ons!</h1>
            <h2>#weareimd</h2>
-           <div id="instafeed"></div>
+<script src="http://snapwidget.com/js/snapwidget.js"></script>
+<iframe src="http://snapwidget.com/in/?h=d2VhcmVpbWR8aW58MjB8NXwyfHx5ZXN8NXxmYWRlSW58b25TdGFydHx5ZXN8eWVz&ve=150415" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden;"></iframe>
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
         

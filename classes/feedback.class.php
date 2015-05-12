@@ -1,98 +1,89 @@
-<?php
-    spl_autoload_register( function($class)
-    {
-        include_once("classes/".$class.".class.php");
-    });
+<?php 
+	class Db
+	{
+		private $m_sHost = "localhost";
+		private $m_sUser = "root";
+		private $m_sPassword = "";
+		private $m_sDatabase = "phpproject";
+		public $conn;
+
+
+		public function __construct()
+		{
+			$this->conn = new mysqli($this->m_sHost, $this->m_sUser, $this->m_sPassword, $this->m_sDatabase);
+		}
+		
+	}
 
 	class Feedback
 	{
-		private $m_sFeedback_tekst;			
+		private $m_sFeedback_tekst;		
+		private $m_iBezoeker_id;		
 		private $m_iFeedback_rating;	
 		private $m_iGids_id;
 
-        //SET
 		public function __set($p_sProperty, $p_vValue)
 		{
-			switch ($p_sProperty)
-            {
-                //FEEDBACK TEKST
+			switch ($p_sProperty) {
 				case 'Feedback_tekst':
-                if($p_vValue!="")
-                {
-                    $this->m_sFeedback_tekst = $p_vValue;     
-                }
-                else
-                {
-                    throw new Exception("<b>Er is geen feedback geplaatst!</b> Alle verplichte velden moeten ingevuld zijn.");
-                }
+				$this->m_sFeedback_tekst = $p_vValue;   
                 break;
 
-                //FEEDBACK RATING
+				case 'Bezoeker_id':
+					$this->m_iBezoeker_id = $p_vValue;
+					break;
+
 				case 'Feedback_rating':
-                if($p_vValue!="")
-                {
-                    $this->m_iFeedback_rating = $p_vValue;
-                }
-                else
-                {
-                    throw new Exception("<b>Er is geen rating aangeduid!</b> Alle verplichte velden moeten ingevuld zijn.");
-                }
-                break;
+					$this->m_iFeedback_rating = $p_vValue;
+					break;
 
-                //GIDS ID
 				case 'Gids_id':
-                if($p_vValue!="")
-                {
-                    $this->m_iGids_id = $p_vValue;
-                }
-                else
-                {
-                    throw new Exception("<b>Er is geen gids aangeduid!</b> Alle verplichte velden moeten ingevuld zijn.");
-                }
-                break;
+					$this->m_iGids_id = $p_vValue;
+					break;
+							
 			}
 		}
 
-        //GET
 		public function __get($p_sProperty)
 		{
 			switch($p_sProperty)
 			{
 				case 'Feedback_tekst':
-                return $this->m_sFeedback_tekst;
-                break;
+					return $this->m_sFeedback_tekst;
+					break;
+
+				case 'Bezoeker_id':
+					return $this->m_iBezoeker_id;
+					break;
 
 				case 'Feedback_rating':
-                return $this->m_iFeedback_rating;
-                break;
+					return $this->m_iFeedback_rating;
+					break;
 
 				case 'Gids_id':
-                return $this->m_iGids_id;
-                break;
+					return $this->m_iGids_id;
+					break;
+
+
 			}
 		}
-        
-        //SAVE
-		public function save($fbid)
-		{
-            $conn = Db::getInstance();
-            $statement = $conn->prepare("INSERT INTO feedback(feedback_tekst,
-                                                              bezoeker_facebookid,
-                                                              feedback_rating,
-                                                              gids_id
-                                                             )
 
-                                                       VALUES(:feedback,
-                                                              :bezoeker_facebookid,
-                                                              :rating,
-                                                              :gids_id
-                                                             )                       
-                                    ");
-            $statement->bindValue(':feedback',$this->Feedback_tekst);
-            $statement->bindValue(':bezoeker_facebookid',$fbid);
-            $statement->bindValue(':rating',$this->Feedback_rating);
-            $statement->bindValue(':gids_id',$this->Gids_id);
-            $statement->execute();
+
+		public function Save()
+		{
+            $db = new Db();
+            $sql = "insert into feedback (feedback_tekst, bezoeker_id, feedback_rating, gids_id) values ('". $db->conn->real_escape_string($this->m_sFeedback_tekst) ."', '" . $db->conn->real_escape_string($this->m_iBezoeker_id) . "', '" . $db->conn->real_escape_string($this->m_iFeedback_rating) . "', '". $db->conn->real_escape_string($this->m_iGids_id) .  "')";
+            $db->conn->query($sql);
 		}
-    }
+
+		/*public function getAll()
+		{
+		    $db = new Db();
+        $sql = "select * from ooptblorders_v10";
+        $result = $db->conn->query($sql);
+        return $result;
+		}*/
+	
+	}
+
 ?>
