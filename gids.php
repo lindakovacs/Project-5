@@ -61,6 +61,20 @@
         $statement->execute();
         $success = "<b>Profiel is aangepast! </b>Je profiel is succesvol aangepast.";
     }
+
+
+    // VANAF HIER TOT EINDE PHP = PHP VOOR CHAT
+    spl_autoload_register(function($class){
+        include_once("/classes/".$class.".class.php"); 
+    });
+
+    if(isset($Gebruikersnaam)){
+        echo 'lala';
+    }
+
+    $naam = $_SESSION['FULLNAME'];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -82,6 +96,7 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="message/chat.css"><!-- CSS VOOR CHAT -->
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -110,6 +125,38 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->    
+
+
+    <!-- VAN HIER TOT EINDE SCRIPT = JS VOOR CHAT -->
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script>
+        function submitChat(){
+            if(form1.uname.value == '' || form1.msg.value == ''){
+                alert('No message or chatname!');
+                return;
+            }
+            form1.uname.readOnly = true;
+            form1.uname.style.border = 'none';
+            var uname = form1.uname.value;
+            var msg = form1.msg.value;
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState==4&&xmlhttp.status==200){
+                    document.getElementById('chatlogs').innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open('GET','message/insert.php?uname='+uname+'&msg='+msg,true);
+            xmlhttp.send();
+        }
+
+        $(document).ready(function(e){
+            $.ajaxSetup({cache:false});
+            setInterval(function() {$('#chatlogs').load('message/logs.php');}, 2000);
+        });
+    </script>
 </head>
 <body>
 
@@ -161,6 +208,29 @@
       </div>
     </nav>
     
+<!--  CHAT FUNCTIE -->
+<div id="chat">
+    <form name="form1" style="width: 280px; max-height:100%; float:left; background-color:#f9f1b9">
+        <?php
+            $g = new User();
+
+            $id = $_GET['id'];
+            $userProfile = $g->getUserProfile($id);
+            while($row = $userProfile->fetch(PDO::FETCH_ASSOC)){ ?>
+            <h3>Chat hier met <?php echo $row['gids_voornaam'] ?>:</h3>
+        <?php } ?>
+        Your Username: <input type="text" name="uname" style="width:200px" value=<?php echo $naam ?>><br>
+        Your Message: <br>
+        <textarea name="msg" style="width:200px; height:70px;"></textarea><br><br>
+        <a href="#" onclick="submitChat()" class="button" >Send</a><br><br>
+
+        <div id="chatlogs">
+            LOADING CHATLOGS PLEASE WAIT...
+        </div>
+    </div>
+
+
+
     <!-- CONTAINER -->
     <div class="container">
       
@@ -195,6 +265,11 @@
             <?php }else{ ?>
                 <img class="img-rounded img-responsive img-beschikbaar" src="img/weareimd.png" alt="weareimd">
             <?php } ?>
+
+
+
+
+
 
             <!-- PROFIEL INFO GIDS ZELF -->
             <?php
