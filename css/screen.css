@@ -4,6 +4,14 @@
 }
 
 footer{
-    padding-top: 0px;
-    padding-bottom: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+footer h2{
+    margin-bottom: 30px;
+}
+
+#instafeed{
+    margin-bottom: 40px;
 }
