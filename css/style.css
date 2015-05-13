@@ -93,7 +93,7 @@ header{
 
 /* MARKETING CONTENT WANNEER NIET INGELOGD --------- */
 .marketing{
-    padding-top: 30px;
+    padding-top: 50px;
     background-color: #F1E859; 
 }
 
@@ -132,39 +132,4 @@ footer{
     background-color:lightgray;
     text-align: center;
     margin:0 auto;
-}
-
-
-
-
-
-
-/* RATING ----------------------------------------- */
-#wrapper{
-    width: 800px;
-    margin: auto;
-}
-#wrapper h2{
-    padding-bottom: 40px;
-    text-align: center;
-    padding-top: 40px;
-}
-.items{
-    padding: 20px;
-    background: #fff;
-    width: 300px;
-    float: left;
-    margin-right: 20px;
-}
-.items h4, .items img, .items p{
-    padding-bottom: 20px;
-}
-
-
-
-#ratings{
-    
-    margin-top:-550px;
-    
-    
 }
