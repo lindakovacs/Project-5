@@ -7,6 +7,23 @@
         include_once("classes/".$class.".class.php");
     });
 
+    //GIDS BOEKEN
+    include("classes/boek.class.php");
+    try{
+        if(!empty($_POST['voegtoe'])){   
+            $book = new Book();
+            $facebookid = $_SESSION['FBID'];
+            $book->Gidsid=$_POST['gidsid'];
+            $book->Isgeboekt=$_POST['isgeboekt'];
+            $book->save($facebookid);
+            $success = "<b>Boeking is succesvol verwerkt!</b>";
+        }
+    }
+
+    catch(Exception $e){
+        $error = $e->getMessage();
+    }
+
     //BUTTON BESCHIKBAAR
     $b = new UserBeschikbaar();
     if(!empty($_POST['beschikbaar'])){
@@ -22,74 +39,28 @@
 
     //BUTTON UPDATE
     if(!empty($_POST['update'])){
-    
-    $link = new mysqli("localhost", "root", "");
-    $link->select_db("phpproject");
-    $Gebruikersnaam = $_SESSION['username'];
-
-    // UPDATE VOORNAAM
-    if (!empty($_POST['update_voornaam'])){ 
+        $conn = Db::getInstance();
+        $Gebruikersnaam = $_SESSION['username'];
+        
         $update_voornaam = $_POST['update_voornaam'];
-        $sqlquery2 = "UPDATE gids SET gids_voornaam='$update_voornaam' WHERE gids_email='$Gebruikersnaam'";
-        $res = $link->query($sqlquery2);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE NAAM
-    if (!empty($_POST['update_naam'])){
         $update_naam = $_POST['update_naam'];
-        $sqlquery3 = "UPDATE gids SET gids_naam='$update_naam' WHERE gids_email='$Gebruikersnaam'";
-        $res2 = $link->query($sqlquery3);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE EMAIL
-    if (!empty($_POST['update_email'])){
         $update_email = $_POST['update_email'];
-        $sqlquery4 = "UPDATE gids SET gids_email='$update_email' WHERE gids_email='$Gebruikersnaam'";
-        $res3 = $link->query($sqlquery4);
-    }
-
-    // UPDATE JAAR
-    if (!empty($_POST['update_jaar'])){
         $update_jaar = $_POST['update_jaar'];
-        $sqlquery4 = "UPDATE gids SET gids_jaar='$update_jaar' WHERE gids_email='$Gebruikersnaam'";
-        $res3 = $link->query($sqlquery4);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE RICHTING
-    if (!empty($_POST['update_richting'])){
         $update_richting = $_POST['update_richting'];
-        $sqlquery5 = "UPDATE gids SET gids_richting='$update_richting' WHERE gids_email='$Gebruikersnaam'";
-        $res4 = $link->query($sqlquery5);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE STAD
-    if (!empty($_POST['update_stad'])){
         $update_stad = $_POST['update_stad'];
-        $sqlquery6 = "UPDATE gids SET gids_stad='$update_stad' WHERE gids_email='$Gebruikersnaam'";
-        $res5 = $link->query($sqlquery6);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
-    }
-
-    // UPDATE BIO
-    if (!empty($_POST['update_bio'])){
         $update_bio = $_POST['update_bio'];
-        $sqlquery7 = "UPDATE gids SET gids_bio='$update_bio' WHERE gids_email='$Gebruikersnaam'";
-        $res6 = $link->query($sqlquery7);
-        $success = "<b>Je profiel is succesvol bijgewerkt!</b>";
+        
+        $statement = $conn->prepare("UPDATE gids SET gids_voornaam='$update_voornaam',
+                                                     gids_naam ='$update_naam',
+                                                     gids_email ='$update_email',
+                                                     gids_jaar ='$update_jaar',
+                                                     gids_richting ='$update_richting',
+                                                     gids_stad ='$update_stad',
+                                                     gids_bio ='$update_bio'
+        WHERE gids_email='$Gebruikersnaam'");
+        $statement->execute();
+        $success = "<b>Profiel is aangepast! </b>Je profiel is succesvol aangepast.";
     }
-
-    // UPDATE FOTO
-    if (!empty($_POST['profilepic'])){
-        $profilepic = $_FILES['profilepic']['name'];
-        $sqlquery7 = "UPDATE gids SET gids_foto='$profilepic' WHERE gids_email='$Gebruikersnaam'";
-        $res6 = $link->query($sqlquery7);
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -170,7 +141,6 @@
             
             <!--FACEBOOK INGELOGD + UITLOGGEN-->
             <?php if(isset($_SESSION['FBID'])){ ?>
-                <?php $success ="<b>Welkom!</b> U bent aangemeld met ".$_SESSION['FULLNAME']."."; ?>
                 <img class="img-rounded fb-img" src="https://graph.facebook.com/<?php echo $_SESSION['FBID']; ?>/picture">
                 <p class="fb-ingelogd"><?php echo $_SESSION['FULLNAME']; ?></p>
                 <a class="btn btn-primary" href="facebook/logout.php">Afmelden</a>
@@ -218,7 +188,7 @@
             <!-- GIDS ZELF ZIET DEZE DATA -->
             <?php if(isset($_SESSION['logged_in'])){ ?>
              
-            <!-- PROFIEL FOTO + INFO -->
+            <!-- PROFIEL FOTO GIDS ZELF -->
             <h1 class="page-header">Profiel</h1>
             <?php if(!empty($_SESSION['gids_foto'])){ ?>
                 <img class="img-rounded img-responsive img-beschikbaar" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="profielfoto">
@@ -226,7 +196,9 @@
                 <img class="img-rounded img-responsive img-beschikbaar" src="img/weareimd.png" alt="weareimd">
             <?php } ?>
 
+            <!-- PROFIEL INFO GIDS ZELF -->
             <?php
+<<<<<<< HEAD
                 $link = new mysqli("localhost", "root", "root");
                 $link->select_db("phpproject");
 
@@ -235,6 +207,12 @@
 
                 while($line = $result->fetch_array())
                 {
+=======
+                $g = new User();
+                $all = $g->getAllInfo();
+            
+                while($line = $all->fetch(PDO::FETCH_ASSOC)){
+>>>>>>> master
                     if($_SESSION['username']==$line['gids_email'])
                     {
                         echo "<b>Voornaam:</b> ".$line['gids_voornaam']."<br>";
@@ -268,8 +246,9 @@
                         $(function () {
                             $('#datetimepicker1').datetimepicker({
                                 format: "dd/mm/yyyy - hh:ii",
-                                startDate: '+1d',
-                                daysOfWeekDisabled: [5, 6]
+                                startDate: '+0d',
+                                daysOfWeekDisabled: [5, 6],
+                                autoclose: true
                             });
                         });
                     </script>
@@ -277,98 +256,153 @@
                 <input type="submit" name="beschikbaar" class="btn btn-primary" value="Beschikbaar"></input>
             </form>
             
-            <!-- PROFIEL UPDATEN -->
-            <div class="page-header">
-                <h1>Profiel aanpassen</h1>
-            </div>
+            <!-- GIDS ZELF KAN PROFIEL UPDATEN -->
+            <h1 class="page-header">Profiel aanpassen</h1>
             <?php
+<<<<<<< HEAD
                 $link = new mysqli("localhost", "root", "root");
                 $link->select_db("phpproject");
                 //test
+=======
+                $g = new User();
+                $all = $g->getAllInfo();
+                while($line = $all->fetch(PDO::FETCH_ASSOC)){
+                if($_SESSION['username']==$line['gids_email']){ ?>
+                <form role="form" method="post" enctype="multipart/form-data" >              
+                    <!--VOORNAAM-->          
+                    <label for="firstname">Voornaam:</label>
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" class="form-control" id="firstname" name="update_voornaam" value="<?php echo $line['gids_voornaam']; ?>">  
+                    </div>
+>>>>>>> master
 
-                $sqlquery = "SELECT * FROM gids";
-                $result = $link->query($sqlquery);
+                    <!--ACHTERNAAM-->
+                    <label for="lastname">Achternaam:</label>
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" class="form-control" id="lastname" name="update_naam" value="<?php echo $line['gids_naam']; ?>">  
+                    </div>
 
-                while($line = $result->fetch_array())
-                {
-                    if($_SESSION['username']==$line['gids_email'])
-                    { ?>
-                    <form role="form" method="post" enctype="multipart/form-data" >              
-                        <!--VOORNAAM-->          
-                        <label for="firstname">Voornaam:</label>
+                    <!--EMAILADRES-->
+                    <label for="email">E-mailadres:</label>
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="update_email" value="<?php echo $line['gids_email']; ?>">
+                    </div>
+
+                   <!--JAAR-->
+                   <div class="form-group">
+                        <label for="year">Jaar:</label>
                         <div style="margin-bottom: 25px" class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="text" class="form-control" id="firstname" name="update_voornaam" value="<?php echo $line['gids_voornaam']; ?>">  
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                            <select class="form-control" id="year" name="update_jaar">
+                                <option><?php echo $line['gids_jaar']; ?></option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                            </select>
                         </div>
-                        
-                        <!--ACHTERNAAM-->
-                        <label for="lastname">Achternaam:</label>
+                    </div>
+
+                    <!--RICHTING-->
+                    <div class="form-group">
+                        <label for="education">Richting:</label>
                         <div style="margin-bottom: 25px" class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="text" class="form-control" id="lastname" name="update_naam" value="<?php echo $line['gids_naam']; ?>">  
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                            <select class="form-control" id="education" name="update_richting">
+                                <option><?php echo $line['gids_richting']; ?></option>
+                                <option>Niet van toepassing</option>
+                                <option>Webdesign</option>
+                                <option>Webdevelopment</option>
+                            </select>
                         </div>
+                    </div>
 
-                        <!--EMAILADRES-->
-                        <label for="email">E-mailadres:</label>
-                        <div style="margin-bottom: 25px" class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            <input type="email" class="form-control" id="email" name="update_email" value="<?php echo $line['gids_email']; ?>">
-                        </div>
+                    <!--WOONPLAATS-->
+                    <label for="email">Woonplaats:</label>
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
+                        <input type="text" class="form-control" id="city" name="update_stad" value="<?php echo $line['gids_stad']; ?>">                                 
+                    </div>
 
-                       <!--JAAR-->
-                       <div class="form-group">
-                            <label for="year">Jaar:</label>
-                            <div style="margin-bottom: 25px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
-                                <select class="form-control" id="year" name="update_jaar">
-                                    <option><?php echo $line['gids_jaar']; ?></option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                </select>
-                            </div>
-                        </div>
+                    <!--BIOGRAFIE-->
+                    <div class="form-group">
+                        <label for="bio">Biografie:</label>
+                        <textarea class="form-control" id="bio" name="update_bio" rows="7"><?php echo $line['gids_bio']; ?></textarea>
+                    </div>
 
-                        <!--RICHTING-->
-                        <div class="form-group">
-                            <label for="education">Richting:</label>
-                            <div style="margin-bottom: 25px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
-                                <select class="form-control" id="education" name="update_richting">
-                                    <option><?php echo $line['gids_richting']; ?></option>
-                                    <option>Niet van toepassing</option>
-                                    <option>Webdesign</option>
-                                    <option>Webdevelopment</option>
-                                </select>
-                            </div>
-                        </div>
+                    <!--PROFIELFOTO-->
+                    <div class="form-group">
+                        <label for="profilePicInputFile">Profielfoto uploaden:</label>
+                        <input type="file" name="profilepic" id="fileToUpload">
+                    </div>
 
-                        <!--WOONPLAATS-->
-                        <label for="email">Woonplaats:</label>
-                        <div style="margin-bottom: 25px" class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
-                            <input type="text" class="form-control" id="city" name="update_stad" value="<?php echo $line['gids_stad']; ?>">                                 
-                        </div>
-                        
-                        <!--BIOGRAFIE-->
-                        <div class="form-group">
-                            <label for="bio">Biografie:</label>
-                            <textarea class="form-control" id="bio" name="update_bio" rows="7"><?php echo $line['gids_bio']; ?></textarea>
-                        </div>
-
-                        <!--PROFIELFOTO-->
-                        <div class="form-group">
-                            <label for="profilePicInputFile">Profielfoto uploaden:</label>
-                            <input type="file" name="profilepic" id="fileToUpload">
-                        </div>
-                
-                <!--UPDATEN-->
-                <input type="submit" name="update" class="btn btn-primary" value="Profiel bewerken"></input>
+                    <!--UPDATEN-->
+                    <input type="submit" name="update" class="btn btn-primary" value="Profiel bewerken"></input>
                 </form>
                 <?php }
                 }
-            }
-            ?>
+            } ?>
+              
+            <!-- IEDEREEN BUITEN GIDS ZIET DEZE DATA -->
+            <?php if(!isset($_SESSION['logged_in'])){ 
+            $id = $_GET['id']; ?>
+             
+            <!-- PROFIEL FOTO + INFO GIDS ID -->
+            <h1 class="page-header">Profiel</h1>
+            <?php
+            $g = new User();
+            $userProfile = $g->getUserProfile($id);
+            
+            while($row = $userProfile->fetch(PDO::FETCH_ASSOC)){ ?>
+
+               <img class="img-rounded img-responsive img-beschikbaar" src="img/profielfotos/<?php echo $row['gids_id']."/".$row['gids_foto']; ?>" alt="profielfoto">
+
+            <?php
+                echo "<b>Voornaam:</b> ".$row['gids_voornaam']."<br>";
+                echo "<b>Achternaam:</b> ".$row['gids_naam']."<br>";
+                echo "<b>Email:</b> ".$row['gids_email']."<br>";
+                echo "<b>Jaar:</b> ".$row['gids_jaar']."<br>";
+                echo "<b>Richting:</b> ".$row['gids_richting']."<br>";
+                echo "<b>Stad:</b> ".$row['gids_stad']."<br>";
+                echo "<b>Bio:</b> " .$row['gids_bio']."<br>"; 
+                echo "<h1 class='page-header'>Wanneer is ".$row['gids_voornaam']." beschikbaar?</h1>";                                            
+           } ?>
+           
+            <!--FACEBOOK INLOGGEN-->
+            <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
+                <a href="facebook/fbconfig.php">
+                <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
+                </a>
+            <?php } ?>
+            
+            <!-- BESCHIKBARE DATA GIDS ID -->
+            <?php
+            $b = new UserBeschikbaar();
+            $allBeschikId = $b->getAllId($id);
+            
+            // ALLEEN ZIEN WANNEER FACEBOOK INGELOGD
+            if(isset($_SESSION['FBID'])){ 
+                while($beschikbaar = $allBeschikId->fetch(PDO::FETCH_ASSOC)){ ?>
+                <div class="col-sm-4">
+                    <p>
+                    <br><b>Datum: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?>
+                    </p>
+
+                    <form method='post'>
+                    <input type='hidden' name='gidsid' value='<?php echo $beschikbaar['gids_id'] ?>'/>
+                    <input type='hidden' name='isgeboekt' value='1'/>
+                    <input type='submit' class='data btn btn-primary col-xs-6' name='voegtoe' value='Boek' width='500'/>
+                    </form>
+                    <br>
+                </div> 
+                <?php } ?>
+                
+                <!-- FEEDBACK -->
+                <h1 class="page-header col-lg-12">Feedback</h1>
+                <p class="col-lg-12">Hier moet feedback gegeven kunnen worden!</p>
+            <?php }} ?>
 
         	</div>
         </section>
