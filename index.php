@@ -36,6 +36,7 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/screen.css">
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -156,6 +157,7 @@
         <!-- INHOUD -->
         <div class="marketing">
             <div class="container">
+               <h1>Over Rent a Student</h1>
                 <div class="col-lg-4">
                 <img class="img-rounded" src="img/weareimd.png">
                 <h2>Bezoeker of Gids?</h2>

@@ -198,10 +198,21 @@
 
             <!-- PROFIEL INFO GIDS ZELF -->
             <?php
+<<<<<<< HEAD
+                $link = new mysqli("localhost", "root", "root");
+                $link->select_db("phpproject");
+
+                $sqlquery = "SELECT * FROM gids";
+                $result = $link->query($sqlquery);
+
+                while($line = $result->fetch_array())
+                {
+=======
                 $g = new User();
                 $all = $g->getAllInfo();
             
                 while($line = $all->fetch(PDO::FETCH_ASSOC)){
+>>>>>>> master
                     if($_SESSION['username']==$line['gids_email'])
                     {
                         echo "<b>Voornaam:</b> ".$line['gids_voornaam']."<br>";
@@ -248,6 +259,11 @@
             <!-- GIDS ZELF KAN PROFIEL UPDATEN -->
             <h1 class="page-header">Profiel aanpassen</h1>
             <?php
+<<<<<<< HEAD
+                $link = new mysqli("localhost", "root", "root");
+                $link->select_db("phpproject");
+                //test
+=======
                 $g = new User();
                 $all = $g->getAllInfo();
                 while($line = $all->fetch(PDO::FETCH_ASSOC)){
@@ -259,6 +275,7 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <input type="text" class="form-control" id="firstname" name="update_voornaam" value="<?php echo $line['gids_voornaam']; ?>">  
                     </div>
+>>>>>>> master
 
                     <!--ACHTERNAAM-->
                     <label for="lastname">Achternaam:</label>

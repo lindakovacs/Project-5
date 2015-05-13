@@ -5,8 +5,28 @@
     spl_autoload_register(function($class){
         include_once("classes/".$class.".class.php"); 
     });
-?>
 
+ if(!empty($_POST))
+    {
+        try
+        {             
+            $a = new Admin();
+            $a->Firstname=$_POST['firstname'];
+            $a->Lastname=$_POST['lastname'];
+            $a->Email=$_POST['email'];
+            //PASSWORD HASH
+            $options=['cost'=>12,];
+            $a->Password = password_hash($_POST['password'],PASSWORD_DEFAULT, $options);
+            $a->save();
+            $success ="<b>Ok!</b> Je hebt succesvol een nieuwe admin toegevoegd.";
+        }
+
+        catch(Exception $e)
+        {
+            $error=$e->getMessage();
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -26,6 +46,7 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/screen.css">
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -142,6 +163,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Registreren</button>
         </form>
+    </div>
                       
         <!-- Hier Moet Een tabel komen zodat hij zijn eigen gegevens kan aanpassen -->
         <!-- PROFIELFOTO -->
@@ -166,11 +188,17 @@
                 $bezoeker_naam = $row["bezoeker_naam"];
                 $gids_voornaam = $row["gids_voornaam"];
                 $gids_naam = $row["gids_naam"];    
+                $gids_foto = $row["gids_foto"];    
+                $gids_id = $row["gids_id"];    
         ?>
             <div class="row">
             <div class="col-lg-4">
-                <p>Bezoeker: <b><?php echo $bezoeker_naam; ?></b> heeft </p>
-                <p><b><?php echo $gids_voornaam?> <?php echo $gids_naam ?></b> geboekt als gids.</p>
+               <img class="img-rounded" src="https://graph.facebook.com/<?php echo $row['bezoeker_facebookid']; ?>/picture" width="59">
+               <img class="img-rounded " src="img/arrow.png" alt="" height="59">
+               <img class="img-rounded float-right" src="img/profielfotos/<?php echo $row['gids_id']."/".$row['gids_foto']; ?>" alt="" width="59">
+               <br>
+                <p>Bezoeker:
+                <b><?php echo $bezoeker_naam; ?></b> heeft <br> gids: <b><?php echo $gids_voornaam?> <?php echo $gids_naam ?></b> geboekt.</p>
             </div>
             </div>
         <?php } ?>     
@@ -208,10 +236,10 @@
         </section>
                 
         <!--FOOTER-->
-        <footer>
+       <footer>
+            <!-- INSTAFEED -->
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
-        
     </div><!--/CONTAINER-->
     
 </body>

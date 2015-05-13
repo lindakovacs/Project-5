@@ -10,6 +10,7 @@ class Admin
         private $m_sLastname;
         private $m_sEmail;
         private $m_sPassword;
+    
         
     
     //SET----------------------------------------
@@ -42,7 +43,7 @@ class Admin
                     break;
                 
                     //Email
-                    case 'Email':
+                   case 'Email':
                     if ($p_vValue!="")
                     {
                         if ($this->checkEmail($p_vValue) === true)
@@ -84,7 +85,7 @@ class Admin
                     return $this->m_sFirstname;
                     break;
                     
-                     case 'Lastname':
+                   case 'Lastname':
                     return $this->m_sLastname;
                     break;
                     
@@ -124,15 +125,15 @@ class Admin
          $statement = $conn->prepare("INSERT INTO admin  (
                                                         admin_voornaam,
                                                         admin_achternaam,
-                                                        admin_email,
-                                                        admin_wachtwoord
+                                                        admin_wachtwoord,
+                                                        admin_email
                                                         )
 
                                                  VALUES(
                                                         :firstname,
                                                         :lastname,
-                                                        :email,
-                                                        :wachtwoord
+                                                        :wachtwoord,
+                                                        :email
                                                         )"
                                        ); 
 
@@ -146,7 +147,7 @@ class Admin
     public function boekingen()
     {
         $conn = Db::getInstance();
-        $boek = $conn->query("SELECT bezoeker_naam,gids_voornaam,gids_naam FROM geboekt INNER JOIN gids ON geboekt.gids_id = gids.gids_id INNER JOIN bezoeker ON geboekt.bezoeker_facebookid = bezoeker.bezoeker_facebookid where geboekt_isgeboekt = 1;");
+        $boek = $conn->query("SELECT * FROM geboekt INNER JOIN gids ON geboekt.gids_id = gids.gids_id INNER JOIN bezoeker ON geboekt.bezoeker_facebookid = bezoeker.bezoeker_facebookid where geboekt_isgeboekt = 1;");
         return $boek;
         
         
