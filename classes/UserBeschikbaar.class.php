@@ -93,5 +93,14 @@
             ORDER BY beschikbaarheid.beschikbaar_dag_uur ASC;");
             return $allGeboekt;
         }
+        
+        
+                    //GET ALL GIDSEN------------------------------------
+        public function getAllGids()
+        {
+            $conn = Db::getInstance();
+            $allgids = $conn->query("SELECT * FROM gids GROUP BY  `gids_id`;");
+            return $allgids;
+        }
     }
 ?>
