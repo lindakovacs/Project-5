@@ -15,6 +15,14 @@
         $conn->query("DELETE FROM beschikbaarheid WHERE beschikbaar_id = $current_id;");
         header('Location:index.php');
     }
+
+    // VANAF HIER TOT EINDE PHP = PHP VOOR CHAT
+    spl_autoload_register(function($class){
+        include_once("/classes/".$class.".class.php"); 
+    });
+    if(isset($_SESSION['username'])){
+        $naam = $_SESSION['username'];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +44,7 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="message/chat.css"><!-- CSS VOOR CHAT -->
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -58,7 +67,38 @@
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->    
+    <![endif]-->
+    
+    <!-- VAN HIER TOT EINDE SCRIPT = JS VOOR CHAT -->
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script>
+        function submitChat(){
+            if(form1.uname.value == '' || form1.msg.value == ''){
+                alert('No message or chatname!');
+                return;
+            }
+            form1.uname.readOnly = true;
+            form1.uname.style.border = 'none';
+            var uname = form1.uname.value;
+            var msg = form1.msg.value;
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState==4&&xmlhttp.status==200){
+                    document.getElementById('chatlogs').innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open('GET','message/insert.php?uname='+uname+'&msg='+msg,true);
+            xmlhttp.send();
+        }
+
+        $(document).ready(function(e){
+            $.ajaxSetup({cache:false});
+            setInterval(function() {$('#chatlogs').load('message/logs.php');}, 2000);
+        });
+    </script>    
 </head>
 <body>
 
@@ -153,6 +193,9 @@
             </div>
         </header>
         
+
+
+
         <!-- INHOUD -->
         <div class="marketing">
             <div class="container">
@@ -179,7 +222,11 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
             </div>
         </div>
         <?php } ?>
+
+
         
+
+
         <!-- AFSPRAKEN VAN GIDS -->
         <div class="container">
         <?php if(isset($_SESSION['username'])){ ?>
@@ -218,7 +265,21 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
                 </div>            
             <?php }} ?>
         </div>
-        
+        <!--  CHAT FUNCTIE -->
+<div id="chat">
+       <?php if(isset($naam)){ ?>
+        <form name="form1" style="width: 280px; max-height:100%; float:left; background-color:#f9f1b9">
+            <h3>Chat met bezoekers</h3>
+            Your Username: <input type="text" name="uname" disabled style="width:200px" value=<?php echo $naam ?>><br>
+            Your Message: <br>
+            <textarea name="msg" style="width:200px; height:70px;"></textarea><br><br>
+            <a href="#" onclick="submitChat()" class="button" >Send</a><br><br>
+
+            <div id="chatlogs">
+                LOADING CHATLOGS PLEASE WAIT...
+            </div>
+       <?php } ?>
+    </div>
         <!-- AFSPRAKEN VAN BEZOEKER -->
         <div class="container">
         <?php if(isset($_SESSION['FBID'])){ 
@@ -243,6 +304,8 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
                 </div>
             <?php } ?>
         </div>
+
+        
         
         <!-- FOTO'S VAN GIDSEN -->
         <div class="container">
