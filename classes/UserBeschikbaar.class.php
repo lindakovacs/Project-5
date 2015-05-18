@@ -94,8 +94,7 @@
             return $allGeboekt;
         }
         
-        
-                    //GET ALL GIDSEN------------------------------------
+        //GET ALL GIDSEN------------------------------------
         public function getAllGids()
         {
             $conn = Db::getInstance();

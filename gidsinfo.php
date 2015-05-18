@@ -7,10 +7,36 @@
     {
         include_once("classes/".$class.".class.php");
     });
+
+
+
+
+       if(!empty($_POST['gerated'])){   
+            echo "gelukt!";
+            $gerated = "Uw rating is verzonden!";
+            //$info = "<b>Boeking gelukt!</b> GidsID: ".$book->Gidsid." IsGeboekt: ".$book->Isgeboekt;
+        }
 ?>
 
 <?php include_once( 'rating/getItems.php' ); include_once( 'rating/ip.php' );?>
 
+
+
+
+
+<?php
+    include_once("classes/ManageRatings.class.php");
+
+    $init = new ManageRatings();
+
+    $posts = $init->getallerates();
+
+    if(!empty($_GET))
+    {
+        $return = $init->getaantal($_GET['gids_id']);
+    }
+    
+?>
 
 
 <!DOCTYPE html>
@@ -28,7 +54,7 @@
     <meta name="author" content="Ande Timmerman,Manuel van den Notelaer,Nick van Puyvelde,Stijn Van Doorslaer">
     
     <link rel="icon" href="img/weareimd.png">
-    <title>Rent-A-Student: Rating</title>
+    <title>Rent-A-Student | Rating</title>
     
     <!-- OPENGRAPH TAGS -->
     <meta property="og:image" content="img/weareimd.png"/>
@@ -60,8 +86,6 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="jquery/jRating.jquery.css" />
     <link rel="stylesheet" href="css/style.css" />
-    <script type="text/javascript" src="jquery/jquery.js"></script>
-    <script type="text/javascript" src="jquery/jRating.jquery.js"></script>
     <script type="text/javascript">
         $(function(){
             $(".rating").jRating({
@@ -69,14 +93,28 @@
                 rateMax : 5, // maximal rate - integer from 0 to 9999 (or more)
                 phpPath: 'ajax/rating.php',
                 onSuccess: function(){
-                    alert('Your rating has been submitted');
+                    alert('Jouw rating is verzonden');
+                    //$gerated = "Uw rating is verzonden!";
                 },
                 onError: function(){
-                    alert('There was a problem submitting your feedback');
+                    alert('Er deed zich een probleem voor waardoor uw rating niet kon worden verzonden');
+                    //$gerated = "Er deed zich een probleem voor waardoor uw rating niet kon worden verzonden";
                 }
             });
         });
     </script>
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
 </head>
 <body>
         <!--NAVIGATIE-->
@@ -133,6 +171,25 @@
     </nav>
 
 
+
+
+
+
+
+ <!-- ALERTS -->
+    <div class="container"> 
+        <!--ALERT SUCCESS-->
+        <?php if(isset($gerated)){ ?>
+            <div class="alert alert-success" role="alert">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <?php echo $gerated; ?>
+            </div>
+        <?php } ?>
+
+    
+
+
           <!--HEADER-->
         <header class="inleiding">
 
@@ -152,7 +209,7 @@
 
 
 
- <!-- BEZOEKER MOET GIDSEN KUNNEN RAADPLEGEN -->
+ <!-- BEZOEKER MOET GIDSEN KUNNEN RATEN -->
         <div id="ratings" class="container">
         <?php if(isset($_SESSION['FBID'])){ ?>
             
@@ -160,10 +217,7 @@
         
         
 
-        
-        
-        
-        
+
             $c = new UserBeschikbaar();
             $allgids = $c->getAllGids();
 
@@ -191,13 +245,17 @@
                     <p>
                     <br><b>Voornaam: </b><?php echo $beschikbaar['gids_voornaam'] ?>
                     <br><b>Achternaam: </b><?php echo $beschikbaar['gids_naam'] ?>
-                     <br><b>Aantal Ratings: </b><?php echo $beschikbaar['total_rates'] ?>
+                    <br><b>Aantal Ratings: </b><?php echo $beschikbaar['total_rates'] ?>
                     <br><b>Gemiddelde Rating: </b><?php echo $beschikbaar['rating'] ?>
+                    
+                    
 
 
-                                       <?php if($allItems!== 0) {
-                                             //($allItems !== 0) { foreach($allItems as $value) {
-            $allIpAddress = explode(',',$value['ip_address']);
+                                       <?php if ($allItems !== 0) { 
+                                              //foreach($allItems as $value) {
+                                             //if ($allItems !== 0) { foreach($allItems as $value) {
+
+            $allIpAddress = explode(',',$beschikbaar['ip_address']);
             $current_ipAddress = GetUserIP();
             
             if(in_array($current_ipAddress,$allIpAddress))
@@ -209,15 +267,16 @@
                 $class = '';
             }
             
-        
-?>
-                      <br><b>Rating:</b><div class="rating <?php echo $beschikbaar; ?>" id="<?php echo $beschikbaar['rating']; ?>_<?php echo $beschikbaar['gids_id']; ?>"></div>
+        ?>
+        <!--<?php echo "?id=".$p['id']; ?> data-id="<?php echo $p['id']; ?> -->
 
-  
+     <br><b>Rating:</b><div class="rating <?php echo $class; ?>" id="<?php echo $beschikbaar['rating']; ?>_<?php echo $beschikbaar['gids_id']; ?>" id-data="<?php echo $allItems['gids_id']; ?>"></div>
+     
+     
 
-                  
 
-   <?php }?>
+ <?php }?>  
+                    
 
 
                     
@@ -235,24 +294,13 @@
                     <br>
                 </div>            
             <?php }}?>
+
+
             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
 
+<script type="text/javascript" src="jquery/jquery.js"></script>
+<script type="text/javascript" src="jquery/jRating.jquery.js"></script>
+<script src="js/count.js"></script>
 </body>
 </html>
