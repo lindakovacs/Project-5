@@ -94,15 +94,12 @@
             return $allGeboekt;
         }
         
-        
-                   //GET ALL GIDSEN------------------------------------
+        //GET ALL GIDSEN------------------------------------
         public function getAllGids()
         {
             $conn = Db::getInstance();
             $allgids = $conn->query("SELECT * FROM gids GROUP BY  `gids_id`;");
             return $allgids;
         }
-        
-        
     }
 ?>

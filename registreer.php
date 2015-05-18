@@ -43,7 +43,7 @@
     <meta name="author" content="Ande Timmerman,Manuel van den Notelaer,Nick Van Puyvelde,Stijn Van Doorslaer">
     
     <link rel="icon" href="img/weareimd.png">
-    <title>Rent-A-Student</title>
+    <title>Rent-A-Student | Registreer</title>
     
     <!-- OPENGRAPH TAGS -->
     <meta property="og:image" content="img/weareimd.png"/>

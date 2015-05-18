@@ -9,6 +9,7 @@
 		private $m_sFeedback_tekst;			
 		private $m_iFeedback_rating;	
 		private $m_iGids_id;
+        private $m_iBezoeker_facebookid;
 
         //SET
 		public function __set($p_sProperty, $p_vValue)
@@ -50,6 +51,18 @@
                     throw new Exception("<b>Er is geen gids aangeduid!</b> Alle verplichte velden moeten ingevuld zijn.");
                 }
                 break;
+
+                 //BEZOEKER FACEBOOK ID
+                case 'Bezoeker_facebookid':
+                if($p_vValue!="")
+                {
+                    $this->m_iBezoeker_facebookid = $p_vValue;
+                }
+                else
+                {
+                   
+                }
+                break;
 			}
 		}
 
@@ -68,6 +81,10 @@
 
 				case 'Gids_id':
                 return $this->m_iGids_id;
+                break;
+
+                case 'Bezoeker_facebookid':
+                return $this->m_iBezoeker_facebookid;
                 break;
 			}
 		}
@@ -94,5 +111,15 @@
             $statement->bindValue(':gids_id',$this->Gids_id);
             $statement->execute();
 		}
+
+        //GET ALL INFO-----------------------------------
+        public function getAllInfo()
+        {
+            
+            $conn = Db::getInstance();
+            $id = $_GET['id'];
+            $allInfo = $conn->query("SELECT * FROM feedback WHERE gids_id = $id");
+            return $allInfo;
+        }
     }
 ?>

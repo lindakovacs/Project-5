@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: 127.0.0.1
--- Gegenereerd op: 11 mei 2015 om 21:06
+-- Gegenereerd op: 04 mei 2015 om 23:53
 -- Serverversie: 5.6.21
 -- PHP-versie: 5.6.3
 
@@ -50,19 +50,9 @@ INSERT INTO `admin` (`admin_id`, `admin_voornaam`, `admin_achternaam`, `admin_fo
 
 CREATE TABLE IF NOT EXISTS `beschikbaarheid` (
 `beschikbaar_id` int(11) NOT NULL,
-  `beschikbaar_dag_uur` varchar(20) NOT NULL,
+  `beschikbaar_dag_uur` varchar(50) NOT NULL,
   `gids_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-
---
--- Gegevens worden geëxporteerd voor tabel `beschikbaarheid`
---
-
-INSERT INTO `beschikbaarheid` (`beschikbaar_id`, `beschikbaar_dag_uur`, `gids_id`) VALUES
-(1, '10/05/2015 - 14:15', 1),
-(2, '25/05/2015 - 16:35', 3),
-(3, '17/05/2015 - 10:30', 4),
-(4, '21/05/2015 - 13:20', 2);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -75,14 +65,7 @@ CREATE TABLE IF NOT EXISTS `bezoeker` (
   `bezoeker_facebookid` varchar(100) NOT NULL,
   `bezoeker_naam` varchar(60) NOT NULL,
   `bezoeker_email` varchar(60) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Gegevens worden geëxporteerd voor tabel `bezoeker`
---
-
-INSERT INTO `bezoeker` (`bezoeker_id`, `bezoeker_facebookid`, `bezoeker_naam`, `bezoeker_email`) VALUES
-(1, '10153203190333188', 'Stijn Van Doorslaer', 'stijnvd_26@hotmail.com');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -93,7 +76,7 @@ INSERT INTO `bezoeker` (`bezoeker_id`, `bezoeker_facebookid`, `bezoeker_naam`, `
 CREATE TABLE IF NOT EXISTS `feedback` (
 `feedback_id` int(10) NOT NULL,
   `feedback_tekst` varchar(300) NOT NULL,
-  `bezoeker_facebookid` varchar(100) NOT NULL,
+  `bezoeker_id` int(10) NOT NULL,
   `feedback_rating` int(10) NOT NULL,
   `gids_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -106,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `feedback` (
 
 CREATE TABLE IF NOT EXISTS `geboekt` (
 `geboekt_id` int(50) NOT NULL,
-  `bezoeker_facebookid` varchar(100) NOT NULL,
+  `bezoeker_id` int(50) NOT NULL,
   `gids_id` int(10) NOT NULL,
   `geboekt_isgeboekt` varchar(10) NOT NULL,
   `geboekt_toegestaan` int(10) NOT NULL
@@ -128,23 +111,18 @@ CREATE TABLE IF NOT EXISTS `gids` (
   `gids_jaar` int(10) NOT NULL,
   `gids_stad` varchar(200) NOT NULL,
   `gids_email` varchar(200) NOT NULL,
-  `gids_wachtwoord` varchar(200) NOT NULL,
-  `gids_aantalboekingen` int(200) NOT NULL,
-  `rating` float NOT NULL,
-  `total_rating` float NOT NULL,
-  `total_rates` int(11) NOT NULL,
-  `ip_address` longtext NOT NULL
+  `gids_wachtwoord` varchar(200) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `gids`
 --
 
-INSERT INTO `gids` (`gids_id`, `gids_voornaam`, `gids_naam`, `gids_foto`, `gids_bio`, `gids_richting`, `gids_jaar`, `gids_stad`, `gids_email`, `gids_wachtwoord`, `gids_aantalboekingen`, `rating`, `total_rating`, `total_rates`, `ip_address`) VALUES
-(1, 'Stijn', 'Van Doorslaer', 'stijn.jpg', 'Ben een Dj''er die evenzeer een IMD''er is, let''s start the party!', 'Webdesign', 3, 'Hofstade', 'stijn.vandoorslaer@student.thomasmore.be', '$2y$12$rFLjyCYJHmZq9mD3mB4XhOk3NS1648QmADltnwdb9E8RnUklBJnWq', 7, 3.525, 28.2, 8, ',::1'),
-(2, 'Nick', 'Van Puyvelde', 'nick.jpg', 'Webdesigner worden is mijn droom die realiteit wordt', 'Webdesign', 2, 'Mechelen', 'nick.vanpuyvelde@student.thomasmore.be', '$2y$12$Q9h24c63MmExuztVOA7jfOgbIFI43d1IlfZowpfLEXFr8dRYiCYny', 12, 3.68, 36.8, 10, ',::1,::1,::1,::1,::1,::1,::1,::1,::1,::1'),
-(3, 'Ande', 'Timmerman', 'ande.jpg', 'Ben een IMD''er in hart en nieren', 'Webdesign', 2, 'Gent', 'ande.timmerman@student.thomasmore.be', '$2y$12$C6TQ1yJgz3JHOvop5BpMbeAGL/SwRePZ.FXi3evB9FVQUteVUyzIW', 10, 3.46667, 20.8, 6, ',::1,::1,::1,::1,::1,::1'),
-(4, 'Manuel', 'Van Den Notelaer', 'manuel.png', 'Hallo, punk is mijn missie, maar ook IMD', 'Webdevelopment', 3, 'Brussel', 'manuel.vandennotelaer@student.thomsmore.be', '$2y$12$LdZcAJuHQwHQ3SlvvVjjIuAM0HJZp58/C.zkaTrm4xWZsdsBlbzC.', 9, 3.46364, 38.1, 11, ',::1,::1,::1,::1,::1,::1,::1,::1,::1,::1,::1');
+INSERT INTO `gids` (`gids_id`, `gids_voornaam`, `gids_naam`, `gids_foto`, `gids_bio`, `gids_richting`, `gids_jaar`, `gids_stad`, `gids_email`, `gids_wachtwoord`) VALUES
+(3, 'Ande', 'Timmerman', '', 'Ben een IMD''er in hart en nieren', 'Webdesign', 2, 'Gent', 'ande.timmerman@student.thomasmore.be', '$2y$12$C6TQ1yJgz3JHOvop5BpMbeAGL/SwRePZ.FXi3evB9FVQUteVUyzIW'),
+(4, 'Nick', 'Van Puyvelde', '', 'Webdesigner worden is mijn droom die realiteit wordt', 'Webdesign', 2, 'Mechelen', 'nick.vanpuyvelde@student.thomasmore.be', '$2y$12$Q9h24c63MmExuztVOA7jfOgbIFI43d1IlfZowpfLEXFr8dRYiCYny'),
+(5, 'Manuel', 'Van Den Notelaer', '', 'Hallo, punk is mijn missie, maar ook IMD', 'Webdevelopment', 3, 'Brussel', 'manuel.vandennotelaer@student.thomsmore.be', '$2y$12$LdZcAJuHQwHQ3SlvvVjjIuAM0HJZp58/C.zkaTrm4xWZsdsBlbzC.'),
+(6, 'Stijn', 'Van Doorslaer', '', 'Ben een Dj''er die evenzeer een IMD''er is, let''s start the party!', 'Webdesign', 3, 'Hofstade', 'stijn.vandoorslaer@student.thomasmore.be', '$2y$12$rFLjyCYJHmZq9mD3mB4XhOk3NS1648QmADltnwdb9E8RnUklBJnWq');
 
 -- --------------------------------------------------------
 
@@ -211,7 +189,7 @@ ALTER TABLE `bezoeker`
 -- Indexen voor tabel `feedback`
 --
 ALTER TABLE `feedback`
- ADD PRIMARY KEY (`feedback_id`), ADD KEY `bezoeker_id` (`bezoeker_facebookid`), ADD KEY `gids_id` (`gids_id`);
+ ADD PRIMARY KEY (`feedback_id`), ADD KEY `bezoeker_id` (`bezoeker_id`), ADD KEY `gids_id` (`gids_id`);
 
 --
 -- Indexen voor tabel `geboekt`
@@ -250,12 +228,12 @@ MODIFY `admin_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT voor een tabel `beschikbaarheid`
 --
 ALTER TABLE `beschikbaarheid`
-MODIFY `beschikbaar_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `beschikbaar_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT voor een tabel `bezoeker`
 --
 ALTER TABLE `bezoeker`
-MODIFY `bezoeker_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `bezoeker_id` int(10) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT voor een tabel `feedback`
 --

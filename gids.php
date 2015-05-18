@@ -13,9 +13,11 @@
         if(!empty($_POST['voegtoe'])){   
             $book = new Book();
             $facebookid = $_SESSION['FBID'];
+            $beschikbaar_id = $_POST['beschikbaar_id'];
+            $beschikbaar_dag_uur = $_POST['beschikbaar_dag_uur'];
             $book->Gidsid=$_POST['gidsid'];
             $book->Isgeboekt=$_POST['isgeboekt'];
-            $book->save($facebookid);
+            $book->save($facebookid,$beschikbaar_id,$beschikbaar_dag_uur);
             $success = "<b>Boeking is succesvol verwerkt!</b>";
         }
     }
@@ -75,13 +77,14 @@
     <meta name="author" content="Ande Timmerman,Manuel van den Notelaer,Nick van Puyvelde,Stijn Van Doorslaer">
     
     <link rel="icon" href="img/weareimd.png">
-    <title>Rent-A-Student</title>
+    <title>Rent-A-Student | Gids</title>
     
     <!-- OPENGRAPH TAGS -->
     <meta property="og:image" content="img/weareimd.png"/>
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="message/chat.css"><!-- CSS VOOR CHAT -->
     
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -110,6 +113,37 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->    
+
+    <!-- VAN HIER TOT EINDE SCRIPT = JS VOOR CHAT -->
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script>
+        function submitChat(){
+            if(form1.uname.value == '' || form1.msg.value == ''){
+                alert('No message or chatname!');
+                return;
+            }
+            form1.uname.readOnly = true;
+            form1.uname.style.border = 'none';
+            var uname = form1.uname.value;
+            var msg = form1.msg.value;
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState==4&&xmlhttp.status==200){
+                    document.getElementById('chatlogs').innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open('GET','message/insert.php?uname='+uname+'&msg='+msg,true);
+            xmlhttp.send();
+        }
+
+        $(document).ready(function(e){
+            $.ajaxSetup({cache:false});
+            setInterval(function() {$('#chatlogs').load('message/logs.php');}, 2000);
+        });
+    </script>
 </head>
 <body>
 
@@ -129,11 +163,8 @@
           <form method="post" class="navbar-form navbar-right">
             <!-- FORMULIER INGELOGD + UITLOGGEN -->
             <?php if(isset($_SESSION['logged_in'])){ 
-                if(!empty($_SESSION['gids_foto'])){ ?>
-                    <img class="img-rounded img-responsive img-profile" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="">
-                <?php }else{ ?>
-                   <img class="img-rounded img-responsive img-profile" src="img/weareimd.png" alt="weareimd">
-                <?php } ?>
+                $style="background-image:url('img/profielfotos/".$_SESSION['gids_id']."/".$_SESSION['gids_foto']."');" ?>
+                <span class="img-profile" style=<?php echo $style ?>></span>
                 <p class="email-ingelogd"><?php echo $_SESSION['username'] ?></p>
                 <a class="btn btn-primary" href="gids.php">Profiel</a>
                 <a class="btn btn-primary" href="logout.php">Afmelden</a>
@@ -190,29 +221,15 @@
              
             <!-- PROFIEL FOTO GIDS ZELF -->
             <h1 class="page-header">Profiel</h1>
-            <?php if(!empty($_SESSION['gids_foto'])){ ?>
-                <img class="img-rounded img-responsive img-beschikbaar" src="img/profielfotos/<?php echo $_SESSION['gids_id']."/".$_SESSION['gids_foto']; ?>" alt="profielfoto">
-            <?php }else{ ?>
-                <img class="img-rounded img-responsive img-beschikbaar" src="img/weareimd.png" alt="weareimd">
-            <?php } ?>
+            <?php $style="background-image:url('img/profielfotos/".$_SESSION['gids_id']."/".$_SESSION['gids_foto']."');" ?>
+            <span class="img-beschikbaar" style=<?php echo $style ?>></span>
 
             <!-- PROFIEL INFO GIDS ZELF -->
             <?php
-<<<<<<< HEAD
-                $link = new mysqli("localhost", "root", "root");
-                $link->select_db("phpproject");
-
-                $sqlquery = "SELECT * FROM gids";
-                $result = $link->query($sqlquery);
-
-                while($line = $result->fetch_array())
-                {
-=======
                 $g = new User();
                 $all = $g->getAllInfo();
             
                 while($line = $all->fetch(PDO::FETCH_ASSOC)){
->>>>>>> master
                     if($_SESSION['username']==$line['gids_email'])
                     {
                         echo "<b>Voornaam:</b> ".$line['gids_voornaam']."<br>";
@@ -225,45 +242,10 @@
                     }
                 }
             ?>
-            
-            <br>
-            
-            <!-- BESCHIKBAARHEID -->
-            <h3>Beschikbaarheid</h3>
-            <form method="post">
-                <div class="row">
-                    <div class='col-sm-5'>
-                        <div class="form-group">
-                            <div class='input-group date' id='datetimepicker1'>
-                                <input type='text' class="form-control" placeholder="Klik op de kalender voor een datum en uur te kiezen." name="beschikbaarDagUur"readonly/>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <script type="text/javascript">
-                        $(function () {
-                            $('#datetimepicker1').datetimepicker({
-                                format: "dd/mm/yyyy - hh:ii",
-                                startDate: '+0d',
-                                daysOfWeekDisabled: [5, 6],
-                                autoclose: true
-                            });
-                        });
-                    </script>
-                </div>                
-                <input type="submit" name="beschikbaar" class="btn btn-primary" value="Beschikbaar"></input>
-            </form>
-            
+                        
             <!-- GIDS ZELF KAN PROFIEL UPDATEN -->
             <h1 class="page-header">Profiel aanpassen</h1>
             <?php
-<<<<<<< HEAD
-                $link = new mysqli("localhost", "root", "root");
-                $link->select_db("phpproject");
-                //test
-=======
                 $g = new User();
                 $all = $g->getAllInfo();
                 while($line = $all->fetch(PDO::FETCH_ASSOC)){
@@ -275,7 +257,6 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <input type="text" class="form-control" id="firstname" name="update_voornaam" value="<?php echo $line['gids_voornaam']; ?>">  
                     </div>
->>>>>>> master
 
                     <!--ACHTERNAAM-->
                     <label for="lastname">Achternaam:</label>
@@ -332,18 +313,35 @@
                         <textarea class="form-control" id="bio" name="update_bio" rows="7"><?php echo $line['gids_bio']; ?></textarea>
                     </div>
 
-                    <!--PROFIELFOTO-->
-                    <div class="form-group">
-                        <label for="profilePicInputFile">Profielfoto uploaden:</label>
-                        <input type="file" name="profilepic" id="fileToUpload">
-                    </div>
-
                     <!--UPDATEN-->
                     <input type="submit" name="update" class="btn btn-primary" value="Profiel bewerken"></input>
-                </form>
+                </form><br>
                 <?php }
                 }
             } ?>
+             
+                <!--  CHAT FUNCTIE -->
+                <div id="chat">
+               <?php if(isset($_SESSION['FBID'])){ ?>
+                <form name="form1" style="width: 280px; max-height:100%; float:left; background-color:#f9f1b9">
+                    <?php
+                        $g = new User();
+
+                        $id = $_GET['id'];
+                        $userProfile = $g->getUserProfile($id);
+                        while($row = $userProfile->fetch(PDO::FETCH_ASSOC)){ ?>
+                        <h3>Chat met onze gidsen<!--<?php echo $row['gids_voornaam'] ?>-->:</h3>
+                    <?php } ?>
+                    Your Username: <input type="text" name="uname" disabled style="width:200px" value=<?php echo $_SESSION['FULLNAME'] ?>><br>
+                    Your Message: <br>
+                    <textarea name="msg" style="width:200px; height:70px;"></textarea><br><br>
+                    <a href="#" onclick="submitChat()" class="button" >Send</a><br><br>
+
+                    <div id="chatlogs">
+                        LOADING CHATLOGS PLEASE WAIT...
+                    </div>
+               <?php } ?>
+            </div>
               
             <!-- IEDEREEN BUITEN GIDS ZIET DEZE DATA -->
             <?php if(!isset($_SESSION['logged_in'])){ 
@@ -355,9 +353,10 @@
             $g = new User();
             $userProfile = $g->getUserProfile($id);
             
-            while($row = $userProfile->fetch(PDO::FETCH_ASSOC)){ ?>
-
-               <img class="img-rounded img-responsive img-beschikbaar" src="img/profielfotos/<?php echo $row['gids_id']."/".$row['gids_foto']; ?>" alt="profielfoto">
+            while($row = $userProfile->fetch(PDO::FETCH_ASSOC)){
+                
+                $style="background-image:url('img/profielfotos/".$row['gids_id']."/".$row['gids_foto']."');" ?>
+                <span class="img-beschikbaar" style=<?php echo $style ?>></span>
 
             <?php
                 echo "<b>Voornaam:</b> ".$row['gids_voornaam']."<br>";
@@ -369,14 +368,7 @@
                 echo "<b>Bio:</b> " .$row['gids_bio']."<br>"; 
                 echo "<h1 class='page-header'>Wanneer is ".$row['gids_voornaam']." beschikbaar?</h1>";                                            
            } ?>
-           
-            <!--FACEBOOK INLOGGEN-->
-            <?php if(!isset($_SESSION['logged_in']) && !isset($_SESSION['FBID'])){ ?>
-                <a href="facebook/fbconfig.php">
-                <button class="btn btn-facebook"><i class="fa fa-facebook"></i>Log in met facebook</button>
-                </a>
-            <?php } ?>
-            
+                      
             <!-- BESCHIKBARE DATA GIDS ID -->
             <?php
             $b = new UserBeschikbaar();
@@ -392,17 +384,44 @@
 
                     <form method='post'>
                     <input type='hidden' name='gidsid' value='<?php echo $beschikbaar['gids_id'] ?>'/>
+                    <input type='hidden' name='beschikbaar_id' value='<?php echo $beschikbaar['beschikbaar_id'] ?>'/>
+                    <input type='hidden' name='beschikbaar_dag_uur' value='<?php echo $beschikbaar['beschikbaar_dag_uur'] ?>'/>
                     <input type='hidden' name='isgeboekt' value='1'/>
                     <input type='submit' class='data btn btn-primary col-xs-6' name='voegtoe' value='Boek' width='500'/>
                     </form>
                     <br>
                 </div> 
                 <?php } ?>
-                
+                                
                 <!-- FEEDBACK -->
+                <div class="container">
                 <h1 class="page-header col-lg-12">Feedback</h1>
-                <p class="col-lg-12">Hier moet feedback gegeven kunnen worden!</p>
-            <?php }} ?>
+                <div id="feedback" style="clear:left;">
+                <?php  
+                    $f = new Feedback();
+                    $allInfo = $f->getAllInfo();
+                    while($row = $allInfo->fetch(PDO::FETCH_ASSOC))
+                    { 
+                        
+                         /*$bfid = $row['bezoeker_facebookid'];
+                         
+
+                        $conn = Db::getInstance();
+                        $query_select_name = $conn->query("SELECT bezoeker_naam FROM bezoeker WHERE bezoeker_facebookid = $bfid");
+                        return $query_select_name;
+
+                         echo $row['bezoeker_facebookid'];*/
+                         echo $row['feedback_tekst']; 
+                         ?><hr><?php
+                    }}
+                ?> 
+                </div>
+                </div>
+
+                
+
+
+            <?php } ?>
 
         	</div>
         </section>

@@ -6,39 +6,14 @@
 
     class Book
     {
-        private $m_sBeschikbaaruur;
-        private $m_sBeschikbaardag;
         private $m_sGidsid;
         private $m_sIsgeboekt;
-        //private $m_sBezoekerid;
         
         //SET----------------------------------------
         public function __set($p_sProperty,$p_vValue)
         {
                 switch($p_sProperty)
                 {
-                    case 'Beschikbaardag':
-                    if($p_vValue=="")
-                    {
-                        throw new Exception("contactdag invullen");
-                    }
-                    else
-                    {
-                        $this->m_sBeschikbaardag = $p_vValue;    
-                    }
-                    break;
-
-                    case 'Beschikbaaruur':
-                    if($p_vValue=="")
-                    {
-                        throw new Exception("contactuur invullen");
-                    }
-                    else
-                    {
-                        $this->m_sBeschikbaaruur = $p_vValue;   
-                    }
-                    break;
-                    
                     case 'Gidsid':
                     if($p_vValue=="")
                     {
@@ -68,14 +43,6 @@
         {
                 switch($p_sProperty)
                 {
-                    case 'Beschikbaardag':
-                    return $this->m_sBeschikbaardag;
-                    break;
-
-                    case 'Beschikbaaruur':
-                    return $this->m_sBeschikbaaruur;
-                    break;
-                    
                     case 'Gidsid':
                     return $this->m_sGidsid;
                     break;
@@ -91,12 +58,10 @@
         {
             $conn = Db::getInstance();
             $current_id = $_SESSION['gids_id'];
-            $afsprakenG = $conn->query("SELECT * FROM geboekt
-            INNER JOIN beschikbaarheid ON geboekt.gids_id = beschikbaarheid.gids_id
-            INNER JOIN gids ON geboekt.gids_id = gids.gids_id 
-            INNER JOIN bezoeker ON geboekt.bezoeker_facebookid = bezoeker.bezoeker_facebookid
-            WHERE geboekt.geboekt_isgeboekt = 1 AND geboekt.gids_id = $current_id
-            ORDER BY beschikbaarheid.beschikbaar_dag_uur ASC;");
+            $afsprakenG = $conn->query("SELECT * FROM bezoeker
+            INNER JOIN geboekt ON bezoeker.bezoeker_facebookid = geboekt.bezoeker_facebookid
+            INNER JOIN gids ON geboekt.gids_id = gids.gids_id
+            WHERE gids.gids_id = $current_id");
             return $afsprakenG;
         }
         
@@ -104,33 +69,39 @@
         public function afsprakenB($fbid)
         {
             $conn = Db::getInstance();
-            $afsprakenB = $conn->query("SELECT * FROM geboekt
-            INNER JOIN beschikbaarheid ON geboekt.gids_id = beschikbaarheid.gids_id
-            INNER JOIN gids ON geboekt.gids_id = gids.gids_id 
+            $afsprakenB = $conn->query("SELECT * FROM gids
+            INNER JOIN geboekt ON gids.gids_id = geboekt.gids_id
             INNER JOIN bezoeker ON geboekt.bezoeker_facebookid = bezoeker.bezoeker_facebookid
-            WHERE geboekt_isgeboekt = 1 ORDER BY beschikbaarheid.beschikbaar_dag_uur ASC;");
+            WHERE bezoeker.bezoeker_facebookid = $fbid");
             return $afsprakenB;
         }
 
          //SAVE---------------------------------------
-         public function save($facebookid){
-         $conn = Db::getInstance();
-         $statement = $conn->prepare("INSERT INTO geboekt(bezoeker_facebookid,
-                                                          gids_id,
-                                                          geboekt_isgeboekt
-                                                         )
+         public function save($facebookid,$beschikbaar_id,$beschikbaar_dag_uur)
+         {
+             $conn = Db::getInstance();
+             $statement = $conn->prepare("INSERT INTO geboekt(bezoeker_facebookid,
+                                                              gids_id,
+                                                              geboekt_isgeboekt,
+                                                              beschikbaar_id,
+                                                              beschikbaar_dag_uur
+                                                             )
 
-                                                   VALUES(:bezoeker_facebookid,
-                                                          :gidsid,
-                                                          :isgeboekt
-                                                         )
-                                    "); 
+                                                       VALUES(:bezoeker_facebookid,
+                                                              :gidsid,
+                                                              :isgeboekt,
+                                                              :beschikbaar_id,
+                                                              :beschikbaar_dag_uur
+                                                             )
+                                        "); 
 
-             $statement->bindValue(':bezoeker_facebookid', $facebookid);
+             $statement->bindValue(':bezoeker_facebookid',$facebookid);
              $statement->bindValue(':gidsid',$this->Gidsid);
              $statement->bindValue(':isgeboekt',$this->Isgeboekt);
+             $statement->bindValue(':beschikbaar_id',$beschikbaar_id);
+             $statement->bindValue(':beschikbaar_dag_uur',$beschikbaar_dag_uur);
              $statement->execute();
              $info = "<b>Boeking is gelukt!</b>";
          }
-        }
+    }
 ?>

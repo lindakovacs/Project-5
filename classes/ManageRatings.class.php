@@ -49,5 +49,27 @@
 			$rowCount = $query->rowCount();
 			return $rowCount;
 		}
+        
+        
+        	public function getallerates()
+		{
+			$conn = Db::getInstance();
+			$result = $conn->query("select * from gids;");
+			return $result->fetchAll();
+		}
+        
+        
+        	public function getaantal($p_id)
+		{
+			$conn = Db::getInstance();
+			//$statement = $conn->prepare("select * from gids where gids_id = :id;");
+            $statement = $conn->prepare("select * from gids where gids_id = :id;");
+			$statement->bindValue(':id', $p_id);
+			$statement->execute();
+
+			return $statement->fetch();
+		}
+        
+        
 	}
 ?>

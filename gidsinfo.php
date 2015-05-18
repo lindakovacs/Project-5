@@ -22,6 +22,23 @@
 
 
 
+
+
+<?php
+    include_once("classes/ManageRatings.class.php");
+
+    $init = new ManageRatings();
+
+    $posts = $init->getallerates();
+
+    if(!empty($_GET))
+    {
+        $return = $init->getaantal($_GET['gids_id']);
+    }
+    
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +54,7 @@
     <meta name="author" content="Ande Timmerman,Manuel van den Notelaer,Nick van Puyvelde,Stijn Van Doorslaer">
     
     <link rel="icon" href="img/weareimd.png">
-    <title>Rent-A-Student: Rating</title>
+    <title>Rent-A-Student | Rating</title>
     
     <!-- OPENGRAPH TAGS -->
     <meta property="og:image" content="img/weareimd.png"/>
@@ -69,8 +86,6 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="jquery/jRating.jquery.css" />
     <link rel="stylesheet" href="css/style.css" />
-    <script type="text/javascript" src="jquery/jquery.js"></script>
-    <script type="text/javascript" src="jquery/jRating.jquery.js"></script>
     <script type="text/javascript">
         $(function(){
             $(".rating").jRating({
@@ -88,6 +103,18 @@
             });
         });
     </script>
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
 </head>
 <body>
         <!--NAVIGATIE-->
@@ -220,7 +247,8 @@
                     <br><b>Achternaam: </b><?php echo $beschikbaar['gids_naam'] ?>
                     <br><b>Aantal Ratings: </b><?php echo $beschikbaar['total_rates'] ?>
                     <br><b>Gemiddelde Rating: </b><?php echo $beschikbaar['rating'] ?>
-        
+                    
+                    
 
 
                                        <?php if ($allItems !== 0) { 
@@ -240,11 +268,15 @@
             }
             
         ?>
+        <!--<?php echo "?id=".$p['id']; ?> data-id="<?php echo $p['id']; ?> -->
 
-     <br><b>Rating:</b><div name="gerated" class="rating <?php echo $class; ?>" id="<?php echo $beschikbaar['rating']; ?>_<?php echo $beschikbaar['gids_id']; ?>"></div>
+     <br><b>Rating:</b><div class="rating <?php echo $class; ?>" id="<?php echo $beschikbaar['rating']; ?>_<?php echo $beschikbaar['gids_id']; ?>" id-data="<?php echo $allItems['gids_id']; ?>"></div>
+     
+     
+
 
  <?php }?>  
-                     
+                    
 
 
                     
@@ -265,15 +297,10 @@
 
 
             
-
-
-
-
-
-
-
-
     
 
+<script type="text/javascript" src="jquery/jquery.js"></script>
+<script type="text/javascript" src="jquery/jRating.jquery.js"></script>
+<script src="js/count.js"></script>
 </body>
 </html>

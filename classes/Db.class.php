@@ -8,7 +8,7 @@
 			//static wilt zeggen: geen object nodig om aan te roepen
 			if( self::$db === null)
 			{
-                 self::$db = new PDO('mysql:host=localhost;dbname=phpproject', 'root', 'root');
+                 self::$db = new PDO('mysql:host=localhost:3306;dbname=phpproject', 'root', 'root');
                 
 				return self::$db;
 			}
