@@ -319,32 +319,9 @@
                 <?php }
                 }
             } ?>
-             
-                <!--  CHAT FUNCTIE -->
-                <div id="chat">
-               <?php if(isset($_SESSION['FBID'])){ ?>
-                <form name="form1" style="width: 280px; max-height:100%; float:left; background-color:#f9f1b9">
-                    <?php
-                        $g = new User();
-
-                        $id = $_GET['id'];
-                        $userProfile = $g->getUserProfile($id);
-                        while($row = $userProfile->fetch(PDO::FETCH_ASSOC)){ ?>
-                        <h3>Chat met onze gidsen<!--<?php echo $row['gids_voornaam'] ?>-->:</h3>
-                    <?php } ?>
-                    Your Username: <input type="text" name="uname" disabled style="width:200px" value=<?php echo $_SESSION['FULLNAME'] ?>><br>
-                    Your Message: <br>
-                    <textarea name="msg" style="width:200px; height:70px;"></textarea><br><br>
-                    <a href="#" onclick="submitChat()" class="button" >Send</a><br><br>
-
-                    <div id="chatlogs">
-                        LOADING CHATLOGS PLEASE WAIT...
-                    </div>
-               <?php } ?>
-            </div>
-              
+                          
             <!-- IEDEREEN BUITEN GIDS ZIET DEZE DATA -->
-            <?php if(!isset($_SESSION['logged_in'])){ 
+            <?php if(isset($_SESSION['FBID'])){ 
             $id = $_GET['id']; ?>
              
             <!-- PROFIEL FOTO + INFO GIDS ID -->
@@ -374,53 +351,26 @@
             $b = new UserBeschikbaar();
             $allBeschikId = $b->getAllId($id);
             
-            // ALLEEN ZIEN WANNEER FACEBOOK INGELOGD
-            if(isset($_SESSION['FBID'])){ 
-                while($beschikbaar = $allBeschikId->fetch(PDO::FETCH_ASSOC)){ ?>
-                <div class="col-sm-4">
-                    <p>
-                    <br><b>Datum: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?>
-                    </p>
+            while($beschikbaar = $allBeschikId->fetch(PDO::FETCH_ASSOC)){ ?>
+            <div class="col-sm-4">
+                <p>
+                <br><b>Datum: </b><?php echo $beschikbaar['beschikbaar_dag_uur'] ?>
+                </p>
 
-                    <form method='post'>
-                    <input type='hidden' name='gidsid' value='<?php echo $beschikbaar['gids_id'] ?>'/>
-                    <input type='hidden' name='beschikbaar_id' value='<?php echo $beschikbaar['beschikbaar_id'] ?>'/>
-                    <input type='hidden' name='beschikbaar_dag_uur' value='<?php echo $beschikbaar['beschikbaar_dag_uur'] ?>'/>
-                    <input type='hidden' name='isgeboekt' value='1'/>
-                    <input type='submit' class='data btn btn-primary col-xs-6' name='voegtoe' value='Boek' width='500'/>
-                    </form>
-                    <br>
-                </div> 
-                <?php } ?>
-                                
-                <!-- FEEDBACK -->
-                <div class="container">
-                <h1 class="page-header col-lg-12">Feedback</h1>
-                <div id="feedback" style="clear:left;">
-                <?php  
-                    $f = new Feedback();
-                    $allInfo = $f->getAllInfo();
-                    while($row = $allInfo->fetch(PDO::FETCH_ASSOC))
-                    { 
-                        
-                         /*$bfid = $row['bezoeker_facebookid'];
-                         
-
-                        $conn = Db::getInstance();
-                        $query_select_name = $conn->query("SELECT bezoeker_naam FROM bezoeker WHERE bezoeker_facebookid = $bfid");
-                        return $query_select_name;
-
-                         echo $row['bezoeker_facebookid'];*/
-                         echo $row['feedback_tekst']; 
-                         ?><hr><?php
-                    }}
-                ?> 
-                </div>
-                </div>
-
+                <form method='post'>
+                <input type='hidden' name='gidsid' value='<?php echo $beschikbaar['gids_id'] ?>'/>
+                <input type='hidden' name='beschikbaar_id' value='<?php echo $beschikbaar['beschikbaar_id'] ?>'/>
+                <input type='hidden' name='beschikbaar_dag_uur' value='<?php echo $beschikbaar['beschikbaar_dag_uur'] ?>'/>
+                <input type='hidden' name='isgeboekt' value='1'/>
+                <input type='submit' class='data btn btn-primary col-xs-6' name='voegtoe' value='Boek' width='500'/>
+                </form>
+                <br>
+            </div> 
+            <?php } ?>
                 
-
-
+                <!-- FEEDBACK -->
+                <h1 class="page-header col-lg-12">Feedback</h1>
+                <p class="col-lg-12">Hier moet feedback gegeven kunnen worden!</p>
             <?php } ?>
 
         	</div>
@@ -434,8 +384,6 @@
             <div id="instafeed"></div>
             <p>&copy; Rent-A-Student 2015</p>    
         </footer>
-        
-    </div><!-- /CONTAINER -->
 
 </body>
 </html>

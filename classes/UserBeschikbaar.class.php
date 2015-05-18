@@ -62,10 +62,11 @@
         public function getAllId($id)
         {
             $conn = Db::getInstance();
-            $allBeschikId = $conn->query("SELECT * FROM gids 
-            INNER JOIN beschikbaarheid ON gids.gids_id = beschikbaarheid.gids_id 
-            WHERE beschikbaarheid.gids_id = '$id' 
-            ORDER BY beschikbaarheid.beschikbaar_dag_uur ASC;");
+            $allBeschikId = $conn->query("SELECT b.*, g.* FROM `beschikbaarheid` b
+            LEFT JOIN geboekt gb ON gb.beschikbaar_id = b.beschikbaar_id 
+            LEFT JOIN gids g ON g.gids_id = b.gids_id 
+            WHERE b.gids_id = $id AND gb.geboekt_isgeboekt IS NULL
+            ORDER BY b.beschikbaar_dag_uur");
             return $allBeschikId;
         }
         
@@ -74,10 +75,11 @@
         {
             $conn = Db::getInstance();
             $current_id = $_SESSION['gids_id'];
-            $allAfspraak = $conn->query("SELECT * FROM gids
-            INNER JOIN beschikbaarheid ON gids.gids_id = beschikbaarheid.gids_id 
-            WHERE beschikbaarheid.gids_id = gids.gids_id AND beschikbaarheid.gids_id = $current_id 
-            ORDER BY beschikbaarheid.beschikbaar_dag_uur ASC;");
+            $allAfspraak = $conn->query("SELECT b.*, g.* FROM `beschikbaarheid` b
+            LEFT JOIN geboekt gb ON gb.beschikbaar_id = b.beschikbaar_id 
+            LEFT JOIN gids g ON g.gids_id = b.gids_id 
+            WHERE b.gids_id = $current_id AND gb.geboekt_isgeboekt IS NULL
+            ORDER BY b.beschikbaar_dag_uur");
             return $allAfspraak;
         }
         

@@ -58,7 +58,6 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/screen.css">
     <link rel="stylesheet" href="message/chat.css"><!-- CSS VOOR CHAT -->
     
     <!-- BOOTSTRAP -->
@@ -91,7 +90,6 @@
     
     <!-- VAN HIER TOT EINDE SCRIPT = JS VOOR CHAT -->
 
-<!--    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script>
         function submitChat(){
@@ -303,22 +301,6 @@ Ben je momenteel een IMD-student en wil je je graag als gids voorstellen registr
                     <br>
                 </div>            
             <?php }} ?>
-        </div>
-        
-        <!--  CHAT FUNCTIE -->
-        <div id="chat">
-        <?php if(isset($_SESSION['logged_in'])){ ?>
-        <form name="form1" style="width: 280px; max-height:100%; float:left; background-color:#f9f1b9">
-            <h3>Chat met bezoekers</h3>
-            Your Username: <input type="text" name="uname" disabled style="width:200px" value=<?php echo $_SESSION['username'] ?>><br>
-            Your Message: <br>
-            <textarea name="msg" style="width:200px; height:70px;"></textarea><br><br>
-            <a href="#" onclick="submitChat()" class="button" >Send</a><br><br>
-
-            <div id="chatlogs">
-                LOADING CHATLOGS PLEASE WAIT...
-            </div>
-        <?php } ?>
         </div>
         
         <!-- AFSPRAKEN VAN BEZOEKER -->

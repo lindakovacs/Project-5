@@ -101,7 +101,6 @@
              $statement->bindValue(':beschikbaar_id',$beschikbaar_id);
              $statement->bindValue(':beschikbaar_dag_uur',$beschikbaar_dag_uur);
              $statement->execute();
-             $info = "<b>Boeking is gelukt!</b>";
          }
     }
 ?>
